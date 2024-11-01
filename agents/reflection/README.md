@@ -1,8 +1,16 @@
-# Spring AI Hello World Chat Application
+# Spring AI Reflection Agent Application
 
-A simple command-line chat application demonstrating Spring AI's ChatClient capabilities with AI models.
+This project demonstrates the use of Spring AI to create a self-improving code generation system. The Reflection Agent uses two ChatClient instances in an iterative loop - one for generation and one for critique - to produce high-quality Java code.
 
 It is based on the code in the repository https://github.com/neural-maze/agentic_patterns
+
+The application implements a reflection-based system where the **Reflection Agent**:
+
+- Uses a **generation ChatClient** to create code based on user prompts
+- Uses a **critique ChatClient** to review the generated code
+- Iteratively improves the code by feeding critique back to the **generation ChatClient**
+- Continues this loop until the **critique ChatClient** is satisfied with the quality
+
 
 ## Prerequisites
 - Java 17 or higher
@@ -30,17 +38,6 @@ export SPRING_AI_OPENAI_API_KEY=<INSERT KEY HERE>
 3. Run the application using Maven wrapper:
    `./mvnw spring-boot:run`
 
-## Reflection Agent Demo
-This project demonstrates the use of Spring AI to create a self-improving code generation system. The Reflection Agent uses two ChatClient instances in an iterative loop - one for generation and one for critique - to produce high-quality Java code.
-
-## Overview
-The application implements a reflection-based system where the Reflection Agent:
-
-1. Uses a generation `ChatClient` instance to create code based on user prompts
-2. Uses a critique `ChatClient` instance to review the generated code
-3. Iteratively improves the code by feeding critique back to the generation ChatClient
-4. Continues this loop until the critique ChatClient is satisfied with the quality
-
 ## Project Structure
 ### Main Components
 
@@ -54,27 +51,32 @@ The application implements a reflection-based system where the Reflection Agent:
 
 The Reflection Agent creates two `ChatClient` instances:
 
-- **generateChatClient**: For generating Java code based on user requests
-- **critiqueChatClient**: For reviewing and critiquing the generated code
+- `generateChatClient`: For generating Java code based on user requests
+- `critiqueChatClient`: For reviewing and critiquing the generated code
 
 ## Generation Process
 
-- **User inputs a request**
-- The **generation ChatClient** creates initial code
-- The **critique ChatClient** reviews the code
-- If improvements are needed, the **generation ChatClient** creates a revised version
-- This continues for up to `maxIterations` or until the **critique ChatClient** approves (`<OK>`)
+- User inputs a request
+- The generation `ChatClient` creates initial code
+- The critique `ChatClient` reviews the code
+- If improvements are needed, the generation `ChatClient` creates a revised version
+- This continues for up to `maxIterations` or until the critique `ChatClient` approves (`<OK>`)
 - 
 ## ChatClient Configurations
 
-- **Generation ChatClient**:
+- **Generation ChatClient** system prompt:
 
 ```text
-You are a Java programmer tasked with generating high quality Java code. Your task is to generate the best content possible for the user's request.
+You are a Java programmer tasked with generating high quality
+Java code. Your task is to generate the best content possible
+for the user's request.
 ```
-- **Critique ChatClient**:
+- **Critique ChatClient** system prompt:
 ```text
-You are tasked with generating critique and recommendations for the user's generated content. If the user content has something wrong or something to be improved, output a list of recommendations and critiques."
+You are tasked with generating critique and recommendations for
+the user's generated content. If the user content has something
+wrong or something to be improved, output a list of
+recommendations and critiques.
 ```
 
 ## Example Run
@@ -111,4 +113,4 @@ The generation `ChatClient` created improved code with:
 
 ## MergeSort
 
-The file `AgentMergeSort.md` shows a similar run to create a merge sort algorithm.
+The file `AgentMergeSort.md` shows a similar run to create a merge sort algorithm.  There is also a JUnit test of the code that was generated to show it works.
