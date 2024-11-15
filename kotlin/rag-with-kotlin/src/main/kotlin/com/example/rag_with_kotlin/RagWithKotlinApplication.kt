@@ -12,6 +12,10 @@ import org.springframework.data.repository.ListCrudRepository
 import org.springframework.web.servlet.function.ServerResponse
 import org.springframework.web.servlet.function.router
 
+
+/**
+ * @author Josh Long
+ */
 @SpringBootApplication
 class RagWithKotlinApplication
 
