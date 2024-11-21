@@ -20,6 +20,7 @@
 		<module>kotlin/kotlin-function-callback</module>
 		<module>kotlin/rag-with-kotlin</module>
 		<module>misc/spring-ai-java-function-callback</module>
+		<module>misc/openai-streaming-response</module>
 	</modules>
 
 
