@@ -3,7 +3,6 @@ package com.example.kotlin_hello_world
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.ai.chat.client.ChatClient
-import org.springframework.ai.chat.model.ChatModel
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 
@@ -15,8 +14,9 @@ data class Joke(val setup: String, val punchline: String)
 class KotlinHelloWorldApplication {
 
 	@Bean
-	fun jokeRunner(chatModel: ChatModel) = CommandLineRunner {
-		val response = ChatClient.create(chatModel).prompt().user("Tell me a joke").call().entity<Joke>()
+	fun jokeRunner(chatClientBuilder: ChatClient.Builder) = CommandLineRunner {
+		val chatClient = chatClientBuilder.build();
+		val response = chatClient.prompt().user("Tell me a joke").call().entity<Joke>()
 
 		println("\nJoke:")
 		println("Setup: ${response.setup}")

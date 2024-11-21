@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.example.spring.ai</groupId>
+	<artifactId>spring-ai-examples-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<packaging>pom</packaging>
+	<url>https://github.com/spring-projects/spring-ai</url>
+
+	<name>Spring AI</name>
+	<description>Building AI applications with Spring Boot</description>
+
+	<modules>
+		<module>models/chat/helloworld</module>
+		<module>agents/reflection</module>
+		<module>kotlin/kotlin-hello-world</module>
+		<module>kotlin/kotlin-function-callback</module>
+		<module>kotlin/rag-with-kotlin</module>
+	</modules>
+
+	<properties>
+		<kotlin.version>1.9.25</kotlin.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib-jdk8</artifactId>
+			<version>${kotlin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-test</artifactId>
+			<version>${kotlin.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>kotlin/kotlin-function-callback/src/main/kotlin</sourceDirectory>
+		<testSourceDirectory>kotlin/kotlin-function-callback/src/test/kotlin</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>test-compile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jvmTarget>1.8</jvmTarget>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

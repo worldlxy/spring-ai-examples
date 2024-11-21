@@ -1,4 +1,4 @@
-package com.example.kotlin_hello_world
+package com.example.kotlin_function_callback
 
 import com.fasterxml.jackson.annotation.JsonClassDescription
 import com.fasterxml.jackson.annotation.JsonInclude

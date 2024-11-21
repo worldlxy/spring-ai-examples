@@ -1,4 +1,4 @@
-package com.example.kotlin_hello_world
+package com.example.kotlin_function_callback
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
