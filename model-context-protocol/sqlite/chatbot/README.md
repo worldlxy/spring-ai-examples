@@ -1,7 +1,25 @@
-# Spring AI Model Context Protocol Demo Application
+# Spring AI Model Context Protocol - SQLite Chatbot
 
 A demo application showcasing the integration of Spring AI with SQLite databases using the Model Context Protocol (MCP). This application enables natural language interactions with your SQLite database through a command-line interface.
 
+It uses the [SQLite MCP-Server](https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite) to enable running SQL queries, analyzing business data, and automatically generating business insight memos.
+
+The demo starts a simple chatbot where your can ask qustions about the data  stored in the database.
+
+For example:
+> Can you connect to my SQLite database and tell me what products are available, and their prices?
+
+or perform some data aggreagation on the fly:
+
+> What's the average price of all products in the database?
+
+run annalysis 
+
+> Can you analyze the price distribution and suggest any pricing optimizations?
+
+or even create an new table: 
+
+> Could you help me design and create a new table for storing customer orders?
 
 ## Features
 
@@ -47,14 +65,9 @@ It has a `PRODUCTS` table and was created using the script `create-database.sh`
 
 ## Running the Application
 
-### Mode 1: Predefined Questions
-Runs through a set of preset database queries:
-```bash
-./mvnw spring-boot:run
-```
-
-### Mode 2: Interactive Chat
+### Interactive Chat
 Enables real-time conversation with your database:
+
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=chat
 ```
@@ -68,6 +81,7 @@ The application uses a synchronous MCP client to communicate with the SQLite dat
 ```java
 @Bean(destroyMethod = "close")
 public McpSyncClient mcpClient() {
+
     var stdioParams = ServerParameters.builder("uvx")
             .args("mcp-server-sqlite", "--db-path", getDbPath())
             .build();
@@ -76,6 +90,7 @@ public McpSyncClient mcpClient() {
             Duration.ofSeconds(10), new ObjectMapper());
 
     var init = mcpClient.initialize();
+
     System.out.println("MCP Initialized: " + init);
 
     return mcpClient;
@@ -97,12 +112,12 @@ The application registers MCP tools with Spring AI using function callbacks:
 
 ```java
 @Bean
-public McpFunctionCallback[] functionCallbacks(McpSyncClient mcpClient) {
+public List<McpFunctionCallback> functionCallbacks(McpSyncClient mcpClient) {
     return mcpClient.listTools(null)
             .tools()
             .stream()
             .map(tool -> new McpFunctionCallback(mcpClient, tool))
-            .toArray(McpFunctionCallback[]::new);
+            .toList();
 }
 ```
 
