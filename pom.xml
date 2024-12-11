@@ -23,6 +23,7 @@
 		<module>misc/openai-streaming-response</module>
 		<module>model-context-protocol/sqlite/simple</module>
 		<module>model-context-protocol/sqlite/chatbot</module>
+		<module>model-context-protocol/filesystem</module>
 	</modules>
 
 
