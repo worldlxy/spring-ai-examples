@@ -24,6 +24,7 @@
 		<module>model-context-protocol/sqlite/simple</module>
 		<module>model-context-protocol/sqlite/chatbot</module>
 		<module>model-context-protocol/filesystem</module>
+		<module>model-context-protocol/brave</module>
 	</modules>
 
 
