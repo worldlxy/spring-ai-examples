@@ -7,7 +7,6 @@ It uses the [SQLite MCP-Server](https://github.com/modelcontextprotocol/servers/
 ## Features
 
 - Natural language querying of SQLite databases
-- Interactive chat mode for dynamic database interactions
 - Predefined question mode for automated database analysis
 - Seamless integration with OpenAI's language models
 - Built on Spring AI and Model Context Protocol
@@ -32,7 +31,7 @@ It uses the [SQLite MCP-Server](https://github.com/modelcontextprotocol/servers/
 2. Clone the repository:
    ```bash
    git clone https://github.com/spring-projects/spring-ai-examples.git
-   cd model-context-protocol/sqlite
+   cd model-context-protocol/sqlite/simple
    ```
 
 3. Set up your OpenAI API key:
@@ -70,12 +69,15 @@ The bean definitions are described below, starting with the `ChatClient`
 @Bean
 @Profile("!chat")
 public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder,
-                                           McpFunctionCallback[] functionCallbacks,
+                                           List<McpFunctionCallback> functionCallbacks,
                                            ConfigurableApplicationContext context) {
     return args -> {
-        var chatClient = chatClientBuilder.defaultFunctions(functionCallbacks)
+        var chatClient = chatClientBuilder.defaultFunctions(functionCallbacks.toArray(new McpFunctionCallback[0]))
                 .build();
-        runPredefinedQuestions(chatClient, context);
+         // Run Predefined Questions
+         System.out.println(chatClient.prompt(
+            "Can you connect to my SQLite database and tell me what products are available, and their prices?").call().content());
+         // ...
     };
 }
 ```

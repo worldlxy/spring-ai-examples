@@ -3,13 +3,10 @@ package org.springframework.ai.mcp.samples.sqlite;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
-import java.util.Scanner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.mcp.client.McpClient;
 import org.springframework.ai.mcp.client.McpSyncClient;
 import org.springframework.ai.mcp.client.stdio.ServerParameters;
@@ -20,7 +17,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class Application {
@@ -30,7 +26,6 @@ public class Application {
 	}
 
 	@Bean
-	@Profile("!chat")
 	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder,
 			List<McpFunctionCallback> functionCallbacks, ConfigurableApplicationContext context) {
 

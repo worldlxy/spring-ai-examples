@@ -25,7 +25,6 @@ or even create an new table:
 
 - Natural language querying of SQLite databases
 - Interactive chat mode for dynamic database interactions
-- Predefined question mode for automated database analysis
 - Seamless integration with OpenAI's language models
 - Built on Spring AI and Model Context Protocol
 
@@ -49,7 +48,7 @@ or even create an new table:
 2. Clone the repository:
    ```bash
    git clone https://github.com/spring-projects/spring-ai-examples.git
-   cd model-context-protocol/sqlite
+   cd model-context-protocol/sqlite/chatbot
    ```
 
 3. Set up your OpenAI API key:
