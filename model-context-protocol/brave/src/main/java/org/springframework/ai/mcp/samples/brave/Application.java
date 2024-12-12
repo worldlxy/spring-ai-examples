@@ -27,20 +27,15 @@ public class Application {
 
 		return args -> {
 
-			List<McpFunctionCallback> functionCallbacks = mcpClient.listTools(null)
-					.tools()
-					.stream()
-					.map(tool -> new McpFunctionCallback(mcpClient, tool))
-					.toList();
-
-			System.out.println("Available tools:");
-			functionCallbacks.stream().map(fc -> fc.getName()).forEach(System.out::println);
-
 			var chatClient = chatClientBuilder
-					.defaultFunctions(functionCallbacks.toArray(new McpFunctionCallback[0]))
+					.defaultFunctions(mcpClient.listTools(null)
+							.tools()
+							.stream()
+							.map(tool -> new McpFunctionCallback(mcpClient, tool))
+							.toArray(McpFunctionCallback[]::new))
 					.build();
 
-			String question = "Can you explain what is Spring AI and if it supports the Model Context Protocol?";
+			String question = "Does Spring AI supports the Model Context Protocol? Please provide some references.";
 			System.out.println("QUESTION: " + question);
 			System.out.println("ASSISTANT: " + chatClient.prompt(question).call().content());
 
