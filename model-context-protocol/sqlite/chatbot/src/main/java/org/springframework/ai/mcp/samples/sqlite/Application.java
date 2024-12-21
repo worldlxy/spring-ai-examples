@@ -5,15 +5,13 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Scanner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.mcp.client.McpClient;
 import org.springframework.ai.mcp.client.McpSyncClient;
 import org.springframework.ai.mcp.client.stdio.ServerParameters;
-import org.springframework.ai.mcp.client.stdio.StdioServerTransport;
+import org.springframework.ai.mcp.client.stdio.StdioClientTransport;
 import org.springframework.ai.mcp.spring.McpFunctionCallback;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -82,8 +80,8 @@ public class Application {
 						getDbPath())
 				.build();
 
-		var mcpClient = McpClient.sync(new StdioServerTransport(stdioParams),
-				Duration.ofSeconds(10), new ObjectMapper());
+		var mcpClient = McpClient.using(new StdioClientTransport(stdioParams))
+				.requestTimeout(Duration.ofSeconds(10)).sync();
 
 		var init = mcpClient.initialize();
 

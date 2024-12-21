@@ -1,12 +1,10 @@
 package org.springframework.ai.mcp.samples.brave;
 
-import java.util.List;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.client.McpClient;
 import org.springframework.ai.mcp.client.McpSyncClient;
 import org.springframework.ai.mcp.client.stdio.ServerParameters;
-import org.springframework.ai.mcp.client.stdio.StdioServerTransport;
+import org.springframework.ai.mcp.client.stdio.StdioClientTransport;
 import org.springframework.ai.mcp.spring.McpFunctionCallback;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -52,7 +50,7 @@ public class Application {
 				.addEnvVar("BRAVE_API_KEY", System.getenv("BRAVE_API_KEY"))
 				.build();
 
-		var mcpClient = McpClient.sync(new StdioServerTransport(stdioParams));
+		var mcpClient = McpClient.using(new StdioClientTransport(stdioParams)).sync();
 		var init = mcpClient.initialize();
 		System.out.println("MCP Initialized: " + init);
 		return mcpClient;
