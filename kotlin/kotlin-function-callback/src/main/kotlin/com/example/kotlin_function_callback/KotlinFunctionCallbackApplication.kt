@@ -41,10 +41,10 @@ class Config {
 	@Bean
 	fun weatherFunctionInfo(currentWeather: (WeatherRequest) -> WeatherResponse): FunctionCallback {
 		return FunctionCallback.builder()
+			.function("WeatherInfo", currentWeather)
 			.description(
 				"Find the weather conditions, forecasts, and temperatures for a location, like a city or state."
 			)
-			.function("WeatherInfo", currentWeather)
 			.inputType(WeatherRequest::class.java)
 			.build()
 	}
