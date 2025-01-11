@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>ai-mdp-sqlite-chatbot</artifactId>
+	<artifactId>ai-mcp-sqlite-chatbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Spring AI - Model Context Protocol - SQLite</name>
 	<description>Simple AI Application using MCP client to chat with SQLite</description>
