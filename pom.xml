@@ -26,6 +26,7 @@
 		<module>model-context-protocol/filesystem</module>
 		<module>model-context-protocol/brave</module>
 		<module>model-context-protocol/mcp-webmvc-server</module>
+		<module>model-context-protocol/mcp-webflux-server</module>
 	</modules>
 
 
