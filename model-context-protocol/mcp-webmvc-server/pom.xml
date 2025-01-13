@@ -18,26 +18,36 @@
     <description>Sample Spring Boot application demonstrating MCP WebMvc server usage</description>
 
     <properties>
-        <spring-ai-mcp.version>0.5.0-SNAPSHOT</spring-ai-mcp.version>
+        <spring-ai-mcp.version>0.5.0</spring-ai-mcp.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.experimental</groupId>
+                <artifactId>mcp-bom</artifactId>
+                <version>${spring-ai-mcp.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>mcp-webmvc-sse-transport</artifactId>
-            <version>${spring-ai-mcp.version}</version>
         </dependency>
 
         <!-- Used only for the client webflux transport -->
         <dependency>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>mcp-webflux-sse-transport</artifactId>
-            <version>${spring-ai-mcp.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>spring-ai-mcp</artifactId>
-            <version>${spring-ai-mcp.version}</version>
         </dependency>
 
         <dependency>
@@ -86,7 +96,7 @@
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone-local</url>
+            <url>https://repo.spring.io/milestone</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
