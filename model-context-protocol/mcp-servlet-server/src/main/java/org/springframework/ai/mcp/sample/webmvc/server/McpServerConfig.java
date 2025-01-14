@@ -58,6 +58,9 @@ public class McpServerConfig implements WebMvcConfigurer {
 		return new StdioServerTransport();
 	}
 
+	public static record ToUpperCaseInput(String input) {
+	}
+
 	@Bean
 	public McpAsyncServer mcpServer(ServerMcpTransport transport, OpenLibrary openLibrary) { // @formatter:off
 
@@ -84,14 +87,14 @@ public class McpServerConfig implements WebMvcConfigurer {
 					.build()),
 				ToolHelper.toToolRegistration(
 					FunctionCallback.builder()
-					.function("toUpperCase", new Function<String, String>() {
+					.function("toUpperCase", new Function<ToUpperCaseInput, String>() {
 						@Override
-						public String apply(String s) {
-							return s.toUpperCase();
+						public String apply(ToUpperCaseInput s) {
+							return s.input().toUpperCase();
 						}
 					})
 					.description("To upper case")
-					.inputType(String.class)						
+					.inputType(ToUpperCaseInput.class)						
 					.build()))
 			.tools(openLibraryToolRegistrations(openLibrary))
 			.async();
@@ -201,10 +204,6 @@ public class McpServerConfig implements WebMvcConfigurer {
 
 	public static String paymentTransactionStatus(String transactionId, String accountName) {
 		return "The status for " + transactionId + ", by " + accountName + " is PENDING";
-	}
-
-	public Function<String, String> toUpperCase() {
-		return String::toUpperCase;
 	}
 
 	@Bean

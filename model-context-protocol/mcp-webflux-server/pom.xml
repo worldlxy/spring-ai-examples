@@ -19,7 +19,7 @@
     <description>Sample Spring Boot application demonstrating MCP server usage</description>
 
     <properties>
-        <spring-ai-mcp.version>0.5.0</spring-ai-mcp.version>
+        <spring-ai-mcp.version>0.5.1</spring-ai-mcp.version>
     </properties>
 
     <dependencyManagement>
