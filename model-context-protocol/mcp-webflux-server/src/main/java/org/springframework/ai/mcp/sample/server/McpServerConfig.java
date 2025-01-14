@@ -58,43 +58,6 @@ public class McpServerConfig {
 		return transport.getRouterFunction();
 	}
 
-	// SSE transport
-	// @Bean
-	// @ConditionalOnProperty(prefix = "transport", name = "mode", havingValue = "sse2")
-	// public HttpServletSseServerTransport sseServerTransport2() {
-	// var httpTransport = new HttpServletSseServerTransport(new ObjectMapper(),
-	// "/mcp/message");
-
-	// // Create and configure Jetty server
-	// Server server = new Server(8080);
-
-	// ServletContextHandler context = new
-	// ServletContextHandler(ServletContextHandler.SESSIONS);
-	// context.setContextPath("/");
-	// server.setHandler(context);
-
-	// // Add our SSE servlet
-	// context.addServlet(new ServletHolder(httpTransport), "/sse");
-
-	// // Start the server
-	// try {
-	// server.start();
-	// System.out.println("Server started on http://localhost:8080/sse");
-	// server.join();
-	// }
-	// catch (Exception e) {
-	// e.printStackTrace();
-	// try {
-	// server.stop();
-	// }
-	// catch (Exception e1) {
-	// e1.printStackTrace();
-	// }
-	// }
-
-	// return httpTransport;
-	// }
-
 	@Bean
 	public McpAsyncServer mcpServer(ServerMcpTransport transport, OpenLibrary openLibrary) { // @formatter:off
 
