@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.springframework.ai.mcp.sample.webmvc.server;
+package org.springframework.ai.mcp.sample.servlet.server;
 
 import java.util.List;
 import java.util.Map;

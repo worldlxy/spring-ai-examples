@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.springframework.ai.mcp.sample.webmvc.client;
+package org.springframework.ai.mcp.sample.servlet.client;
 
 import org.springframework.ai.mcp.client.transport.HttpClientSseClientTransport;
 

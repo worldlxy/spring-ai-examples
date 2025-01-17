@@ -1,4 +1,4 @@
-package org.springframework.ai.mcp.sample.webmvc.server;
+package org.springframework.ai.mcp.sample.servlet.server;
 
 import java.util.List;
 import java.util.Map;
@@ -16,9 +16,7 @@ import org.springframework.ai.mcp.server.McpServer.ToolRegistration;
 import org.springframework.ai.mcp.server.transport.HttpServletSseServerTransport;
 import org.springframework.ai.mcp.server.transport.StdioServerTransport;
 import org.springframework.ai.mcp.spec.McpSchema;
-import org.springframework.ai.mcp.spec.McpSchema.CallToolResult;
 import org.springframework.ai.mcp.spec.McpSchema.GetPromptResult;
-import org.springframework.ai.mcp.spec.McpSchema.LoggingMessageNotification;
 import org.springframework.ai.mcp.spec.McpSchema.PromptMessage;
 import org.springframework.ai.mcp.spec.McpSchema.Role;
 import org.springframework.ai.mcp.spec.McpSchema.TextContent;
@@ -74,32 +72,19 @@ public class McpServerConfig implements WebMvcConfigurer {
 
 		// Create the server with both tool and resource capabilities
 		var server = McpServer.using(transport)
-			.serverInfo("MCP Demo Server", "1.0.0")
+			.serverInfo("MCP Demo Servlet Server", "1.0.0")
 			.capabilities(capabilities)
 			.resources(systemInfoResourceRegistration())
 			.prompts(greetingPromptRegistration())
 			.tools(
 				ToolHelper.toToolRegistration(
 					FunctionCallback.builder()
-						.method("paymentTransactionStatus",String.class, String.class)
-						.description("Get transaction payment status")
-						.targetClass(McpServerConfig.class)
-					.build()),
-				ToolHelper.toToolRegistration(
-					FunctionCallback.builder()
-					.function("toUpperCase", new Function<ToUpperCaseInput, String>() {
-						@Override
-						public String apply(ToUpperCaseInput s) {
-							return s.input().toUpperCase();
-						}
-					})
+					.function("toUpperCase", (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
 					.description("To upper case")
 					.inputType(ToUpperCaseInput.class)						
 					.build()))
 			.tools(openLibraryToolRegistrations(openLibrary))
-			.async();
-		
-		server.addTool(weatherToolRegistration(server));
+			.async();		
 		return server; // @formatter:on
 	} // @formatter:on
 
@@ -170,40 +155,6 @@ public class McpServerConfig implements WebMvcConfigurer {
 
 			return new GetPromptResult("A personalized greeting message", List.of(userMessage));
 		});
-	}
-
-	private static ToolRegistration weatherToolRegistration(McpAsyncServer server) {
-		String emptyJsonSchema = """
-				{
-					"$schema": "http://json-schema.org/draft-07/schema#",
-					"type": "object",
-					"properties": {"city" : "string"}
-				}
-				""";
-		return new ToolRegistration(new McpSchema.Tool("weather", "Weather forecast tool by location", emptyJsonSchema),
-				(arguments) -> {
-					String city = (String) arguments.get("city");
-
-					// Create the result
-					var result = new CallToolResult(
-							List.of(new TextContent("Weather forecast for " + city + " is sunny")), false);
-
-					// Send the logging notification and ignore its completion
-					server
-						.loggingNotification(LoggingMessageNotification.builder()
-							.data("This is a log message from the weather tool")
-							.build())
-						.subscribe(null, error -> {
-							// Log any errors but don't fail the operation
-							logger.error("Failed to send logging notification", error);
-						});
-
-					return result;
-				});
-	}
-
-	public static String paymentTransactionStatus(String transactionId, String accountName) {
-		return "The status for " + transactionId + ", by " + accountName + " is PENDING";
 	}
 
 	@Bean

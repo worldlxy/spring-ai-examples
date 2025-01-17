@@ -75,32 +75,19 @@ public class McpServerConfig implements WebMvcConfigurer {
 
 		// Create the server with both tool and resource capabilities
 		var server = McpServer.using(transport)
-			.serverInfo("MCP Demo Server", "1.0.0")
+			.serverInfo("MCP Demo WebMVC Server", "1.0.0")
 			.capabilities(capabilities)
 			.resources(systemInfoResourceRegistration())
 			.prompts(greetingPromptRegistration())
-			.tools(calculatorToolRegistration(),
+			.tools(
 				ToolHelper.toToolRegistration(
 					FunctionCallback.builder()
-						.method("paymentTransactionStatus",String.class, String.class)
-						.description("Get transaction payment status")
-						.targetClass(McpServerConfig.class)
-					.build()),
-				ToolHelper.toToolRegistration(
-					FunctionCallback.builder()
-					.function("toUpperCase", new Function<ToUpperCaseInput, String>() {
-						@Override
-						public String apply(ToUpperCaseInput s) {
-							return s.input().toUpperCase();
-						}
-					})
-					.description("To upper case")
-					.inputType(ToUpperCaseInput.class)						
-					.build()))
+						.function("toUpperCase", (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
+						.description("To upper case")
+						.inputType(ToUpperCaseInput.class)						
+						.build()))
 			.tools(openLibraryToolRegistrations(openLibrary))
 			.async();
-		
-		server.addTool(weatherToolRegistration(server));
 		return server; // @formatter:on
 	} // @formatter:on
 
@@ -171,96 +158,6 @@ public class McpServerConfig implements WebMvcConfigurer {
 
 			return new GetPromptResult("A personalized greeting message", List.of(userMessage));
 		});
-	}
-
-	private static ToolRegistration weatherToolRegistration(McpAsyncServer server) {
-		String emptyJsonSchema = """
-				{
-					"$schema": "http://json-schema.org/draft-07/schema#",
-					"type": "object",
-					"properties": {"city" : "string"}
-				}
-				""";
-		return new ToolRegistration(new McpSchema.Tool("weather", "Weather forecast tool by location", emptyJsonSchema),
-				(arguments) -> {
-					String city = (String) arguments.get("city");
-
-					// Create the result
-					var result = new CallToolResult(
-							List.of(new TextContent("Weather forecast for " + city + " is sunny")), false);
-
-					// Send the logging notification and ignore its completion
-					server
-						.loggingNotification(LoggingMessageNotification.builder()
-							.data("This is a log message from the weather tool")
-							.build())
-						.subscribe(null, error -> {
-							// Log any errors but don't fail the operation
-							logger.error("Failed to send logging notification", error);
-						});
-
-					return result;
-				});
-	}
-
-	private static ToolRegistration calculatorToolRegistration() {
-		return new ToolRegistration(new McpSchema.Tool("calculator",
-				"Performs basic arithmetic operations (add, subtract, multiply, divide)", """
-						{
-							"type": "object",
-							"properties": {
-								"operation": {
-									"type": "string",
-									"enum": ["add", "subtract", "multiply", "divide"],
-									"description": "The arithmetic operation to perform"
-								},
-								"a": {
-									"type": "number",
-									"description": "First operand"
-								},
-								"b": {
-									"type": "number",
-									"description": "Second operand"
-								}
-							},
-							"required": ["operation", "a", "b"]
-						}
-						"""), arguments -> {
-					String operation = (String) arguments.get("operation");
-					double a = (Integer) arguments.get("a");
-					double b = (Integer) arguments.get("b");
-
-					double result;
-					switch (operation) {
-						case "add":
-							result = a + b;
-							break;
-						case "subtract":
-							result = a - b;
-							break;
-						case "multiply":
-							result = a * b;
-							break;
-						case "divide":
-							if (b == 0) {
-								return new McpSchema.CallToolResult(
-										java.util.List.of(new McpSchema.TextContent("Division by zero")), true);
-							}
-							result = a / b;
-							break;
-						default:
-							return new McpSchema.CallToolResult(
-									java.util.List.of(new McpSchema.TextContent("Unknown operation: " + operation)),
-									true);
-					}
-
-					return new McpSchema.CallToolResult(
-							java.util.List.of(new McpSchema.TextContent(String.valueOf(result))), false);
-				});
-	}
-
-	public static String paymentTransactionStatus(String transactionId, String accountName) {
-		return "The status for " + transactionId + ", by " + accountName + " is PENDING";
 	}
 
 	@Bean

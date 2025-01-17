@@ -50,19 +50,12 @@ public class SampleClient {
 		ListToolsResult toolsList = client.listTools();
 		System.out.println("Available Tools = " + toolsList);
 
-		CallToolResult weatherResponse = client.callTool(new CallToolRequest("weather", Map.of("city", "Sofia")));
-		System.out.println("Weather Response = " + weatherResponse);
+		CallToolResult upperCaseResult = client
+			.callTool(new CallToolRequest("toUpperCase", Map.of("input", "accountName")));
+		System.out.println("Upper case Response = " + upperCaseResult);
 
-		CallToolResult calcResponse = client
-			.callTool(new CallToolRequest("calculator", Map.of("operation", "multiply", "a", 2.0, "b", 3.0)));
-		System.out.println("Calculator Response = " + calcResponse);
-
-		CallToolResult paymentStatus = client.callTool(
-				new CallToolRequest("paymentTransactionStatus", Map.of("transactionId", "006", "accountName", "John")));
-		System.out.println("Payment Status Response = " + paymentStatus);
-
-		CallToolResult parks = client.callTool(new CallToolRequest("getBooks", Map.of("title", "Spring Framework")));
-		System.out.println("Books Response = " + parks);
+		CallToolResult books = client.callTool(new CallToolRequest("getBooks", Map.of("title", "Spring Framework")));
+		System.out.println("Books Response = " + books);
 
 		// List and demonstrate resources
 		var resourcesList = client.listResources();
