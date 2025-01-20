@@ -12,24 +12,6 @@ The Orchestrator-Workers pattern is a flexible approach for handling complex tas
 - **Workers**: Specialized LLMs that execute specific subtasks
 - **Synthesizer**: Component that combines worker outputs into a final result
 
-## How It Works
-
-1. The orchestrator receives a task and analyzes it to determine necessary subtasks
-2. Each subtask is delegated to worker LLMs that specialize in specific types of processing
-3. The synthesizer combines the workers' outputs into a cohesive final result
-
-```mermaid
-graph LR
-    In[Input] --> O[Orchestrator]
-    O --> W1[Worker 1]
-    O --> W2[Worker 2]
-    O --> W3[Worker 3]
-    W1 --> S[Synthesizer]
-    W2 --> S
-    W3 --> S
-    S --> Out[Output]
-```
-
 ## When to Use
 
 This pattern is particularly effective for:

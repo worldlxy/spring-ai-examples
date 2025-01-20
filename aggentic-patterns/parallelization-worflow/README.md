@@ -32,17 +32,6 @@ The Parallelization Workflow pattern manifests in two key variations:
    mvn clean install
    ```
 
-## Configuration
-
-The project uses Spring AI's Ollama integration. The application is configured to use the Ollama model by default through the Spring AI starter dependency:
-
-```xml
-<dependency>
-    <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
-</dependency>
-```
-
 ## Usage Example
 
 Here's a basic example of using the Parallelization Workflow:
