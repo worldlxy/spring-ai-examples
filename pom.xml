@@ -28,6 +28,7 @@
 		<module>model-context-protocol/mcp-webmvc-server</module>
 		<module>model-context-protocol/mcp-webflux-server</module>
 		<module>model-context-protocol/mcp-servlet-server</module>
+		<module>aggentic-patterns</module>
 	</modules>
 
 
