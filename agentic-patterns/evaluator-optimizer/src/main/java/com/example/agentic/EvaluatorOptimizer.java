@@ -74,7 +74,7 @@ import org.springframework.util.Assert;
  *      effective agents</a>
  */
 @SuppressWarnings("null")
-public class EvaluatorOptimizerWorkflow {
+public class EvaluatorOptimizer {
 
 	public static final String DEFAULT_GENERATOR_PROMPT = """
 			Your goal is to complete the task based on the input. If there are feedback
@@ -101,6 +101,7 @@ public class EvaluatorOptimizerWorkflow {
 
 	public static final String DEFAULT_EVALUATOR_PROMPT = """
 			Evaluate this code implementation for correctness, time complexity, and best practices.
+			Ensure the code have proper javadoc documentation.
 			Respond with EXACTLY this JSON format on a single line:
 
 			{"evaluation":"PASS, NEEDS_IMPROVEMENT, or FAIL", "feedback":"Your feedback here"}
@@ -150,11 +151,11 @@ public class EvaluatorOptimizerWorkflow {
 
 	private final String evaluatorPrompt;
 
-	public EvaluatorOptimizerWorkflow(ChatClient chatClient) {
+	public EvaluatorOptimizer(ChatClient chatClient) {
 		this(chatClient, DEFAULT_GENERATOR_PROMPT, DEFAULT_EVALUATOR_PROMPT);
 	}
 
-	public EvaluatorOptimizerWorkflow(ChatClient chatClient, String generatorPrompt, String evaluatorPrompt) {
+	public EvaluatorOptimizer(ChatClient chatClient, String generatorPrompt, String evaluatorPrompt) {
 		Assert.notNull(chatClient, "ChatClient must not be null");
 		Assert.hasText(generatorPrompt, "Generator prompt must not be empty");
 		Assert.hasText(evaluatorPrompt, "Evaluator prompt must not be empty");

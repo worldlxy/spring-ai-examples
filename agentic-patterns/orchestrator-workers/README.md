@@ -27,7 +27,7 @@ This pattern is particularly effective for:
 The implementation uses Spring AI's ChatClient for LLM interactions and consists of:
 
 ```java
-public class OrchestratorWorkersWorkflow {
+public class OrchestratorWorkers {
     public WorkerResponse process(String taskDescription) {
         // 1. Orchestrator analyzes task and determines subtasks
         OrchestratorResponse orchestratorResponse = // ...
@@ -45,10 +45,10 @@ public class OrchestratorWorkersWorkflow {
 
 ```java
 ChatClient chatClient = // ... initialize chat client
-OrchestratorWorkersWorkflow workflow = new OrchestratorWorkersWorkflow(chatClient);
+OrchestratorWorkers agent = new OrchestratorWorkers(chatClient);
 
 // Process a task
-WorkerResponse response = workflow.process(
+WorkerResponse response = agent.process(
     "Generate both technical and user-friendly documentation for a REST API endpoint"
 );
 
@@ -59,11 +59,11 @@ System.out.println("Worker Outputs: " + response.workerResponses());
 
 ## Customization
 
-The workflow can be customized through:
+The pattern can be customized through:
 
 1. **Custom Prompts**: Provide specialized prompts for orchestrator and workers
 ```java
-workflow = new OrchestratorWorkersWorkflow(
+agent = new OrchestratorWorkers(
     chatClient,
     customOrchestratorPrompt,
     customWorkerPrompt

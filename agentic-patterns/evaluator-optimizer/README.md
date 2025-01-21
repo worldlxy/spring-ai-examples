@@ -1,8 +1,8 @@
-# Evaluator-Optimizer Workflow Pattern
+# Evaluator-Optimizer Pattern
 
-This project demonstrates the Evaluator-Optimizer workflow pattern for building effective LLM-based systems, as described in [Anthropic's research on building effective agents](https://www.anthropic.com/research/building-effective-agents).
+This project demonstrates the Evaluator-Optimizer pattern for building effective LLM-based systems, as described in [Anthropic's research on building effective agents](https://www.anthropic.com/research/building-effective-agents).
 
-![Evaluator-Optimizer Workflow](https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F14f51e6406ccb29e695da48b17017e899a6119c7-2401x1000.png&w=3840&q=75)
+![Evaluator-Optimizer](https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F14f51e6406ccb29e695da48b17017e899a6119c7-2401x1000.png&w=3840&q=75)
 
 ## Overview
 
@@ -48,7 +48,7 @@ This pattern is particularly effective when:
 The implementation uses Spring AI's ChatClient for LLM interactions and consists of:
 
 ```java
-public class EvaluatorOptimizerWorkflow {
+public class EvaluatorOptimizer {
     public RefinedResponse loop(String task) {
         // 1. Generate initial solution
         Generation generation = generate(task, context);
@@ -68,10 +68,10 @@ public class EvaluatorOptimizerWorkflow {
 
 ```java
 ChatClient chatClient = // ... initialize chat client
-EvaluatorOptimizerWorkflow workflow = new EvaluatorOptimizerWorkflow(chatClient);
+EvaluatorOptimizer agent = new EvaluatorOptimizer(chatClient);
 
 // Process a task
-RefinedResponse response = workflow.loop(
+RefinedResponse response = agent.loop(
     "Create a Java class implementing a thread-safe counter"
 );
 
@@ -82,11 +82,11 @@ System.out.println("Evolution: " + response.chainOfThought());
 
 ## Customization
 
-The workflow can be customized through:
+The pattern can be customized through:
 
 1. **Custom Prompts**: Provide specialized prompts for generator and evaluator
 ```java
-workflow = new EvaluatorOptimizerWorkflow(
+agent = new EvaluatorOptimizer(
     chatClient,
     customGeneratorPrompt,
     customEvaluatorPrompt

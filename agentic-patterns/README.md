@@ -55,8 +55,8 @@ Implements a classification system that directs input to specialized followup ta
 - Content moderation systems
 - Query optimization based on complexity
 
-### 4. Orchestrator-Workers Workflow
-[orchestrator-workers-workflow/](orchestrator-workers-workflow/)
+### 4. Orchestrator-Workers
+[orchestrator-workers/](orchestrator-workers/)
 
 Implements a flexible system where a central LLM orchestrates task decomposition and delegates to specialized worker LLMs.
 
@@ -70,8 +70,8 @@ Implements a flexible system where a central LLM orchestrates task decomposition
 - Multi-source research tasks
 - Adaptive content creation
 
-### 5. Evaluator-Optimizer Workflow
-[evaluator-optimizer-workflow/](evaluator-optimizer-workflow/)
+### 5. Evaluator-Optimizer
+[evaluator-optimizer/](evaluator-optimizer/)
 
 Implements an iterative refinement process where one LLM generates solutions while another provides evaluation and feedback.
 

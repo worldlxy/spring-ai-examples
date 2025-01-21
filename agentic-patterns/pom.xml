@@ -17,8 +17,8 @@
 		<module>chain-workflow</module>
 		<module>parallelization-worflow</module>
 		<module>routing-workflow</module>
-		<module>orchestrator-workers-workflow</module>
-		<module>evaluator-optimizer-workflow</module>
+		<module>orchestrator-workers</module>
+		<module>evaluator-optimizer</module>
 	</modules>
 
 

@@ -21,9 +21,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.util.Assert;
 
 /**
- * Workflow: <b>Orchestrator-workers</b>
+ * Pattern: <b>Orchestrator-workers</b>
  * <p/>
- * In this workflow, a central LLM (the orchestrator) dynamically breaks down
+ * In this pattern, a central LLM (the orchestrator) dynamically breaks down
  * complex tasks into subtasks,
  * delegates them to worker LLMs, and uses a synthesizer to combine their
  * results. The orchestrator analyzes
@@ -41,7 +41,7 @@ import org.springframework.util.Assert;
  * result</li>
  * </ul>
  * <p/>
- * When to use: This workflow is well-suited for complex tasks where you can't
+ * When to use: This pattern is well-suited for complex tasks where you can't
  * predict the subtasks needed upfront.
  * For example:
  * <ul>
@@ -64,7 +64,7 @@ import org.springframework.util.Assert;
  *      "https://www.anthropic.com/research/building-effective-agents">Building
  *      effective agents</a>
  */
-public class OrchestratorWorkersWorkflow {
+public class OrchestratorWorkers {
 
 	private final ChatClient chatClient;
 	private final String orchestratorPrompt;
@@ -135,22 +135,22 @@ public class OrchestratorWorkersWorkflow {
 	}
 
 	/**
-	 * Creates a new OrchestratorWorkersWorkflow with default prompts.
+	 * Creates a new OrchestratorWorkers with default prompts.
 	 * 
 	 * @param chatClient The ChatClient to use for LLM interactions
 	 */
-	public OrchestratorWorkersWorkflow(ChatClient chatClient) {
+	public OrchestratorWorkers(ChatClient chatClient) {
 		this(chatClient, DEFAULT_ORCHESTRATOR_PROMPT, DEFAULT_WORKER_PROMPT);
 	}
 
 	/**
-	 * Creates a new OrchestratorWorkersWorkflow with custom prompts.
+	 * Creates a new OrchestratorWorkers with custom prompts.
 	 * 
 	 * @param chatClient         The ChatClient to use for LLM interactions
 	 * @param orchestratorPrompt Custom prompt for the orchestrator LLM
 	 * @param workerPrompt       Custom prompt for the worker LLMs
 	 */
-	public OrchestratorWorkersWorkflow(ChatClient chatClient, String orchestratorPrompt, String workerPrompt) {
+	public OrchestratorWorkers(ChatClient chatClient, String orchestratorPrompt, String workerPrompt) {
 		Assert.notNull(chatClient, "ChatClient must not be null");
 		Assert.hasText(orchestratorPrompt, "Orchestrator prompt must not be empty");
 		Assert.hasText(workerPrompt, "Worker prompt must not be empty");
@@ -161,7 +161,7 @@ public class OrchestratorWorkersWorkflow {
 	}
 
 	/**
-	 * Processes a task using the orchestrator-workers workflow pattern.
+	 * Processes a task using the orchestrator-workers pattern.
 	 * First, the orchestrator analyzes the task and breaks it down into subtasks.
 	 * Then, workers execute each subtask in parallel.
 	 * Finally, the results are combined into a single response.
