@@ -1,0 +1,62 @@
+2025-01-24T12:29:43.836+01:00  INFO 49430 --- [main] o.s.a.m.s.server.McpServerApplication    : Starting McpServerApplication v0.0.1-SNAPSHOT using Java 23.0.1 with PID 49430 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/mcp-webflux-server/target/mcp-webflux-server-0.0.1-SNAPSHOT.jar started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-01-24T12:29:43.837+01:00  INFO 49430 --- [main] o.s.a.m.s.server.McpServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-24T12:29:44.414+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=9ad56cc6-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Spring AI MCP Client, version=1.0.0}}]
+2025-01-24T12:29:44.422+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.server.McpAsyncServer         : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Spring AI MCP Client, version=1.0.0]
+2025-01-24T12:29:44.475+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-01-24T12:29:44.475+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=9ad56cc6-1, params=null]
+2025-01-24T12:29:44.478+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=9ad56cc6-2, params={}]
+2025-01-24T12:29:44.490+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=9ad56cc6-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-01-24T12:29:44.515+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=9ad56cc6-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-01-24T12:29:44.520+01:00  INFO 49430 --- [main] o.s.a.m.s.server.McpServerApplication    : Started McpServerApplication in 0.91 seconds (process running for 1.157)
+2025-01-24T12:29:49.269+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=9ad56cc6-5, params={}]
+2025-01-24T12:29:49.276+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=9ad56cc6-6, params={uri=system://info}]
+2025-01-24T12:29:49.286+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=9ad56cc6-7, params={}]
+2025-01-24T12:29:49.293+01:00  INFO 49430 --- [pool-1-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=9ad56cc6-8, params={name=greeting, arguments={name=Spring}}]
+2025-01-24T19:03:06.765+01:00  INFO 90957 --- [main] o.s.a.m.s.server.McpServerApplication    : Starting McpServerApplication v0.0.1-SNAPSHOT using Java 23.0.1 with PID 90957 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/mcp-webflux-server/target/mcp-webflux-server-0.0.1-SNAPSHOT.jar started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-01-24T19:03:06.767+01:00  INFO 90957 --- [main] o.s.a.m.s.server.McpServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-24T19:03:07.174+01:00  INFO 91011 --- [main] o.s.a.m.s.server.McpServerApplication    : Starting McpServerApplication v0.0.1-SNAPSHOT using Java 23.0.1 with PID 91011 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/mcp-webflux-server/target/mcp-webflux-server-0.0.1-SNAPSHOT.jar started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-01-24T19:03:07.176+01:00  INFO 91011 --- [main] o.s.a.m.s.server.McpServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-24T19:03:07.427+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=9e0a3f40-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Spring AI MCP Client, version=1.0.0}}]
+2025-01-24T19:03:07.433+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.server.McpAsyncServer         : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Spring AI MCP Client, version=1.0.0]
+2025-01-24T19:03:07.499+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-01-24T19:03:07.500+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=9e0a3f40-1, params=null]
+2025-01-24T19:03:07.502+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=9e0a3f40-2, params={}]
+2025-01-24T19:03:07.517+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=9e0a3f40-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-01-24T19:03:07.540+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=9e0a3f40-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-01-24T19:03:07.628+01:00  INFO 90957 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-01-24T19:03:07.635+01:00  INFO 90957 --- [main] o.s.a.m.s.server.McpServerApplication    : Started McpServerApplication in 1.093 seconds (process running for 1.335)
+2025-01-24T19:03:07.841+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=a7f036cf-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Spring AI MCP Client, version=1.0.0}}]
+2025-01-24T19:03:07.849+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.server.McpAsyncServer         : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Spring AI MCP Client, version=1.0.0]
+2025-01-24T19:03:07.904+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-01-24T19:03:07.905+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=a7f036cf-1, params=null]
+2025-01-24T19:03:07.907+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=a7f036cf-2, params={}]
+2025-01-24T19:03:07.920+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=a7f036cf-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-01-24T19:03:07.946+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=a7f036cf-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-01-24T19:03:10.035+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=a7f036cf-5, params={}]
+2025-01-24T19:03:10.045+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=a7f036cf-6, params={uri=system://info}]
+2025-01-24T19:03:10.057+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=a7f036cf-7, params={}]
+2025-01-24T19:03:10.064+01:00  INFO 91011 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=a7f036cf-8, params={name=greeting, arguments={name=Spring}}]
+2025-01-24T19:03:10.070+01:00  WARN 91011 --- [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-01-24T19:03:10.074+01:00  INFO 91011 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-01-24T19:03:10.083+01:00 ERROR 91011 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-01-24T19:03:10.173+01:00  INFO 91011 --- [parallel-1] o.s.a.m.s.t.StdioServerTransport         : Graceful shutdown completed
+2025-01-24T19:03:10.180+01:00  INFO 91011 --- [parallel-2] o.s.a.m.s.t.StdioServerTransport         : Graceful shutdown completed
+2025-01-24T19:03:10.191+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=9e0a3f40-5, params={}]
+2025-01-24T19:03:10.199+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=9e0a3f40-6, params={uri=system://info}]
+2025-01-24T19:03:10.208+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=9e0a3f40-7, params={}]
+2025-01-24T19:03:10.214+01:00  INFO 90957 --- [pool-3-thread-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=9e0a3f40-8, params={name=greeting, arguments={name=Spring}}]

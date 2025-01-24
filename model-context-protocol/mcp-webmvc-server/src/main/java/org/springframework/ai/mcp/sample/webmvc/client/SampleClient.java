@@ -40,7 +40,7 @@ public class SampleClient {
 
 	public void run() {
 
-		var client = McpClient.using(this.transport).sync();
+		var client = McpClient.sync(this.transport).build();
 
 		client.initialize();
 

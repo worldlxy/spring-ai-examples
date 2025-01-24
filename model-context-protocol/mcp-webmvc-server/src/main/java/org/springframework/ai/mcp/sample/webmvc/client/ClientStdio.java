@@ -27,7 +27,7 @@ public class ClientStdio {
 	public static void main(String[] args) {
 
 		var stdioParams = ServerParameters.builder("java")
-			.args("-Dtransport.mode=stdio", "-jar",
+			.args("-Dtransport.mode=stdio", "-Dspring.main.web-application-type=none", "-jar",
 					"model-context-protocol/mcp-webmvc-server/target/mcp-webmvc-server-0.0.1-SNAPSHOT.jar")
 			.build();
 

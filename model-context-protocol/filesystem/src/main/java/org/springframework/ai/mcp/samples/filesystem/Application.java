@@ -70,8 +70,8 @@ public class Application {
 				.args("-y", "@modelcontextprotocol/server-filesystem", getDbPath())
 				.build();
 
-		var mcpClient = McpClient.using(new StdioClientTransport(stdioParams))
-				.requestTimeout(Duration.ofSeconds(10)).sync();
+		var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams))
+				.requestTimeout(Duration.ofSeconds(10)).build();
 
 		var init = mcpClient.initialize();
 

@@ -50,7 +50,7 @@ public class Application {
 				.addEnvVar("BRAVE_API_KEY", System.getenv("BRAVE_API_KEY"))
 				.build();
 
-		var mcpClient = McpClient.using(new StdioClientTransport(stdioParams)).sync();
+		var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams)).build();
 		var init = mcpClient.initialize();
 		System.out.println("MCP Initialized: " + init);
 		return mcpClient;
