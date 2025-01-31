@@ -1,0 +1,148 @@
+# Spring AI - Model Context Protocol (MCP) Brave Search Example
+
+This example demonstrates how to use the Spring AI Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application enables natural language interactions with Brave Search, allowing you to perform internet searches through a conversational interface.
+
+<img src="spring-ai-mcp-brave.jpg" width="600"/>
+
+## Prerequisites
+
+- Java 17 or higher
+- Maven 3.6+
+- npx package manager
+- OpenAI API key
+- Brave Search API key (Get one at https://brave.com/search/api/)
+
+## Setup
+
+1. Install npx (Node Package eXecute):
+   First, make sure to install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+   and then run:
+   ```bash
+   npm install -g npx
+   ```
+
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/spring-projects/spring-ai-examples.git
+   cd model-context-protocol/brave-starter
+   ```
+
+3. Set up your API keys:
+   ```bash
+   export OPENAI_API_KEY='your-openai-api-key-here'
+   export BRAVE_API_KEY='your-brave-api-key-here'
+   ```
+
+4. Build the application:
+   ```bash
+   ./mvnw clean install
+   ```
+
+## Running the Application
+
+Run the application using Maven:
+```bash
+./mvnw spring-boot:run
+```
+
+The application will demonstrate the integration by asking a sample question about Spring AI and Model Context Protocol, utilizing Brave Search to gather information.
+
+## How it Works
+
+The application demonstrates Spring AI integration with Brave Search through the Model Context Protocol (MCP). Here's an overview of the key components:
+
+### Project Configuration
+
+The project uses Spring AI's MCP boot starter:
+
+```xml
+<dependency>
+   <groupId>org.springframework.ai</groupId>
+   <artifactId>spring-ai-mcp-spring-boot-starter</artifactId>
+</dependency>
+```
+
+The application configuration is defined in two files:
+
+1. `application.properties` - Core application settings:
+```properties
+# Application configuration
+spring.application.name=mcp
+spring.main.web-application-type=none
+
+# API Keys
+spring.ai.openai.api-key=${OPENAI_API_KEY}
+
+
+# MCP Configuration
+spring.ai.mcp.client.stdio.enabled=true
+spring.ai.mcp.client.stdio.servers-configuration=classpath:/mcp-servers-config.json
+```
+
+2. `mcp-servers-config.json` - MCP server configuration:
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+      }
+    }
+  }
+}
+```
+
+### Auto-Configuration
+
+Spring Boot's auto-configuration handles the setup:
+- Configures the application as a command-line tool (non-web)
+- Sets up the OpenAI integration using the provided API key
+- Enables the MCP STDIO client for communication with the Brave Search server
+- Provides a `List<ToolCallback>` bean containing the Brave Search capabilities, which is automatically injected into the `CommandLineRunner`
+
+### Main Application
+
+The `Application.java` file demonstrates a simple Spring Boot application that:
+
+1. Uses Spring Boot's `CommandLineRunner` to execute a predefined question when the application starts
+2. Creates a `ChatClient` with the automatically configured MCP tools (Brave Search capabilities)
+3. Asks a specific question about Spring AI and Model Context Protocol
+4. Prints both the question and the AI assistant's response to the console
+5. Automatically closes the application after receiving the response
+
+Here's the key code from `Application.java`:
+
+```java
+@Bean
+public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, 
+        List<ToolCallback> tools, ConfigurableApplicationContext context) {
+    return args -> {
+        var chatClient = chatClientBuilder
+                .defaultTools(tools)
+                .build();
+
+        String question = "Does Spring AI support the Model Context Protocol? "
+                + "Please provide some references.";
+
+        System.out.println("QUESTION: " + question);
+        System.out.println("ASSISTANT: " + chatClient.prompt(question).call().content());
+
+        context.close();
+    };
+}
+```
+
+The application automatically:
+- Injects the `ChatClient.Builder` and `ToolCallback` list (containing Brave Search capabilities)
+- Configures the chat client with the available tools
+- Executes a predefined question
+- Uses Brave Search when needed to gather information for the response
+
+This setup allows the AI model to do the following:
+- Understand when to use Brave Search
+- Format queries appropriately
+- Process and incorporate search results into responses
