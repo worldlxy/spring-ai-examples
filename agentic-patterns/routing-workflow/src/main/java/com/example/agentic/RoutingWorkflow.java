@@ -153,7 +153,7 @@ public class RoutingWorkflow {
 
         String selectorPrompt = String.format("""
                 Analyze the input and select the most appropriate support team from these options: %s
-                First explain your reasoning, then provide your selection in this XML format:
+                First explain your reasoning, then provide your selection in this JSON format:
 
                 \\{
                     "reasoning": "Brief explanation of why this ticket should be routed to a specific team.
