@@ -1,0 +1,50 @@
+2025-02-09T21:21:11.760+01:00  INFO 93310 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Starting McpMvcServerApplication using Java 17.0.12 with PID 93310 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-webmvc-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:21:11.761+01:00  INFO 93310 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:21:12.089+01:00  INFO 93310 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-09T21:21:12.095+01:00  INFO 93310 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-09T21:21:12.095+01:00  INFO 93310 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-09T21:21:12.125+01:00  INFO 93310 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-09T21:21:12.125+01:00  INFO 93310 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 344 ms
+2025-02-09T21:21:12.481+01:00  INFO 93310 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-09T21:21:12.487+01:00  INFO 93310 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Started McpMvcServerApplication in 0.895 seconds (process running for 1.022)
+2025-02-09T21:21:36.802+01:00  INFO 93310 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed
+2025-02-09T21:21:36.803+01:00  INFO 93310 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed
+2025-02-09T21:22:52.834+01:00  INFO 93938 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Starting McpMvcServerApplication using Java 17.0.12 with PID 93938 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-webmvc-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:22:52.835+01:00  INFO 93938 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:22:53.140+01:00  INFO 93938 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-09T21:22:53.145+01:00  INFO 93938 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-09T21:22:53.145+01:00  INFO 93938 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-09T21:22:53.167+01:00  INFO 93938 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-09T21:22:53.167+01:00  INFO 93938 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 313 ms
+2025-02-09T21:22:53.484+01:00  INFO 93938 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-09T21:22:53.490+01:00  INFO 93938 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Started McpMvcServerApplication in 0.82 seconds (process running for 0.943)
+2025-02-09T21:23:04.979+01:00  INFO 93938 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed
+2025-02-09T21:23:04.979+01:00  INFO 93938 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed
+2025-02-09T21:24:24.073+01:00  INFO 94676 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Starting McpMvcServerApplication using Java 17.0.12 with PID 94676 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-webmvc-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:24:24.074+01:00  INFO 94676 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:24:24.425+01:00  INFO 94676 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-09T21:24:24.430+01:00  INFO 94676 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-09T21:24:24.431+01:00  INFO 94676 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-09T21:24:24.455+01:00  INFO 94676 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-09T21:24:24.456+01:00  INFO 94676 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 362 ms
+2025-02-09T21:24:24.789+01:00  INFO 94676 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-09T21:24:24.795+01:00  INFO 94676 --- [main] o.s.a.m.s.w.s.McpMvcServerApplication    : Started McpMvcServerApplication in 0.896 seconds (process running for 1.022)
+2025-02-09T21:24:27.528+01:00  INFO 94676 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-02-09T21:24:27.529+01:00  INFO 94676 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-02-09T21:24:27.529+01:00  INFO 94676 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-02-09T21:24:27.578+01:00  INFO 94676 --- [http-nio-8080-exec-2] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=1f83bbd8-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Spring AI MCP Client, version=1.0.0}}]
+2025-02-09T21:24:27.582+01:00  INFO 94676 --- [http-nio-8080-exec-2] o.s.ai.mcp.server.McpAsyncServer         : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Spring AI MCP Client, version=1.0.0]
+2025-02-09T21:24:27.630+01:00  INFO 94676 --- [http-nio-8080-exec-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-02-09T21:24:27.633+01:00  INFO 94676 --- [http-nio-8080-exec-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=1f83bbd8-1, params=null]
+2025-02-09T21:24:27.637+01:00  INFO 94676 --- [http-nio-8080-exec-5] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=1f83bbd8-2, params={}]
+2025-02-09T21:24:27.649+01:00  INFO 94676 --- [http-nio-8080-exec-6] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=1f83bbd8-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-02-09T21:24:27.672+01:00  INFO 94676 --- [http-nio-8080-exec-7] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=1f83bbd8-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-02-09T21:24:28.635+01:00  INFO 94676 --- [http-nio-8080-exec-8] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=1f83bbd8-5, params={}]
+2025-02-09T21:24:28.645+01:00  INFO 94676 --- [http-nio-8080-exec-9] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=1f83bbd8-6, params={uri=system://info}]
+2025-02-09T21:24:28.657+01:00  INFO 94676 --- [http-nio-8080-exec-10] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=1f83bbd8-7, params={}]
+2025-02-09T21:24:28.665+01:00  INFO 94676 --- [http-nio-8080-exec-1] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=1f83bbd8-8, params={name=greeting, arguments={name=Spring}}]
+2025-02-09T21:24:57.797+01:00  WARN 94676 --- [http-nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Ignoring exception, response committed already: org.springframework.web.context.request.async.AsyncRequestTimeoutException
+2025-02-09T21:24:57.798+01:00  WARN 94676 --- [http-nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.context.request.async.AsyncRequestTimeoutException]
+2025-02-09T21:25:37.487+01:00  WARN 94676 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Failed to complete SSE emitter for session 76fdc444-38d2-4884-9e75-dc747611b756: The response object has been recycled and is no longer associated with this facade
+2025-02-09T21:25:37.487+01:00  INFO 94676 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed
+2025-02-09T21:25:37.487+01:00  INFO 94676 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebMvcSseServerTransport     : Graceful shutdown completed

@@ -1,0 +1,50 @@
+2025-02-09T21:25:36.624+01:00  INFO 95283 --- [main] o.s.a.m.s.server.McpServerApplication    : Starting McpServerApplication using Java 17.0.12 with PID 95283 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-webflux-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:25:36.625+01:00  INFO 95283 --- [main] o.s.a.m.s.server.McpServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:25:38.595+01:00  WARN 95283 --- [main] o.s.c.support.DefaultLifecycleProcessor  : Failed to stop bean 'reactorResourceFactory'
+
+reactor.core.Exceptions$ReactiveException: java.lang.InterruptedException
+	at reactor.core.Exceptions.propagate(Exceptions.java:410) ~[reactor-core-3.6.12.jar:3.6.12]
+	at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:96) ~[reactor-core-3.6.12.jar:3.6.12]
+	at reactor.core.publisher.Mono.block(Mono.java:1779) ~[reactor-core-3.6.12.jar:3.6.12]
+	at org.springframework.http.client.ReactorResourceFactory.stop(ReactorResourceFactory.java:298) ~[spring-web-6.1.15.jar:6.1.15]
+	at org.springframework.context.SmartLifecycle.stop(SmartLifecycle.java:117) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStop(DefaultLifecycleProcessor.java:346) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.stop(DefaultLifecycleProcessor.java:488) ~[spring-context-6.1.15.jar:6.1.15]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.context.support.DefaultLifecycleProcessor.stopBeans(DefaultLifecycleProcessor.java:315) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.DefaultLifecycleProcessor.onRefresh(DefaultLifecycleProcessor.java:207) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:990) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:628) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.ai.mcp.sample.server.McpServerApplication.main(McpServerApplication.java:10) ~[classes/:na]
+Caused by: java.lang.InterruptedException: null
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1048) ~[na:na]
+	at java.base/java.util.concurrent.CountDownLatch.await(CountDownLatch.java:230) ~[na:na]
+	at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:91) ~[reactor-core-3.6.12.jar:3.6.12]
+	... 17 common frames omitted
+
+2025-02-09T21:25:38.599+01:00  WARN 95283 --- [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-02-09T21:25:38.609+01:00  INFO 95283 --- [main] o.s.a.m.s.t.WebFluxSseServerTransport    : Graceful shutdown completed
+2025-02-09T21:25:38.610+01:00  INFO 95283 --- [main] o.s.a.m.s.t.WebFluxSseServerTransport    : Graceful shutdown completed
+2025-02-09T21:25:44.586+01:00  INFO 95411 --- [main] o.s.a.m.s.server.McpServerApplication    : Starting McpServerApplication using Java 17.0.12 with PID 95411 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-webflux-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:25:44.587+01:00  INFO 95411 --- [main] o.s.a.m.s.server.McpServerApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:25:45.244+01:00  INFO 95411 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-02-09T21:25:45.252+01:00  INFO 95411 --- [main] o.s.a.m.s.server.McpServerApplication    : Started McpServerApplication in 0.833 seconds (process running for 0.968)
+2025-02-09T21:25:49.434+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=12e95de7-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Spring AI MCP Client, version=1.0.0}}]
+2025-02-09T21:25:49.438+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.server.McpAsyncServer         : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Spring AI MCP Client, version=1.0.0]
+2025-02-09T21:25:49.488+01:00  INFO 95411 --- [reactor-http-nio-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-02-09T21:25:49.492+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=12e95de7-1, params=null]
+2025-02-09T21:25:49.496+01:00  INFO 95411 --- [reactor-http-nio-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=12e95de7-2, params={}]
+2025-02-09T21:25:49.508+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=12e95de7-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-02-09T21:25:49.527+01:00  INFO 95411 --- [reactor-http-nio-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=12e95de7-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-02-09T21:25:50.384+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=12e95de7-5, params={}]
+2025-02-09T21:25:50.396+01:00  INFO 95411 --- [reactor-http-nio-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=12e95de7-6, params={uri=system://info}]
+2025-02-09T21:25:50.408+01:00  INFO 95411 --- [reactor-http-nio-3] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=12e95de7-7, params={}]
+2025-02-09T21:25:50.417+01:00  INFO 95411 --- [reactor-http-nio-4] o.s.ai.mcp.spec.DefaultMcpSession        : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=12e95de7-8, params={name=greeting, arguments={name=Spring}}]
+2025-02-09T21:25:54.383+01:00  INFO 95411 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebFluxSseServerTransport    : Graceful shutdown completed
+2025-02-09T21:25:54.384+01:00  INFO 95411 --- [SpringApplicationShutdownHook] o.s.a.m.s.t.WebFluxSseServerTransport    : Graceful shutdown completed

@@ -1,0 +1,58 @@
+2025-02-09T21:26:38.153+01:00  INFO 95924 --- [main] .s.a.m.s.s.s.McpServletServerApplication : Starting McpServletServerApplication using Java 17.0.12 with PID 95924 (/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/book-library/manual-servlet-server/target/classes started by christiantzolov in /Users/christiantzolov/Dev/projects/spring-ai-examples)
+2025-02-09T21:26:38.154+01:00  INFO 95924 --- [main] .s.a.m.s.s.s.McpServletServerApplication : No active profile set, falling back to 1 default profile: "default"
+2025-02-09T21:26:38.468+01:00  INFO 95924 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-02-09T21:26:38.473+01:00  INFO 95924 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-02-09T21:26:38.473+01:00  INFO 95924 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-02-09T21:26:38.493+01:00  INFO 95924 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-02-09T21:26:38.493+01:00  INFO 95924 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 319 ms
+2025-02-09T21:26:38.711+01:00  INFO 95924 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-02-09T21:26:38.715+01:00  INFO 95924 --- [main] .s.a.m.s.s.s.McpServletServerApplication : Started McpServletServerApplication in 0.731 seconds (process running for 0.85)
+2025-02-09T21:26:43.707+01:00  INFO 95924 --- [http-nio-8080-exec-2] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=initialize, id=6c0682de-0, params={protocolVersion=2024-11-05, capabilities={}, clientInfo={name=Java SDK MCP Client, version=1.0.0}}]
+2025-02-09T21:26:43.711+01:00  INFO 95924 --- [http-nio-8080-exec-2] i.m.server.McpAsyncServer                : Client initialize request - Protocol: 2024-11-05, Capabilities: ClientCapabilities[experimental=null, roots=null, sampling=null], Info: Implementation[name=Java SDK MCP Client, version=1.0.0]
+2025-02-09T21:26:43.756+01:00  INFO 95924 --- [http-nio-8080-exec-3] i.m.spec.DefaultMcpSession               : Received notification: JSONRPCNotification[jsonrpc=2.0, method=notifications/initialized, params=null]
+2025-02-09T21:26:43.758+01:00  INFO 95924 --- [http-nio-8080-exec-4] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=ping, id=6c0682de-1, params=null]
+2025-02-09T21:26:43.760+01:00  INFO 95924 --- [http-nio-8080-exec-5] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/list, id=6c0682de-2, params={}]
+2025-02-09T21:26:43.770+01:00  INFO 95924 --- [http-nio-8080-exec-6] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=6c0682de-3, params={name=toUpperCase, arguments={input=accountName}}]
+2025-02-09T21:26:43.794+01:00  INFO 95924 --- [http-nio-8080-exec-7] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=tools/call, id=6c0682de-4, params={name=getBooks, arguments={title=Spring Framework}}]
+2025-02-09T21:26:44.908+01:00  INFO 95924 --- [http-nio-8080-exec-8] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/list, id=6c0682de-5, params={}]
+2025-02-09T21:26:44.917+01:00  INFO 95924 --- [http-nio-8080-exec-9] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=resources/read, id=6c0682de-6, params={uri=system://info}]
+2025-02-09T21:26:44.927+01:00  INFO 95924 --- [http-nio-8080-exec-10] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/list, id=6c0682de-7, params={}]
+2025-02-09T21:26:44.934+01:00  INFO 95924 --- [http-nio-8080-exec-1] i.m.spec.DefaultMcpSession               : Received request: JSONRPCRequest[jsonrpc=2.0, method=prompts/get, id=6c0682de-8, params={name=greeting, arguments={name=Spring}}]
+2025-02-09T21:26:46.642+01:00 ERROR 95924 --- [SpringApplicationShutdownHook] reactor.core.publisher.Operators         : Operator called default onErrorDropped
+
+reactor.core.Exceptions$ErrorCallbackNotImplemented: java.lang.IllegalStateException: The request associated with the AsyncContext has already completed processing.
+Caused by: java.lang.IllegalStateException: The request associated with the AsyncContext has already completed processing.
+	at org.apache.catalina.core.AsyncContextImpl.check(AsyncContextImpl.java:529) ~[tomcat-embed-core-10.1.33.jar:10.1.33]
+	at org.apache.catalina.core.AsyncContextImpl.complete(AsyncContextImpl.java:92) ~[tomcat-embed-core-10.1.33.jar:10.1.33]
+	at io.modelcontextprotocol.server.transport.HttpServletSseServerTransport.removeSession(HttpServletSseServerTransport.java:379) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at java.base/java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4780) ~[na:na]
+	at io.modelcontextprotocol.server.transport.HttpServletSseServerTransport.lambda$closeGracefully$4(HttpServletSseServerTransport.java:351) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at reactor.core.publisher.MonoCreate.subscribe(MonoCreate.java:61) ~[reactor-core-3.6.12.jar:3.6.12]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.6.12.jar:3.6.12]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4642) ~[reactor-core-3.6.12.jar:3.6.12]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4403) ~[reactor-core-3.6.12.jar:3.6.12]
+	at io.modelcontextprotocol.spec.McpTransport.close(McpTransport.java:61) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at io.modelcontextprotocol.server.transport.HttpServletSseServerTransport.close(HttpServletSseServerTransport.java:323) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at io.modelcontextprotocol.spec.DefaultMcpSession.close(DefaultMcpSession.java:283) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at io.modelcontextprotocol.server.McpAsyncServer.close(McpAsyncServer.java:255) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at io.modelcontextprotocol.server.McpSyncServer.close(McpSyncServer.java:205) ~[mcp-0.7.0-SNAPSHOT.jar:0.7.0-SNAPSHOT]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.invokeCustomDestroyMethod(DisposableBeanAdapter.java:316) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DisposableBeanAdapter.destroy(DisposableBeanAdapter.java:249) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroyBean(DefaultSingletonBeanRegistry.java:587) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingleton(DefaultSingletonBeanRegistry.java:559) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingleton(DefaultListableBeanFactory.java:1202) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.destroySingletons(DefaultSingletonBeanRegistry.java:520) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.destroySingletons(DefaultListableBeanFactory.java:1195) ~[spring-beans-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.AbstractApplicationContext.destroyBeans(AbstractApplicationContext.java:1195) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1156) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:174) ~[spring-boot-3.3.6.jar:3.3.6]
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1102) ~[spring-context-6.1.15.jar:6.1.15]
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:145) ~[spring-boot-3.3.6.jar:3.3.6]
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[na:na]
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:114) ~[spring-boot-3.3.6.jar:3.3.6]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
