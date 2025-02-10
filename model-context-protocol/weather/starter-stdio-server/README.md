@@ -4,17 +4,16 @@ A Spring Boot starter project demonstrating how to build a Model Context Protoco
 
 For more information, see the [MCP Server Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html) reference documentation.
 
-
 ## Prerequisites
 
 - Java 17 or later
-- Maven 3.6+
-- Basic understanding of Spring Boot and Spring AI
+- Maven 3.6 or later
+- Understanding of Spring Boot and Spring AI concepts
 - (Optional) Claude Desktop for AI assistant integration
 
 ## About Spring AI MCP Server Boot Starter
 
-This project uses `spring-ai-mcp-server-spring-boot-starter`, which provides:
+The `spring-ai-mcp-server-spring-boot-starter` provides:
 - Automatic configuration of MCP server components
 - Support for both synchronous and asynchronous operation modes
 - STDIO transport layer implementation
@@ -40,7 +39,7 @@ src/
 
 ## Building and Running
 
-The server uses STDIO transport mode and is typically started automatically by the client. You only need to build the server jar:
+The server uses STDIO transport mode and is typically started automatically by the client. To build the server jar:
 
 ```bash
 ./mvnw clean install -DskipTests
@@ -53,7 +52,6 @@ The project demonstrates how to implement and register MCP tools using Spring's 
 ```java
 @Service
 public class WeatherService {
-
     @Tool(description = "Get weather forecast for a specific latitude/longitude")
     public String getWeatherForecastByLocation(
         double latitude,   // Latitude coordinate
@@ -64,7 +62,7 @@ public class WeatherService {
 
     @Tool(description = "Get weather alerts for a US state")
     public String getAlerts(
-        String state  // Two-letter US state code (e.g. CA, NY)
+        String state  // Two-letter US state code (e.g., CA, NY)
     ) {
         // Implementation
     }
@@ -79,7 +77,7 @@ public class McpServerApplication {
 }
 ```
 
-The auto-configuration will automatically register these tools with the MCP server. You can have multiple beans producing lists of ToolCallbacks, and the auto-configuration will merge them.
+The auto-configuration automatically registers these tools with the MCP server. You can have multiple beans producing lists of ToolCallbacks, and the auto-configuration will merge them.
 
 ## Available Tools
 
@@ -111,7 +109,7 @@ CallToolResult forecast = client.callTool(
 ```java
 @Tool(description = "Get weather alerts for a US state")
 public String getAlerts(
-    String state  // Two-letter US state code (e.g. CA, NY)
+    String state  // Two-letter US state code (e.g., CA, NY)
 ) {
     // Returns active alerts including:
     // - Event type
@@ -133,6 +131,8 @@ CallToolResult alerts = client.callTool(
 
 ### Java Client Example
 
+#### Create MCP Client Manually
+
 ```java
 // Create server parameters
 ServerParameters stdioParams = ServerParameters.builder("java")
@@ -148,9 +148,25 @@ var transport = new StdioClientTransport(stdioParams);
 var client = McpClient.sync(transport).build();
 ```
 
-The [ClientStdio.java](src/test/java/org/springframework/ai/mcp/sample/client/ClientStdio.java) shows how to implement an MCP client manually.
+The [ClientStdio.java](src/test/java/org/springframework/ai/mcp/sample/client/ClientStdio.java) demonstrates how to implement an MCP client manually.
 
 For a better development experience, consider using the [MCP Client Boot Starters](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-client-boot-starter-docs.html). These starters enable auto-configuration of multiple STDIO and/or SSE connections to MCP servers. See the [starter-default-client](../../client-starter/starter-default-client) and [starter-webflux-client](../../client-starter/starter-webflux-client) projects for examples.
+
+#### Use MCP Client Boot Starter
+
+Use the [starter-default-client](../../client-starter/starter-default-client) to connect to the weather `starter-stdio-server`:
+
+1. Follow the `starter-default-client` readme instructions to build a `mcp-starter-default-client-0.0.1-SNAPSHOT.jar` client application.
+
+2. Run the client using the configuration file:
+
+```bash
+java -Dspring.ai.mcp.client.stdio.connections.server1.command=java \
+     -Dspring.ai.mcp.client.stdio.connections.server1.args=-jar,/Users/christiantzolov/Dev/projects/spring-ai-examples/model-context-protocol/weather/starter-stdio-server/target/mcp-weather-stdio-server-0.0.1-SNAPSHOT.jar \
+     -Dai.user.input='What is the weather in NY?' \
+     -Dlogging.pattern.console= \
+     -jar mcp-starter-default-client-0.0.1-SNAPSHOT.jar
+```
 
 ### Claude Desktop Integration
 
@@ -162,7 +178,7 @@ To integrate with Claude Desktop, add the following configuration to your Claude
     "spring-ai-mcp-weather": {
       "command": "java",
       "args": [
-        "-Dspring.ai.mcp.server.transport=STDIO",
+        "-Dspring.ai.mcp.server.stdio=true",
         "-Dspring.main.web-application-type=none",
         "-Dlogging.pattern.console=",
         "-jar",
@@ -175,13 +191,11 @@ To integrate with Claude Desktop, add the following configuration to your Claude
 
 Replace `/absolute/path/to/` with the actual path to your built jar file.
 
-
 ## Configuration
 
 ### Application Properties
 
-All properties are prefixed with `spring.ai.mcp.server`
-
+All properties are prefixed with `spring.ai.mcp.server`:
 
 ```properties
 # Required STDIO Configuration
@@ -205,12 +219,12 @@ logging.file.name=mcp-weather-stdio-server.log
 
 ### Key Configuration Notes
 
-1. **STDIO Mode Requirements**:
+1. **STDIO Mode Requirements**
    - Disable web application type (`spring.main.web-application-type=none`)
    - Disable Spring banner (`spring.main.banner-mode=off`)
    - Clear console logging pattern (`logging.pattern.console=`)
 
-2. **Server Type**:
+2. **Server Type**
    - `SYNC` (default): Uses `McpSyncServer` for straightforward request-response patterns
    - `ASYNC`: Uses `McpAsyncServer` for non-blocking operations with Project Reactor support
 
@@ -221,4 +235,3 @@ logging.file.name=mcp-weather-stdio-server.log
 - [MCP Client Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-client-docs.html)
 - [Model Context Protocol Specification](https://modelcontextprotocol.github.io/specification/)
 - [Spring Boot Auto-configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.developing-auto-configuration)
-

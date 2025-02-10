@@ -143,7 +143,9 @@ public class WeatherService {
 
 You can connect to the weather server using either STDIO or SSE transport:
 
-### WebFlux SSE Client
+### Manual Clients
+
+#### WebFlux SSE Client
 
 For servers using SSE transport:
 
@@ -152,7 +154,7 @@ var transport = new WebFluxSseClientTransport(WebClient.builder().baseUrl("http:
 var client = McpClient.sync(transport).build();
 ```
 
-### STDIO Client
+#### STDIO Client
 
 For servers using STDIO transport:
 
@@ -176,6 +178,61 @@ The sample project includes example client implementations:
 - [ClientSse.java](src/test/java/org/springframework/ai/mcp/sample/client/ClientSse.java): SSE transport connection
 
 For a better development experience, consider using the [MCP Client Boot Starters](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-client-boot-starter-docs.html). These starters enable auto-configuration of multiple STDIO and/or SSE connections to MCP servers. See the [starter-default-client](../../client-starter/starter-default-client) and [starter-webflux-client](../../client-starter/starter-webflux-client) projects for examples.
+
+### Boot Starter Clients
+
+Lets use the [starter-webflux-client](../../client-starter/starter-webflux-client) client to connect to our weather `starter-webflux-server`.
+
+Follow the `starter-webflux-client` readme instruction to build a `mcp-starter-webflux-client-0.0.1-SNAPSHOT.jar` client application.
+
+#### STDIO Transport
+
+1. Create a `mcp-servers-config.json` configuration file with this content:
+
+```json
+{
+  "mcpServers": {
+    "weather-starter-webflux-server": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "/absolute/path/to/mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar"
+      ]
+    }
+  }
+}
+```
+
+2. Run the client using the configuration file:
+
+```bash
+java -Dspring.ai.mcp.client.stdio.servers-configuration=file:mcp-servers-config.json \
+ -Dai.user.input='What is the weather in NY?' \
+ -Dlogging.pattern.console= \
+ -jar mcp-starter-webflux-client-0.0.1-SNAPSHOT.jar
+```
+
+#### SSE (WebFlux) Transport
+
+1. Start the `mcp-weather-starter-webflux-server`:
+
+```bash
+java -jar mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar
+```
+
+starts the MCP server on port 8080.
+
+2. In another console start the client configured with SSE transport:
+
+```bash
+java -Dspring.ai.mcp.client.sse.connections.weather-server.url=http://localhost:8080 \
+ -Dlogging.pattern.console= \
+ -Dai.user.input='What is the weather in NY?' \
+ -jar mcp-starter-webflux-client-0.0.1-SNAPSHOT.jar
+```
 
 ## Additional Resources
 
