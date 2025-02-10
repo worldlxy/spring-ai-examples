@@ -2,6 +2,9 @@
 
 A Spring Boot starter project demonstrating how to build a Model Context Protocol (MCP) server that provides weather-related tools using the National Weather Service (weather.gov) API. This project showcases the Spring AI MCP Server Boot Starter capabilities with STDIO transport implementation.
 
+For more information, see the [MCP Server Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html) reference documentation.
+
+
 ## Prerequisites
 
 - Java 17 or later
@@ -145,6 +148,10 @@ var transport = new StdioClientTransport(stdioParams);
 var client = McpClient.sync(transport).build();
 ```
 
+The [ClientStdio.java](src/test/java/org/springframework/ai/mcp/sample/client/ClientStdio.java) shows how to implement an MCP client manually.
+
+For a better development experience, consider using the [MCP Client Boot Starters](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-client-boot-starter-docs.html). These starters enable auto-configuration of multiple STDIO and/or SSE connections to MCP servers. See the [starter-default-client](../../client-starter/starter-default-client) and [starter-webflux-client](../../client-starter/starter-webflux-client) projects for examples.
+
 ### Claude Desktop Integration
 
 To integrate with Claude Desktop, add the following configuration to your Claude Desktop settings:
@@ -167,6 +174,7 @@ To integrate with Claude Desktop, add the following configuration to your Claude
 ```
 
 Replace `/absolute/path/to/` with the actual path to your built jar file.
+
 
 ## Configuration
 
@@ -209,6 +217,8 @@ logging.file.name=mcp-weather-stdio-server.log
 ## Additional Resources
 
 - [Spring AI Documentation](https://docs.spring.io/spring-ai/reference/)
+- [MCP Server Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.html)
+- [MCP Client Boot Starter](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-client-docs.html)
 - [Model Context Protocol Specification](https://modelcontextprotocol.github.io/specification/)
 - [Spring Boot Auto-configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.developing-auto-configuration)
 
