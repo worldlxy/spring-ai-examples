@@ -33,7 +33,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Value("${spring.ai.mcp.client.demo.user.input}")
+	@Value("${ai.user.input}")
 	private String userInput;
 
 	@Bean

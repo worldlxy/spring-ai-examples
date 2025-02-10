@@ -76,49 +76,6 @@ spring.main.banner-mode=off
 logging.file.name=./target/starter-webflux-server.log
 ```
 
-## Sample Clients
-
-### WebFlux SSE Client
-```java
-var transport = new WebFluxSseClientTransport(WebClient.builder().baseUrl("http://localhost:8080"));
-var client = McpClient.sync(transport).build();
-```
-
-### STDIO Client
-```java
-var stdioParams = ServerParameters.builder("java")
-    .args("-Dspring.ai.mcp.server.stdio=true",
-          "-Dspring.main.web-application-type=none",
-          "-Dspring.main.banner-mode=off",
-          "-Dlogging.pattern.console=",
-          "-jar",
-          "target/mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar")
-    .build();
-
-var transport = new StdioClientTransport(stdioParams);
-var client = McpClient.sync(transport).build();
-```
-
-### Claude Desktop Configuration
-
-```json
-{
-  "mcpServers": {
-    "spring-ai-mcp-weather": {
-      "command": "java",
-      "args": [
-        "-Dspring.ai.mcp.server.stdio=true",
-        "-Dspring.main.web-application-type=none",
-        "-Dspring.main.banner-mode=off",
-        "-Dlogging.pattern.console=",
-        "-jar",
-        "<YOUR ABSOLUTE PATH TO>/mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar"
-      ]
-    }
-  }
-}
-```
-
 ## Available Tools
 
 ### Weather Forecast Tool
@@ -180,7 +137,50 @@ public class WeatherService {
 }
 ```
 
-## Client Usage Example
+## Sample Clients
+
+### WebFlux SSE Client
+```java
+var transport = new WebFluxSseClientTransport(WebClient.builder().baseUrl("http://localhost:8080"));
+var client = McpClient.sync(transport).build();
+```
+
+### STDIO Client
+```java
+var stdioParams = ServerParameters.builder("java")
+    .args("-Dspring.ai.mcp.server.stdio=true",
+          "-Dspring.main.web-application-type=none",
+          "-Dspring.main.banner-mode=off",
+          "-Dlogging.pattern.console=",
+          "-jar",
+          "target/mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar")
+    .build();
+
+var transport = new StdioClientTransport(stdioParams);
+var client = McpClient.sync(transport).build();
+```
+
+### Claude Desktop Configuration
+
+```json
+{
+  "mcpServers": {
+    "spring-ai-mcp-weather": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dspring.main.banner-mode=off",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "<YOUR ABSOLUTE PATH TO>/mcp-weather-starter-webflux-server-0.0.1-SNAPSHOT.jar"
+      ]
+    }
+  }
+}
+```
+
+### Client Usage Example
 
 ```java
 // Initialize client
