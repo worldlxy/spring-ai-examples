@@ -27,8 +27,8 @@
 		<module>model-context-protocol/filesystem</module>
 		
 		<module>model-context-protocol/brave</module>
-		<module>model-context-protocol/brave-starter</module>
-		<module>model-context-protocol/brave-chatbot</module>
+		<module>model-context-protocol/web-search/brave-starter</module>
+		<module>model-context-protocol/web-search/brave-chatbot</module>
 
 		<module>model-context-protocol/book-library/manual-webmvc-server</module>
 		<module>model-context-protocol/book-library/manual-webflux-server</module>
