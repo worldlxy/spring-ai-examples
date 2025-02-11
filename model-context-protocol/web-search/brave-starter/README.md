@@ -1,6 +1,24 @@
 # Spring AI - Model Context Protocol (MCP) Brave Search Example
 
-This example demonstrates how to use the Spring AI Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application enables natural language interactions with Brave Search, allowing you to perform internet searches through a conversational interface.
+This example demonstrates how to use the Spring AI Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search) using Spring Boot's auto-configuration capabilities. The application enables natural language interactions with Brave Search, allowing you to perform internet searches through a conversational interface. When run, the application demonstrates the MCP client's capabilities by asking a specific question: "Does Spring AI supports the Model Context Protocol? Please provide some references." The MCP client uses Brave Search to find relevant information and returns a comprehensive answer. After providing the response, the application exits.
+
+Unlike the manual configuration approach, this example uses the Spring Boot starter which automatically creates the MCP client for you, moving the configuration into `application.properties` and `mcp-servers-config.json`.
+
+## Dependencies
+
+The project uses the following key dependencies:
+
+```xml
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+</dependency>
+```
 
 <img src="spring-ai-mcp-brave.jpg" width="600"/>
 
@@ -49,29 +67,102 @@ The application will demonstrate the integration by asking a sample question abo
 
 ## How it Works
 
-The application demonstrates Spring AI integration with Brave Search through the Model Context Protocol (MCP). Here's an overview of the key components:
+The application uses Spring Boot's auto-configuration capabilities to set up the MCP client. The configuration is primarily done through two files:
 
-### Project Configuration
+### Project Dependencies
 
-The project uses Spring AI's MCP boot starter:
+The project uses Spring AI's MCP client Spring Boot starter and OpenAI starter:
 
 ```xml
 <dependency>
-   <groupId>org.springframework.ai</groupId>
-   <artifactId>spring-ai-mcp-spring-boot-starter</artifactId>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
 </dependency>
 ```
 
-The application configuration is defined in two files:
+### Configuration Files
 
-1. `application.properties` - Core application settings:
+The MCP client can be configured in two different ways, both achieving the same behavior:
+
+#### Option 1: Direct Configuration in application.properties
+
+This approach configures the MCP client directly in the application.properties file:
+
 ```properties
-# Application configuration
 spring.application.name=mcp
 spring.main.web-application-type=none
-
-# API Keys
 spring.ai.openai.api-key=${OPENAI_API_KEY}
+
+# Direct MCP client configuration
+spring.ai.mcp.client.stdio.connections.brave-search.command=npx
+spring.ai.mcp.client.stdio.connections.brave-search.args=-y,@modelcontextprotocol/server-brave-search
+```
+
+#### Option 2: External Configuration File
+
+Alternatively, you can move the MCP configuration to an external file. This approach is similar to how the anthropic standalone client is configured.
+
+1. In `application.properties`, enable the external configuration and comment out the direct configuration:
+```properties
+spring.application.name=mcp
+spring.main.web-application-type=none
+spring.ai.openai.api-key=${OPENAI_API_KEY}
+
+# Use external configuration file
+spring.ai.mcp.client.stdio.servers-configuration=classpath:/mcp-servers-config.json
+
+# Comment out direct configuration when using external file
+# spring.ai.mcp.client.stdio.connections.brave-search.command=npx
+# spring.ai.mcp.client.stdio.connections.brave-search.args=-y,@modelcontextprotocol/server-brave-search
+```
+
+2. In `mcp-servers-config.json` - Define the MCP server configuration:
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+### Application Code
+
+The main application (`Application.java`) uses the auto-configured components to create a chat client and execute a single question:
+
+```java
+@SpringBootApplication
+public class Application {
+    @Bean
+    public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, 
+            List<ToolCallback> tools, ConfigurableApplicationContext context) {
+        return args -> {
+            var chatClient = chatClientBuilder
+                    .defaultTools(tools)
+                    .build();
+
+            String question = "Does Spring AI support the Model Context Protocol? Please provide some references.";
+            System.out.println("QUESTION: " + question);
+            System.out.println("ASSISTANT: " + chatClient.prompt(question).call().content());
+
+            context.close();
+        };
+    }
+}
+```
+
+The application uses Spring Boot's auto-configuration to automatically create and configure the MCP client based on the properties and configuration files, without requiring explicit bean definitions for the client itself.
 
 
 # MCP Configuration
