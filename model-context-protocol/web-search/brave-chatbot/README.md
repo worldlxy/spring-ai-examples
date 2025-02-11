@@ -1,6 +1,8 @@
 # Spring AI - Model Context Protocol (MCP) Brave Search Chatbot
 
-This example demonstrates how to build an interactive chatbot that combines Spring AI's Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application creates a conversational interface powered by Anthropic's Claude AI model that can perform internet searches through Brave Search, enabling natural language interactions with real-time web data.
+This example demonstrates how to build an interactive chatbot that combines Spring AI's Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application creates a persistent chatbot that maintains conversation history using Spring AI's Memory Advisor, allowing for contextual interactions across multiple exchanges. Users can engage in an ongoing conversation with the bot, which can perform internet searches through Brave Search to provide up-to-date information. The chatbot runs continuously until terminated with Ctrl-C, maintaining conversational state throughout the session.
+
+The application is powered by Anthropic's Claude AI model and can perform internet searches through Brave Search, enabling natural language interactions with real-time web data while maintaining context of the conversation.
 
 <img src="spring-ai-mcp-brave.jpg" width="600"/>
 
@@ -9,7 +11,7 @@ This example demonstrates how to build an interactive chatbot that combines Spri
 - Java 17 or higher
 - Maven 3.6+
 - npx package manager
-- Anthropic API key (Claude)
+- Anthropic API key (Claude) (Get one at https://docs.anthropic.com/en/docs/initial-setup)
 - Brave Search API key (Get one at https://brave.com/search/api/)
 
 ## Setup
@@ -24,7 +26,7 @@ This example demonstrates how to build an interactive chatbot that combines Spri
 2. Clone the repository:
    ```bash
    git clone https://github.com/spring-projects/spring-ai-examples.git
-   cd model-context-protocol/web-search/brave-chatbot
+   cd spring-ai-examples/model-context-protocol/web-search/brave-chatbot
    ```
 
 3. Set up your API keys:
