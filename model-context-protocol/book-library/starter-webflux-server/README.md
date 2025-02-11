@@ -23,8 +23,19 @@ The project provides:
 The server uses WebFlux transport mode by default:
 
 ```bash
-java -jar target/mcp-webflux-server-starter-0.0.1-SNAPSHOT.jar
+./mvnw spring-boot:run
 ```
+
+## Running the Client Test
+
+After starting the server, you can run the WebFlux SSE client test located in `src/test/java/org/springframework/ai/mcp/sample/client/ClientWebFluxSse.java`. This test demonstrates how to connect to the server using Spring WebFlux's SSE transport.
+
+To run the test:
+1. Ensure the server is running (previous step)
+2. Open `ClientWebFluxSse.java` in your IDE
+3. Run the main method in `ClientWebFluxSse` class
+
+The test creates a WebFlux SSE client that connects to `http://localhost:8080` and demonstrates the client-server interaction using the Model Context Protocol.
 
 ## Available Tools
 
