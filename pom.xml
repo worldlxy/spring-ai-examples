@@ -23,26 +23,30 @@
 		<module>misc/openai-streaming-response</module>
 		<module>model-context-protocol/sqlite/simple</module>
 		<module>model-context-protocol/sqlite/chatbot</module>
+
+
+		<!-- modules listed in alphabetical order -->
+		<module>model-context-protocol/book-library/manual-servlet-server</module>
+		<module>model-context-protocol/book-library/manual-webflux-server</module>
+		<module>model-context-protocol/book-library/manual-webmvc-server</module>
+		<module>model-context-protocol/book-library/starter-webflux-server</module>
+
+		<module>model-context-protocol/brave</module>
+
+
+		<module>model-context-protocol/client-starter/starter-default-client</module>
+		<module>model-context-protocol/client-starter/starter-webflux-client</module>
+
 		
 		<module>model-context-protocol/filesystem</module>
 		
-		<module>model-context-protocol/brave</module>
+
+		<module>model-context-protocol/weather/manual-webflux-server</module>
+		<module>model-context-protocol/weather/starter-stdio-server</module>
+		<module>model-context-protocol/weather/starter-webflux-server</module>
+		
 		<module>model-context-protocol/web-search/brave-starter</module>
 		<module>model-context-protocol/web-search/brave-chatbot</module>
-
-		<module>model-context-protocol/book-library/manual-webmvc-server</module>
-		<module>model-context-protocol/book-library/manual-webflux-server</module>
-		<module>model-context-protocol/book-library/starter-webflux-server</module>
-		<module>model-context-protocol/book-library/manual-servlet-server</module>
-		
-		<module>model-context-protocol/weather/java-client</module>
-		<module>model-context-protocol/weather/starter-webflux-server</module>
-		<module>model-context-protocol/weather/starter-stdio-server</module>
-		<module>model-context-protocol/weather/manual-webflux-server</module>
-		
-		
-		<module>model-context-protocol/client-starter/starter-default-client</module>
-		<module>model-context-protocol/client-starter/starter-webflux-client</module>
 
 
 		<module>agentic-patterns</module>
