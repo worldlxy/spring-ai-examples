@@ -1,6 +1,8 @@
 # Spring AI - Model Context Protocol (MCP) Brave Search Example
 
-This example demonstrates how to use the Spring AI Model Context Protocol (MCP) with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application enables natural language interactions with Brave Search, allowing you to perform internet searches through a conversational interface.
+This example demonstrates how to create a Spring AI Model Context Protocol (MCP) client that communicates with the [Brave Search MCP Server](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search). The application shows how to build an MCP client that enables natural language interactions with Brave Search, allowing you to perform internet searches through a conversational interface. Instead of using Spring Boot autoconfiguration, this example demonstrates how to manually configure the MCP client transport using an `@Bean` definition.
+
+When run, the application demonstrates the MCP client's capabilities by asking a specific question: "Does Spring AI supports the Model Context Protocol? Please provide some references." The MCP client uses Brave Search to find relevant information and returns a comprehensive answer. After providing the response, the application exits.
 
 <img src="spring-ai-mcp-brave.jpg" width="600"/>
 
@@ -11,7 +13,7 @@ This example demonstrates how to use the Spring AI Model Context Protocol (MCP) 
 - npx package manager
 - Git
 - OpenAI API key
-- Brave Search API key
+- Brave Search API key (Get one at https://brave.com/search/api/)
 
 ## Setup
 
@@ -46,7 +48,7 @@ Run the application using Maven:
 ./mvnw spring-boot:run
 ```
 
-The application will demonstrate the integration by asking a sample question about Spring AI and Model Context Protocol, utilizing Brave Search to gather information.
+The application will execute a single query asking about Spring AI's support for the Model Context Protocol. It uses the Brave Search MCP server to search the internet for relevant information, processes the results through the MCP client, and provides a detailed response before exiting.
 
 ## How it Works
 
@@ -55,16 +57,19 @@ The application integrates Spring AI with the Brave Search MCP server through se
 ### MCP Client Setup
 
 ```java
-@Bean(destroyMethod = "close")
+@Bean
 public McpSyncClient mcpClient() {
-    var stdioParams = ServerParameters.builder("npx")
-            .args("-y", "@modelcontextprotocol/server-brave-search")
-            .addEnvVar("BRAVE_API_KEY", System.getenv("BRAVE_API_KEY"))
-            .build();
 
-    var mcpClient = McpClient.sync(new StdioServerTransport(stdioParams));
-    var init = mcpClient.initialize();
-    return mcpClient;
+   // https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search
+   var stdioParams = ServerParameters.builder("npx")
+           .args("-y", "@modelcontextprotocol/server-brave-search")
+           .addEnvVar("BRAVE_API_KEY", System.getenv("BRAVE_API_KEY"))
+           .build();
+
+   var mcpClient = McpClient.sync(new StdioClientTransport(stdioParams)).build();
+   var init = mcpClient.initialize();
+   logger.info("MCP Initialized: {}", init);
+   return mcpClient;
 }
 ```
 
