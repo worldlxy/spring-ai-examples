@@ -20,7 +20,7 @@ The sample provides:
 ## Building the Project
 
 ```bash
-./mvnw clean package
+./mvnw clean install -DskipTests
 ```
 
 ## Running the Server
