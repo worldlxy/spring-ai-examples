@@ -6,16 +6,20 @@ Follow the [MCP Client Boot Starter](https://docs.spring.io/spring-ai/reference/
 
 ## Overview
 
-The project uses Spring Boot and Spring AI to create a command-line application that:
+The project uses Spring Boot and Spring AI to create a command-line application that demonstrates MCP server integration with WebFlux. The application:
 - Connects to MCP servers using STDIO and/or SSE (WebFlux-based) transports
 - Integrates with Spring AI's chat capabilities
 - Demonstrates tool execution through MCP servers
+- Takes a user-defined question via the `-Dai.user.input` command-line property, which is mapped to a Spring `@Value` annotation in the code
+
+For example, running the application with `-Dai.user.input="Does Spring AI support MCP?"` will inject this question into the application through Spring's property injection, and the application will use it to query the MCP server using WebFlux's reactive programming model.
 
 ## Prerequisites
 
 - Java 17 or later
 - Maven 3.6+
-- Anthropic API key (for Claude AI model)
+- Anthropic API key (Claude) (Get one at https://docs.anthropic.com/en/docs/initial-setup)
+- Brave Search API key (Get one at https://brave.com/search/api/)
 
 ## Dependencies
 
@@ -116,6 +120,7 @@ The application demonstrates a simple command-line interaction with an AI model 
 1. Set the required environment variable:
    ```bash
    export ANTHROPIC_API_KEY=your-api-key
+   export BRAVE_API_KEY='your-brave-api-key-here'
    ```
 
 2. Build the application:
