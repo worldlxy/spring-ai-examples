@@ -15,10 +15,8 @@
  */
 package org.springframework.ai.mcp.samples.brave;
 
-import java.util.List;
-
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +31,7 @@ public class Application {
 	}	
 
 	@Bean
-	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, List<ToolCallback> tools,
+	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
 			ConfigurableApplicationContext context) {
 
 		return args -> {

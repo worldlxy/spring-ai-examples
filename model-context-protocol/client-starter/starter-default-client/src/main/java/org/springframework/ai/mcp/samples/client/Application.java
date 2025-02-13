@@ -15,10 +15,8 @@
  */
 package org.springframework.ai.mcp.samples.client;
 
-import java.util.List;
-
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,7 +35,7 @@ public class Application {
 	private String userInput;
 
 	@Bean
-	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, List<ToolCallback> tools,
+	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
 			ConfigurableApplicationContext context) {
 
 		return args -> {

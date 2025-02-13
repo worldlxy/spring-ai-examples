@@ -122,23 +122,19 @@ logging.file.name=./target/mcp.webflux-server-starter.log
 ```java
 @SpringBootApplication
 public class McpServerApplication {
-    @Bean
-    public List<ToolCallback> tools(OpenLibrary openLibrary) {
-        List<ToolCallback> tools = new ArrayList<>();
-        
-        // Add OpenLibrary tools
-        tools.addAll(List.of(ToolCallbacks.from(openLibrary)));
-        
-        // Add toUpperCase tool
-        tools.add(FunctionToolCallback
-            .builder("toUpperCase", 
-                    (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
-            .description("To upper case")
-            .inputType(ToUpperCaseInput.class)
-            .build());
-            
-        return tools;
-    }
+	@Bean
+	public ToolCallbackProvider openLibraryTools(OpenLibrary openLibrary) {
+		return MethodToolCallbackProvider.builder().toolObjects(openLibrary).build();
+	}
+
+	@Bean
+	public ToolCallback tools(OpenLibrary openLibrary) {
+		return FunctionToolCallback
+				.builder("toUpperCase", (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
+				.description("To upper case")
+				.inputType(ToUpperCaseInput.class)
+				.build();
+	}
 }
 ```
 

@@ -1,9 +1,7 @@
 package org.springframework.ai.mcp.sample.server;
 
-import java.util.List;
-
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.ToolCallbacks;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +14,8 @@ public class McpServerApplication {
 	}
 
 	@Bean
-	public List<ToolCallback> weatherTools(WeatherService weatherService) {
-		return List.of(ToolCallbacks.from(weatherService));
+	public ToolCallbackProvider weatherTools(WeatherService weatherService) {
+		return MethodToolCallbackProvider.builder().toolObjects(weatherService).build();
 	}
 
 }

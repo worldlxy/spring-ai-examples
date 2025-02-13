@@ -17,8 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallbacks;
 import org.springframework.ai.tool.function.FunctionToolCallback;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -36,19 +38,17 @@ public class McpServerApplication {
 	}
 
 	@Bean
-	public List<ToolCallback> tools(OpenLibrary openLibrary) {
+	public ToolCallbackProvider openLibraryTools(OpenLibrary openLibrary) {
+		return MethodToolCallbackProvider.builder().toolObjects(openLibrary).build();
+	}
 
-		List<ToolCallback> tools = new ArrayList<>();
-
-		tools.addAll(List.of(ToolCallbacks.from(openLibrary)));
-
-		tools.add(FunctionToolCallback
-			.builder("toUpperCase", (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
-			.description("To upper case")
-			.inputType(ToUpperCaseInput.class)
-			.build());
-
-		return tools;
+	@Bean
+	public ToolCallback tools(OpenLibrary openLibrary) {
+		return FunctionToolCallback
+				.builder("toUpperCase", (Function<ToUpperCaseInput, String>) s -> s.input().toUpperCase())
+				.description("To upper case")
+				.inputType(ToUpperCaseInput.class)
+				.build();
 	}
 
 	@Bean
