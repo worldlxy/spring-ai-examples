@@ -15,7 +15,12 @@
  */
 package org.springframework.ai.mcp.samples.brave;
 
+import java.util.List;
+
+import io.modelcontextprotocol.client.McpSyncClient;
+
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,13 +36,13 @@ public class Application {
 	}	
 
 	@Bean
-	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools,
+	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder, List<McpSyncClient> mcpSyncClients,
 			ConfigurableApplicationContext context) {
 
 		return args -> {
 
 			var chatClient = chatClientBuilder
-					.defaultTools(tools)
+					.defaultTools(new SyncMcpToolCallbackProvider(mcpSyncClients))
 					.build();
 
 			String question = "Does Spring AI support the Model Context Protocol? Please provide some references.";

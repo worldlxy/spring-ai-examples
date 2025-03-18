@@ -3,9 +3,12 @@ package org.springframework.ai.mcp.samples.brave;
 import java.util.List;
 import java.util.Scanner;
 
+import io.modelcontextprotocol.client.McpSyncClient;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
@@ -21,13 +24,13 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner chatbot(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools) {
+	public CommandLineRunner chatbot(ChatClient.Builder chatClientBuilder, List<McpSyncClient> mcpSyncClients) {
 
 		return args -> {
 
 			var chatClient = chatClientBuilder
 					.defaultSystem("You are useful assistant and can perform web searches Brave's search API to reply to your questions.")
-					.defaultTools(tools)
+					.defaultTools(new SyncMcpToolCallbackProvider(mcpSyncClients))
 					.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
 					.build();
 
