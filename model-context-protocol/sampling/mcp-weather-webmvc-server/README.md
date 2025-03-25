@@ -39,7 +39,7 @@ The project requires the Spring AI MCP Server WebMVC Boot Starter:
 ```xml
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
+    <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 </dependency>
 ```
 
