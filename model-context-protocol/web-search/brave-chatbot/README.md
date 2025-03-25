@@ -59,11 +59,11 @@ The application integrates Spring AI with the Brave Search MCP server through se
 ```xml
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-mcp-client-spring-boot-starter</artifactId>
+    <artifactId>spring-ai-starter-mcp-client</artifactId>
 </dependency>
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-anthropic-spring-boot-starter</artifactId>
+    <artifactId>spring-ai-starter-model-anthropic</artifactId>
 </dependency>
 ```
 
@@ -150,7 +150,7 @@ For WebFlux-based applications, you can use the WebFlux starter instead:
 ```xml
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-mcp-client-webflux-spring-boot-starter</artifactId>
+    <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
 </dependency>
 ```
 

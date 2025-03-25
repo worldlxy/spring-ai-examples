@@ -16,7 +16,7 @@ The project uses the following key dependencies:
 
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-starter-model-openai</artifactId>
+    <artifactId>spring-ai-starter-model-anthropic</artifactId>
 </dependency>
 ```
 
@@ -27,7 +27,7 @@ The project uses the following key dependencies:
 - Java 17 or higher
 - Maven 3.6+
 - npx package manager
-- OpenAI API key
+- Anthropic API key
 - Brave Search API key (Get one at https://brave.com/search/api/)
 
 ## Setup
@@ -47,7 +47,7 @@ The project uses the following key dependencies:
 
 3. Set up your API keys:
    ```bash
-   export OPENAI_API_KEY='your-openai-api-key-here'
+   export ANTHROPIC_API_KEY='your-anthropic-api-key-here'
    export BRAVE_API_KEY='your-brave-api-key-here'
    ```
 
@@ -71,7 +71,7 @@ The application uses Spring Boot's auto-configuration capabilities to set up the
 
 ### Project Dependencies
 
-The project uses Spring AI's MCP client Spring Boot starter and OpenAI starter:
+The project uses Spring AI's MCP client Spring Boot starter and Anthropic starter:
 
 ```xml
 <dependency>
@@ -81,7 +81,7 @@ The project uses Spring AI's MCP client Spring Boot starter and OpenAI starter:
 
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-starter-model-openai</artifactId>
+    <artifactId>spring-ai-starter-model-anthropic</artifactId>
 </dependency>
 ```
 
@@ -96,7 +96,7 @@ This approach configures the MCP client directly in the application.properties f
 ```properties
 spring.application.name=mcp
 spring.main.web-application-type=none
-spring.ai.openai.api-key=${OPENAI_API_KEY}
+spring.ai.anthropic.api-key=${ANTHROPIC_API_KEY}
 
 # Direct MCP client configuration
 spring.ai.mcp.client.stdio.connections.brave-search.command=npx
@@ -111,7 +111,7 @@ Alternatively, you can move the MCP configuration to an external file. This appr
 ```properties
 spring.application.name=mcp
 spring.main.web-application-type=none
-spring.ai.openai.api-key=${OPENAI_API_KEY}
+spring.ai.anthropic.api-key=${ANTHROPIC_API_KEY}
 
 # Use external configuration file
 spring.ai.mcp.client.stdio.servers-configuration=classpath:/mcp-servers-config.json
@@ -191,7 +191,7 @@ spring.ai.mcp.client.stdio.servers-configuration=classpath:/mcp-servers-config.j
 
 Spring Boot's auto-configuration handles the setup:
 - Configures the application as a command-line tool (non-web)
-- Sets up the OpenAI integration using the provided API key
+- Sets up the Anthropic integration using the provided API key
 - Enables the MCP STDIO client for communication with the Brave Search server
 - Provides a `List<ToolCallback>` bean containing the Brave Search capabilities, which is automatically injected into the `CommandLineRunner`
 
