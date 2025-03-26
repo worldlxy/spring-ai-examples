@@ -66,6 +66,8 @@ The MCP Sampling workflow in these examples follows these steps:
    - The server combines the responses from different LLMs
    - It returns the combined result to the user
 
+![MCP Sampling Sequence Diagram](./mvc-sampling-sq.svg)
+
 ## Server Implementation
 
 The MCP Weather Server implements the server-side of MCP Sampling:
