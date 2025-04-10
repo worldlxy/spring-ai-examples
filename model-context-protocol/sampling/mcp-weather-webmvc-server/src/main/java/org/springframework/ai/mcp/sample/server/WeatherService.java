@@ -21,10 +21,13 @@ import java.util.List;
 import io.modelcontextprotocol.server.McpSyncServerExchange;
 import io.modelcontextprotocol.spec.McpSchema;
 import io.modelcontextprotocol.spec.McpSchema.CreateMessageResult;
+import io.modelcontextprotocol.spec.McpSchema.LoggingLevel;
+import io.modelcontextprotocol.spec.McpSchema.LoggingMessageNotification;
 import io.modelcontextprotocol.spec.McpSchema.ModelPreferences;
 import org.slf4j.Logger;
 
 import org.springframework.ai.chat.model.ToolContext;
+import org.springframework.ai.mcp.McpToolUtils;
 import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -72,43 +75,54 @@ public class WeatherService {
 
 	public String callMcpSampling(ToolContext toolContext, WeatherResponse weatherResponse) {
 
-		String openAiWeatherPoem = "<no OpenAI poem>";
-		String anthropicWeatherPoem = "<no Anthropic poem>";
+		StringBuilder openAiWeatherPoem = new StringBuilder();
+		StringBuilder anthropicWeatherPoem = new StringBuilder();
 
-		if (toolContext != null && toolContext.getContext().containsKey("exchange")) {
+		McpToolUtils.getMcpExchange(toolContext)
+				.ifPresent(exchange -> {
 
-			// Spring AI MCP Auto-configuration injects the McpSyncServerExchange into the ToolContext under the key "exchange"
-			McpSyncServerExchange exchange = (McpSyncServerExchange) toolContext.getContext().get("exchange");
-			if (exchange.getClientCapabilities().sampling() != null) {
-				var messageRequestBuilder = McpSchema.CreateMessageRequest.builder()
-						.systemPrompt("You are a poet!")
-						.messages(List.of(new McpSchema.SamplingMessage(McpSchema.Role.USER,
-								new McpSchema.TextContent(
-										"Please write a poem about thius weather forecast (temperature is in Celsious). Use markdown format :\n "
-												+ ModelOptionsUtils.toJsonStringPrettyPrinter(weatherResponse)))));
+					exchange.loggingNotification(LoggingMessageNotification.builder()
+							.level(LoggingLevel.INFO)
+							.data("Start sampling")
+							.build());
 
-				var opeAiLlmMessageRequest = messageRequestBuilder
-						.modelPreferences(ModelPreferences.builder().addHint("openai").build())
-						.build();
-				CreateMessageResult openAiLlmResponse = exchange.createMessage(opeAiLlmMessageRequest);
+					if (exchange.getClientCapabilities().sampling() != null) {
+						var messageRequestBuilder = McpSchema.CreateMessageRequest.builder()
+								.systemPrompt("You are a poet!")
+								.messages(List.of(new McpSchema.SamplingMessage(McpSchema.Role.USER,
+										new McpSchema.TextContent(
+												"Please write a poem about thius weather forecast (temperature is in Celsious). Use markdown format :\n "
+														+ ModelOptionsUtils
+																.toJsonStringPrettyPrinter(weatherResponse)))));
 
-				openAiWeatherPoem = ((McpSchema.TextContent) openAiLlmResponse.content()).text();
+						var opeAiLlmMessageRequest = messageRequestBuilder
+								.modelPreferences(ModelPreferences.builder().addHint("openai").build())
+								.build();
+						CreateMessageResult openAiLlmResponse = exchange.createMessage(opeAiLlmMessageRequest);
 
-				var anthropicLlmMessageRequest = messageRequestBuilder
-						.modelPreferences(ModelPreferences.builder().addHint("anthropic").build())
-						.build();
-				CreateMessageResult anthropicAiLlmResponse = exchange.createMessage(anthropicLlmMessageRequest);
+						openAiWeatherPoem.append(((McpSchema.TextContent) openAiLlmResponse.content()).text());
 
-				anthropicWeatherPoem = ((McpSchema.TextContent) anthropicAiLlmResponse.content()).text();
+						var anthropicLlmMessageRequest = messageRequestBuilder
+								.modelPreferences(ModelPreferences.builder().addHint("anthropic").build())
+								.build();
+						CreateMessageResult anthropicAiLlmResponse = exchange.createMessage(anthropicLlmMessageRequest);
 
-			}
-		}
+						anthropicWeatherPoem.append(((McpSchema.TextContent) anthropicAiLlmResponse.content()).text());
 
-		String responseWithPoems = "OpenAI poem about the weather: " + openAiWeatherPoem + "\n\n" +
-				"Anthropic poem about the weather: " + anthropicWeatherPoem + "\n"
+					}
+
+					exchange.loggingNotification(LoggingMessageNotification.builder()
+							.level(LoggingLevel.INFO)
+							.data("Finish Sampling")
+							.build());
+
+				});
+
+		String responseWithPoems = "OpenAI poem about the weather: " + openAiWeatherPoem.toString() + "\n\n" +
+				"Anthropic poem about the weather: " + anthropicWeatherPoem.toString() + "\n"
 				+ ModelOptionsUtils.toJsonStringPrettyPrinter(weatherResponse);
 
-		logger.info(anthropicWeatherPoem, responseWithPoems);
+		logger.info(anthropicWeatherPoem.toString(), responseWithPoems.toString());
 
 		return responseWithPoems;
 

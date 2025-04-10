@@ -68,6 +68,11 @@ public class McpClientApplication {
 	McpSyncClientCustomizer samplingCustomizer(Map<String, ChatClient> chatClients) {
 
 		return (name, mcpClientSpec) -> {
+			
+			mcpClientSpec = mcpClientSpec.loggingConsumer(logingMessage -> {			
+				System.out.println("MCP LOGGING: [" + logingMessage.level() + "] " + logingMessage.data());			
+			});
+
 			mcpClientSpec.sampling(llmRequest -> {
 				var userPrompt = ((McpSchema.TextContent) llmRequest.messages().get(0).content()).text();
 				String modelHint = llmRequest.modelPreferences().hints().get(0).name();
