@@ -11,7 +11,6 @@ import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -20,24 +19,22 @@ public class Application {
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(Application.class, args).close();
 	}
 
 	@Bean
 	public CommandLineRunner predefinedQuestions(ChatClient.Builder chatClientBuilder,
-		List<McpSyncClient> mcpSyncClients, ConfigurableApplicationContext context) {
+		List<McpSyncClient> mcpSyncClients) {
 
 		return args -> {
 
 			var chatClient = chatClientBuilder
-					.defaultTools(new SyncMcpToolCallbackProvider(mcpSyncClients))
+					.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients))
 					.build();
 
 			String question = "Does Spring AI supports the Model Context Protocol? Please provide some references.";
 			logger.info("QUESTION: {}\n", question);
 			logger.info("ASSISTANT: {}\n", chatClient.prompt(question).call().content());
-
-			context.close();
 		};
 	}
 }

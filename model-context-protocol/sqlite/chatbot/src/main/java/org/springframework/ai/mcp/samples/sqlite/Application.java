@@ -34,7 +34,7 @@ public class Application {
 		return args -> {
 
 			var chatClient = chatClientBuilder
-					.defaultTools(new SyncMcpToolCallbackProvider(mcpClients))
+					.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients))
 					.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
 					.build();
 

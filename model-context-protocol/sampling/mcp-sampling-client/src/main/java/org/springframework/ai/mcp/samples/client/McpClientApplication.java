@@ -49,7 +49,7 @@ public class McpClientApplication {
 
 			var mcpToolProvider = new SyncMcpToolCallbackProvider(mcpClients);
 
-			ChatClient chatClient = ChatClient.builder(openAiChatModel).defaultTools(mcpToolProvider).build();
+			ChatClient chatClient = ChatClient.builder(openAiChatModel).defaultToolCallbacks(mcpToolProvider).build();
 
 			String userQuestion = """
 					What is the weather in Amsterdam right now?
