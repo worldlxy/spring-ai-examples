@@ -41,6 +41,9 @@
 		<module>model-context-protocol/web-search/brave-chatbot</module>
 		<module>model-context-protocol/sampling/mcp-weather-webmvc-server</module>
 		<module>model-context-protocol/sampling/mcp-sampling-client</module>
+		
+		<module>model-context-protocol/dynamic-tool-update/client</module>
+		<module>model-context-protocol/dynamic-tool-update/server</module>
 
 		<module>prompt-engineering/prompt-engineering-patterns</module>
 	</modules>
