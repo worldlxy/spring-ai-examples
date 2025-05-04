@@ -43,7 +43,7 @@ public class ServerApplication {
 	}
 
 	@Bean
-	public CommandLineRunner predefinedQuestions(McpSyncServer mcpSyncServer) {
+	public CommandLineRunner commandRunner(McpSyncServer mcpSyncServer) {
 
 		return args -> {
 			
@@ -54,7 +54,10 @@ public class ServerApplication {
 			List<SyncToolSpecification> newTools = McpToolUtils
 					.toSyncToolSpecifications(ToolCallbacks.from(new MathTools()));
 
-			mcpSyncServer.addTool(newTools.iterator().next());
+			for (SyncToolSpecification newTool : newTools) {
+				logger.info("Add new tool: " + newTool);
+				mcpSyncServer.addTool(newTool);
+			}
 
 			logger.info("Tools updated: ");
 		};
