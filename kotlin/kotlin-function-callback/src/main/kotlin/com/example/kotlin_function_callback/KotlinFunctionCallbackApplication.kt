@@ -19,7 +19,7 @@ class KotlinFunctionCallbackApplication {
 			val chatClient = chatClientBuilder.build();
 			val response = chatClient
 				.prompt("What are the weather conditions in San Francisco, Tokyo, and Paris? Find the temperature in Celsius for each of the three locations.")
-				.tools("WeatherInfo")
+				.toolNames("WeatherInfo")
 				.call().chatResponse();
 
 			println("Response: $response")
