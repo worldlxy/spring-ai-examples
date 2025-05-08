@@ -12,7 +12,7 @@ import io.modelcontextprotocol.client.transport.StdioClientTransport;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,7 +35,7 @@ public class Application {
 
 			var chatClient = chatClientBuilder
 					.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients))
-					.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+					.defaultAdvisors(new MessageChatMemoryAdvisor(MessageWindowChatMemory.builder().build()))
 					.build();
 
 			var scanner = new Scanner(System.in);
