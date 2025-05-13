@@ -31,19 +31,18 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class McpClientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(McpClientApplication.class, args);
+		SpringApplication.run(McpClientApplication.class, args).close();;
 	}
 
 	@Bean
 	public CommandLineRunner predefinedQuestions(OpenAiChatModel openAiChatModel,
-			ConfigurableApplicationContext context, List<McpSyncClient> mcpClients) {
+			List<McpSyncClient> mcpClients) {
 
 		return args -> {
 
@@ -59,8 +58,6 @@ public class McpClientApplication {
 
 			System.out.println("> USER: " + userQuestion);
 			System.out.println("> ASSISTANT: " + chatClient.prompt(userQuestion).call().content());
-
-			context.close();
 		};
 	}
 

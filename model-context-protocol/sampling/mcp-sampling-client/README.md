@@ -120,8 +120,8 @@ spring.ai.mcp.client.sse.connections.server1.url=http://localhost:8080
 logging.level.io.modelcontextprotocol.client=WARN
 logging.level.io.modelcontextprotocol.spec=WARN
 
-# Uncomment to disable MCP tool callbacks
-# spring.ai.mcp.client.toolcallback.enabled=false
+#Disable MCP tool callbacks
+spring.ai.mcp.client.toolcallback.enabled=false
 ```
 
 ## How It Works
