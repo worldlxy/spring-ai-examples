@@ -35,7 +35,7 @@ public class Application {
 
 			var chatClient = chatClientBuilder
 					.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpClients))
-					.defaultAdvisors(new MessageChatMemoryAdvisor(MessageWindowChatMemory.builder().build()))
+					.defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
 					.build();
 
 			var scanner = new Scanner(System.in);

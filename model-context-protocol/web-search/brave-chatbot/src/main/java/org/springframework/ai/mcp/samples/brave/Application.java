@@ -29,7 +29,7 @@ public class Application {
 			var chatClient = chatClientBuilder
 					.defaultSystem("You are useful assistant and can perform web searches Brave's search API to reply to your questions.")
 					.defaultToolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients))
-					.defaultAdvisors(new MessageChatMemoryAdvisor(MessageWindowChatMemory.builder().build()))
+					.defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
 					.build();
 
 			// Start the chat loop
