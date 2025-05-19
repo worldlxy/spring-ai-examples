@@ -104,6 +104,6 @@ This setup allows the AI model to:
 
 The project uses:
 - Spring Boot 3.3.6
-- Spring AI 1.0.0-SNAPSHOT
+- Spring AI 1.1.0-SNAPSHOT
 - spring-ai-starter-model-openai
 - spring-ai-starter-mcp-client
