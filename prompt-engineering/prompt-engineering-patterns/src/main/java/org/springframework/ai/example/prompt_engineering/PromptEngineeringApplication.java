@@ -8,6 +8,7 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -23,10 +24,10 @@ public class PromptEngineeringApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(ChatClient.Builder chatClientBuilder) {
+	public CommandLineRunner commandLineRunner(ChatClient.Builder chatClientBuilder, ConfigurableApplicationContext context) {
 		return args -> {
-
-			ChatClient chatClient = chatClientBuilder.build();
+			try {
+				ChatClient chatClient = chatClientBuilder.build();
 
 			//@formatter:off
 			// 2. Prompting techniques (page 13)
@@ -80,6 +81,14 @@ public class PromptEngineeringApplication {
 					// 2.9.3 Prompts for translating code
 					pt_code_prompting_translating_code(chatClient);
 			//@formatter:on
+				
+				System.out.println("Prompt engineering patterns demonstration completed!");
+				context.close();
+			} catch (Exception e) {
+				System.err.println("Error during prompt engineering execution: " + e.getMessage());
+				e.printStackTrace();
+				context.close();
+			}
 		};
 	}
 

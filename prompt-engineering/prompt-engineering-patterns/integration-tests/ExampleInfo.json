@@ -1,0 +1,12 @@
+{
+  "timeoutSec": 900,
+  "successRegex": [
+    "Output: POSITIVE|NEGATIVE|NEUTRAL",
+    "Output:.*museum",
+    "The email is.*IMPORTANT",
+    "Prompt engineering patterns demonstration completed!"
+  ],
+  "requiredEnv": [
+    "SPRING_AI_ANTHROPIC_API_KEY"
+  ]
+}
