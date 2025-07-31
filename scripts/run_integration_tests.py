@@ -78,7 +78,7 @@ def validate_environment() -> bool:
     log("Environment validation passed", "SUCCESS")
     return True
 
-def run_integration_test(launcher: pathlib.Path, verbose: bool = False) -> Tuple[pathlib.Path, bool, str, float]:
+def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: bool = False) -> Tuple[pathlib.Path, bool, str, float]:
     """
     Run a single integration test
     Returns: (launcher_path, success, error_message, execution_time)
@@ -102,55 +102,109 @@ def run_integration_test(launcher: pathlib.Path, verbose: bool = False) -> Tuple
     module_dir = launcher.parent.parent.resolve()
     
     try:
-        # Create temporary file for output capture
-        with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".log") as tmp:
+        # Set up output capture and execution with persistent log files
+        launcher_absolute = launcher.resolve()
+        launcher_relative = launcher_absolute.relative_to(module_dir)
+        
+        # Create logs directory and log file for this test
+        logs_dir = pathlib.Path("logs")
+        logs_dir.mkdir(exist_ok=True)
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        log_file = logs_dir / f"{module_name.replace('/', '_')}_{timestamp}.log"
+        
+        timeout = config.get("timeoutSec", 300)
+        
+        if stream:
+            # Stream mode: show live output while writing to log file
+            log(f"🚀 Streaming {module_name} (timeout: {timeout}s) → {log_file}", "INFO")
+            
             try:
-                # Run the JBang script from the module directory
-                # Use relative path from module directory to the launcher
-                launcher_absolute = launcher.resolve()
-                launcher_relative = launcher_absolute.relative_to(module_dir)
-                result = subprocess.run(
-                    [JBANG, str(launcher_relative)],
-                    cwd=module_dir,
-                    stdout=tmp,
-                    stderr=subprocess.STDOUT,
-                    text=True,
-                    timeout=config.get("timeoutSec", 300)
-                )
-                
-                # Read output for pattern verification
-                tmp.seek(0)
-                output = tmp.read()
-                
-                if verbose:
-                    log(f"Output from {launcher.name}:\n{output}", "DEBUG", verbose)
-                
-                # Check exit code
-                if result.returncode != 0:
-                    return launcher, False, f"Exit code {result.returncode}", time.time() - start_time
-                
-                # Verify success patterns
-                success_patterns = config.get("successRegex", [])
-                failed_patterns = []
-                
-                for pattern in success_patterns:
-                    if not re.search(pattern, output, re.DOTALL):
-                        failed_patterns.append(pattern)
-                
-                if failed_patterns:
-                    return launcher, False, f"Missing patterns: {failed_patterns}", time.time() - start_time
-                
-                execution_time = time.time() - start_time
-                log(f"✅ {module_name} completed in {execution_time:.1f}s", "SUCCESS", verbose)
-                return launcher, True, "Success", execution_time
-                
-            except subprocess.TimeoutExpired:
-                return launcher, False, f"Timeout after {config.get('timeoutSec', 300)}s", time.time() - start_time
+                with open(log_file, 'w') as logf:
+                    process = subprocess.Popen(
+                        [JBANG, str(launcher_relative)],
+                        cwd=module_dir,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        bufsize=1,  # Line buffering
+                        universal_newlines=True
+                    )
+                    
+                    start_stream_time = time.time()
+                    
+                    # Read output line by line in real-time
+                    for line in iter(process.stdout.readline, ''):
+                        if not line:
+                            break
+                            
+                        # Write to log file
+                        logf.write(line)
+                        logf.flush()
+                        
+                        elapsed = time.time() - start_stream_time
+                        
+                        # Check for timeout
+                        if elapsed > timeout:
+                            process.terminate()
+                            return launcher, False, f"Timeout after {timeout}s", time.time() - start_time
+                        
+                        # Show progress indicator with cleaner output
+                        progress = min(elapsed / timeout * 100, 99)
+                        clean_line = line.strip()[:80]  # Limit line length
+                        if clean_line:  # Only show meaningful lines
+                            print(f"🔄 [{progress:5.1f}%] {clean_line}")
+                        
+                        # Check if process finished
+                        if process.poll() is not None:
+                            break
+                    
+                    # Get final return code
+                    return_code = process.wait()
+                    print()  # New line after progress display
+                    
             except Exception as e:
-                return launcher, False, f"Execution error: {e}", time.time() - start_time
-            finally:
-                # Cleanup temp file
-                pathlib.Path(tmp.name).unlink(missing_ok=True)
+                return launcher, False, f"Streaming error: {e}", time.time() - start_time
+            
+        else:
+            # Non-stream mode: capture to log file
+            log(f"Running {module_name} → {log_file}", "INFO", verbose)
+            
+            try:
+                with open(log_file, 'w') as logf:
+                    result = subprocess.run(
+                        [JBANG, str(launcher_relative)],
+                        cwd=module_dir,
+                        stdout=logf,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        timeout=timeout
+                    )
+                    return_code = result.returncode
+                    
+            except subprocess.TimeoutExpired:
+                return launcher, False, f"Timeout after {timeout}s", time.time() - start_time
+        
+        # Read the log file for pattern verification (unified for both modes)
+        with open(log_file, 'r') as logf:
+            output = logf.read()
+            
+        if verbose and not stream:
+            log(f"Output from {launcher.name}:\n{output}", "DEBUG", verbose)
+        
+        # Check exit code and trust JBang's pattern verification
+        if return_code != 0:
+            return launcher, False, f"Exit code {return_code}", time.time() - start_time
+        
+        # JBang script does its own pattern verification and exits with proper code
+        # If we reach here with return_code == 0, the JBang script verified all patterns
+        # No need to duplicate pattern verification in Python
+        
+        execution_time = time.time() - start_time
+        if stream:
+            log(f"✅ {module_name} completed in {execution_time:.1f}s", "SUCCESS")
+        else:
+            log(f"✅ {module_name} completed in {execution_time:.1f}s", "SUCCESS", verbose)
+        return launcher, True, "Success", execution_time
                 
     except Exception as e:
         return launcher, False, f"Execution error: {e}", time.time() - start_time
@@ -216,6 +270,8 @@ def main():
                        help="Output file for test report")
     parser.add_argument("--fail-fast", action="store_true",
                        help="Stop on first failure")
+    parser.add_argument("--stream", "-s", action="store_true",
+                       help="Stream live output from tests (shows progress in real-time)")
     
     args = parser.parse_args()
     
@@ -244,7 +300,7 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
         # Submit all tests
         future_to_launcher = {
-            executor.submit(run_integration_test, launcher, args.verbose): launcher 
+            executor.submit(run_integration_test, launcher, args.verbose, args.stream): launcher 
             for launcher in launchers
         }
         

@@ -68,6 +68,7 @@ public class RunHelloworld {
                     failedPatterns++;
                 }
             }
+            
 
             Files.deleteIfExists(logFile);
 

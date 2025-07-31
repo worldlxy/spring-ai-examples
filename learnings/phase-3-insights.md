@@ -21,8 +21,13 @@ Phase 3 revealed critical architectural challenges with parallel execution in Sp
 
 ### Framework Responsiveness to Issues
 - **Finding**: Framework architecture allows rapid fixes to discovered problems
-- **Evidence**: Port conflict fixed by changing single configuration line (MAX_WORKERS = 1)
+- **Evidence**: Port conflict fixed by changing single configuration line (MAX_WORKERS = 1); architecture bug fixed by trusting JBang verification
 - **Impact**: Demonstrates good separation of concerns and maintainable design
+
+### Live Progress Implementation Success
+- **Finding**: File-based logging + streaming display provides excellent developer experience
+- **Evidence**: `--stream` flag shows real-time progress with percentage indicators and captures full output to `logs/` directory
+- **Impact**: Long-running tests now provide immediate feedback, and persistent logs enable debugging
 
 ## Challenges & Issues ❌
 
@@ -35,8 +40,14 @@ Phase 3 revealed critical architectural challenges with parallel execution in Sp
 ### Long-running Test Visibility
 - **Problem**: Tests like prompt-engineering-patterns take 2+ minutes with no progress indication
 - **Root Cause**: Integration tests capture output for post-execution verification, no live streaming
-- **Solution Applied**: Added to future enhancements - real-time output streaming
-- **Prevention**: Implement progress indicators and live output tailing
+- **Solution Applied**: ✅ **COMPLETED** - Implemented `--stream` flag with real-time output and progress indicators
+- **Prevention**: All long-running tests now support live progress indication
+
+### Critical Architecture Bug Discovery
+- **Problem**: Python integration test framework was giving false negatives - reporting pattern failures when patterns were actually found
+- **Root Cause**: Python script was doing duplicate pattern verification on JBang script's stdout (not the application output), while JBang script correctly verified patterns against captured application output
+- **Solution Applied**: ✅ **COMPLETED** - Modified Python framework to trust JBang script's pattern verification (exit code 0 = all patterns found)
+- **Prevention**: Single source of truth for pattern verification eliminates discrepancies
 
 ### Application Type Categorization Gap
 - **Problem**: Framework doesn't distinguish between web applications and CommandLineRunner applications

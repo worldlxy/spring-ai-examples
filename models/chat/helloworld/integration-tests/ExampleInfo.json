@@ -3,7 +3,7 @@
   "successRegex": [
     "Spring AI Hello World!",
     "USER: Tell me a joke",
-    "ASSISTANT:",
+    "ASSISTANT: [A-Za-z]",
     "Hello World demo completed!"
   ],
   "requiredEnv": [
