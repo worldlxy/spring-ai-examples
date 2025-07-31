@@ -21,7 +21,7 @@ from typing import List, Tuple, Dict, Optional
 
 # Configuration
 JBANG = shutil.which("jbang")
-MAX_WORKERS = 4  # Parallel test execution
+MAX_WORKERS = 1  # Sequential execution to avoid Spring Boot port conflicts
 
 def log(message: str, level: str = "INFO", verbose: bool = False):
     """Enhanced logging with timestamps and levels"""

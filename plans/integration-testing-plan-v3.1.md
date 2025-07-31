@@ -543,94 +543,108 @@ jobs:
 
 Each phase documents learnings and insights in `learnings/phase-N-insights.md` files to guide subsequent phases and ensure continuous improvement.
 
+### 🚨 **Critical Implementation Principle**
+**ALWAYS review ALL existing learnings documents before starting any implementation work**, including:
+- All previous phase learnings (`phase-1-insights.md`, `phase-2-insights.md`, etc.)
+- Current phase learnings (if any `phase-N-insights.md` exists for the current phase)
+- Implementation summary and templates
+
+This ensures that recent discoveries, architectural changes, and proven patterns are incorporated into all implementation decisions.
+
 ### Phase 1: Infrastructure Setup & Foundation Learning (Week 1)
 **Before Starting**: Review existing bash scripts and testing patterns in the repository.
 
 #### Tasks:
-- [ ] **Setup Python CI Runner**
-  - [ ] Create `scripts/run_integration_tests.py` runner
-  - [ ] Add parallel execution capability
-  - [ ] Include verbose logging and error reporting
-  - [ ] Document in `learnings/phase-1-insights.md`: Python script effectiveness, performance characteristics
+- [x] **Setup Python CI Runner**
+  - [x] Create `scripts/run_integration_tests.py` runner
+  - [x] Add parallel execution capability
+  - [x] Include verbose logging and error reporting
+  - [x] Document in `learnings/phase-1-insights.md`: Python script effectiveness, performance characteristics
 
-- [ ] **GitHub Actions Configuration**
-  - [ ] Set up basic GitHub Actions workflow with JBang installation
-  - [ ] Configure environment variable handling for API keys
-  - [ ] Test cross-platform compatibility (Ubuntu, Windows, macOS)
-  - [ ] Document in `learnings/phase-1-insights.md`: CI setup challenges, platform-specific issues
+- [x] **GitHub Actions Configuration**
+  - [x] Set up basic GitHub Actions workflow with JBang installation
+  - [x] Configure environment variable handling for API keys
+  - [x] Test cross-platform compatibility (Ubuntu, Windows, macOS)
+  - [x] Document in `learnings/phase-1-insights.md`: CI setup challenges, platform-specific issues
 
-- [ ] **Scaffolding Tools Development**
-  - [ ] Create `scripts/scaffold_integration_test.py` for rapid test creation
-  - [ ] Design template system for common test patterns
-  - [ ] Test scaffolding tool on sample modules
-  - [ ] Document in `learnings/phase-1-insights.md`: Template effectiveness, developer UX feedback
+- [x] **Scaffolding Tools Development**
+  - [x] Create `scripts/scaffold_integration_test.py` for rapid test creation
+  - [x] Design template system for common test patterns
+  - [x] Test scaffolding tool on sample modules
+  - [x] Document in `learnings/phase-1-insights.md`: Template effectiveness, developer UX feedback
 
-- [ ] **Documentation & Developer Workflow**
-  - [ ] Create developer onboarding guide
-  - [ ] Document local testing procedures
-  - [ ] Create troubleshooting guide for common issues
-  - [ ] Document in `learnings/phase-1-insights.md`: Documentation gaps, developer pain points
+- [x] **Documentation & Developer Workflow**
+  - [x] Create developer onboarding guide
+  - [x] Document local testing procedures
+  - [x] Create troubleshooting guide for common issues
+  - [x] Document in `learnings/phase-1-insights.md`: Documentation gaps, developer pain points
 
-- [ ] **Phase 1 Learning Capture**
-  - [ ] Create `learnings/phase-1-insights.md` with findings
-  - [ ] Include: setup time, tool effectiveness, discovered edge cases
-  - [ ] Note: patterns that work well, patterns to avoid
-  - [ ] Recommendations for Phase 2 based on learnings
+- [x] **Phase 1 Learning Capture**
+  - [x] Create `learnings/phase-1-insights.md` with findings
+  - [x] Include: setup time, tool effectiveness, discovered edge cases
+  - [x] Note: patterns that work well, patterns to avoid
+  - [x] Recommendations for Phase 2 based on learnings
 
 ### Phase 2: Pilot Conversion & Pattern Validation (Week 2)
 **Before Starting**: Review `learnings/phase-1-insights.md` for infrastructure insights and tool effectiveness.
 
 #### Tasks:
-- [ ] **Simple Example Conversion** (`kotlin/kotlin-hello-world`)
-  - [ ] Add standard JUnit tests in `src/test/java/`
-  - [ ] Test with local Maven execution
-  - [ ] Validate CI integration
-  - [ ] Document timing, complexity, issues encountered
+- [x] **Simple Example Conversion** (`kotlin/kotlin-hello-world`)
+  - [x] Add standard JUnit tests in `src/test/java/`
+  - [x] Test with local Maven execution
+  - [x] Validate CI integration
+  - [x] Document timing, complexity, issues encountered
 
-- [ ] **Complex Example Conversion** (`agentic-patterns/chain-workflow`)
-  - [ ] Create `integration-tests/` directory
-  - [ ] Configure `ExampleInfo.json` with appropriate timeouts and success patterns
-  - [ ] Create JBang `RunChainWorkflow.java` launcher
-  - [ ] Test locally and in CI
-  - [ ] Document pattern verification challenges, timeout tuning
+- [x] **Complex Example Conversion** (`agentic-patterns/chain-workflow`)
+  - [x] Create `integration-tests/` directory
+  - [x] Configure `ExampleInfo.json` with appropriate timeouts and success patterns
+  - [x] Create JBang `RunChainWorkflow.java` launcher
+  - [x] Test locally and in CI
+  - [x] Document pattern verification challenges, timeout tuning
 
-- [ ] **Very Complex Example Conversion** (`model-context-protocol/sqlite/simple`)
-  - [ ] Handle database setup requirements
-  - [ ] Configure environment dependencies (uvx, SQLite MCP server)
-  - [ ] Create comprehensive success pattern matching
-  - [ ] Test with external service dependencies
-  - [ ] Document dependency management strategies, reliability issues
+- [x] **Very Complex Example Conversion** (`model-context-protocol/sqlite/simple`)
+  - [x] Handle database setup requirements
+  - [x] Configure environment dependencies (uvx, SQLite MCP server)
+  - [x] Create comprehensive success pattern matching
+  - [x] Test with external service dependencies
+  - [x] Document dependency management strategies, reliability issues
 
-- [ ] **Pattern Analysis & Refinement**
-  - [ ] Compare conversion effort across complexity levels
-  - [ ] Identify common configuration patterns
-  - [ ] Refine templates based on real implementation
-  - [ ] Test different success pattern strategies
+- [x] **Pattern Analysis & Refinement**
+  - [x] Compare conversion effort across complexity levels
+  - [x] Identify common configuration patterns
+  - [x] Refine templates based on real implementation
+  - [x] Test different success pattern strategies
 
-- [ ] **Phase 2 Learning Capture**
-  - [ ] Create `learnings/phase-2-insights.md` with conversion patterns
-  - [ ] Include: time estimates per complexity level, effective success patterns
-  - [ ] Note: template improvements needed, configuration edge cases
-  - [ ] Document dependency management best practices
-  - [ ] Recommendations for batch conversion approach
+- [x] **Phase 2 Learning Capture**
+  - [x] Create `learnings/phase-2-insights.md` with conversion patterns
+  - [x] Include: time estimates per complexity level, effective success patterns
+  - [x] Note: template improvements needed, configuration edge cases
+  - [x] Document dependency management best practices
+  - [x] Recommendations for batch conversion approach
 
 ### Phase 3: Batch Conversion & Scale Testing (Weeks 3-4)
-**Before Starting**: Review `learnings/phase-1-insights.md` and `learnings/phase-2-insights.md` for tool improvements and proven patterns.
+**Before Starting**: Review ALL learnings documents (`learnings/phase-1-insights.md`, `learnings/phase-2-insights.md`, and any existing `learnings/phase-3-insights.md`) for tool improvements, proven patterns, and recent discoveries.
 
 #### Tasks:
-- [ ] **Simple Examples Batch Conversion** (Week 3)
-  - [ ] Apply learnings from Phase 2 to remaining simple examples
-  - [ ] Use proven templates and patterns from `learnings/phase-2-insights.md`
-  - [ ] Convert: `models/chat/helloworld`, `misc/openai-streaming-response`, `misc/spring-ai-java-function-callback`
-  - [ ] Convert: `kotlin/kotlin-function-callback`, `prompt-engineering/prompt-engineering-patterns`
-  - [ ] Track conversion time and success rate
+- [x] **Simple Examples Batch Conversion** (Week 3)
+  - [x] Apply learnings from Phase 2 to remaining simple examples
+  - [x] Use proven templates and patterns from `learnings/phase-2-insights.md`
+  - [x] Convert: `models/chat/helloworld`, `misc/openai-streaming-response`, `misc/spring-ai-java-function-callback`
+  - [x] Convert: `kotlin/kotlin-function-callback`, `prompt-engineering/prompt-engineering-patterns`
+  - [x] Track conversion time and success rate
+
+- [ ] **Live Progress Indication Implementation** (Priority: Critical UX Issue)
+  - [ ] Add `--stream` or `--live` flag to show real-time test output
+  - [ ] Implement live log tailing (`tail -f` style) for active tests
+  - [ ] Add progress indicators (dots, spinners, or progress bars) during test execution
+  - [ ] Show timeout countdown for long-running tests
+  - [ ] Test with long-running examples like prompt-engineering-patterns
 
 - [ ] **MCP Examples Conversion** (Week 3-4)
   - [ ] Apply complex example patterns to all MCP modules
   - [ ] Handle varied dependency requirements (databases, external APIs)
   - [ ] Create reusable configuration templates for MCP patterns
-  - [ ] Test parallel execution of multiple MCP examples
-  - [ ] Document resource contention issues, timing conflicts
+  - [ ] Document resource contention issues, timing conflicts (Note: parallel testing disabled due to port conflicts)
 
 - [ ] **Agentic Pattern Examples** (Week 4)
   - [ ] Convert remaining agentic pattern examples
@@ -657,7 +671,7 @@ Each phase documents learnings and insights in `learnings/phase-N-insights.md` f
   - [ ] Performance benchmarks and optimization opportunities
 
 ### Phase 4: Validation, Cleanup & Knowledge Synthesis (Week 5)
-**Before Starting**: Review all previous learning files (`learnings/phase-1-insights.md`, `learnings/phase-2-insights.md`, `learnings/phase-3-insights.md`) for comprehensive improvement opportunities.
+**Before Starting**: Review ALL learnings documents (`learnings/phase-1-insights.md`, `learnings/phase-2-insights.md`, `learnings/phase-3-insights.md`, and any `learnings/phase-4-insights.md` created during this phase) for comprehensive improvement opportunities and latest discoveries.
 
 #### Tasks:
 - [ ] **Comprehensive Testing & Flaky Test Resolution**
@@ -775,6 +789,8 @@ export BRAVE_API_KEY="your-brave-key"  # if using Brave examples
 ## 12. Future Enhancements
 
 ### Short-term (Next 6 months)
+- [ ] **Real-time Test Output Window**: Stream live test output for long-running tests with progress indicators
+- [ ] **Parallel Execution with Port Management**: Dynamic port assignment or test categorization to enable safe parallel execution
 - [ ] **Intelligent Test Selection**: Run only tests affected by code changes
 - [ ] **Performance Benchmarking**: Track execution time trends
 - [ ] **Test Result Caching**: Skip unchanged tests when possible
