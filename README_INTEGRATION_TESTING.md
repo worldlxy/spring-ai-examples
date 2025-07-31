@@ -215,18 +215,41 @@ Required secrets in GitHub repository:
 - Failed test logs are preserved for debugging
 - Cross-platform compatibility is tested on Ubuntu, Windows, macOS
 
-## Debugging with Log Files
+## Log Management & Debugging
 
 ### 📁 Persistent Logs
 
-All integration tests automatically save their output to timestamped log files in the `logs/` directory:
+All integration tests automatically save their output to log files. The framework supports two log organization modes:
 
+#### Flat Log Directory (Default)
+Timestamped files in the main `logs/` directory:
 ```bash
 logs/
 ├── helloworld_integration-tests_20250731_174535.log
 ├── chain-workflow_integration-tests_20250731_180245.log
 └── sqlite-simple_integration-tests_20250731_181030.log
 ```
+
+#### Structured Log Directories (Recommended for Iteration Testing)
+Run-specific directories for debugging multiple test iterations:
+```bash
+# Use --structured-logs flag
+python3 scripts/run_integration_tests.py --structured-logs --filter="helloworld"
+
+# Creates organized structure
+logs/
+├── run-20250731_180214/
+│   ├── helloworld_integration-tests.log
+│   └── filesystem_integration-tests.log
+└── run-20250731_181030/
+    ├── helloworld_integration-tests.log
+    └── chain-workflow_integration-tests.log
+```
+
+**Benefits of structured logs:**
+- 🔄 **Iteration Debugging**: Keep complete logs from each test run separated
+- 📊 **Comparison**: Compare outputs between different runs easily
+- 🗂️ **Organization**: Clean separation when debugging failing tests multiple times
 
 ### 🔍 Log File Contents
 
@@ -307,6 +330,8 @@ python3 scripts/run_integration_tests.py [OPTIONS]
 | `--stream` | `-s` | **🆕** Stream live output with progress | `--stream` |
 | `--report` | `-r` | Generate test report file | `--report=results.md` |
 | `--fail-fast` | | Stop on first failure | `--fail-fast` |
+| `--clean-logs` | | **🆕** Clean up old log files and directories | `--clean-logs` |
+| `--structured-logs` | | **🆕** Use run-specific log directories | `--structured-logs` |
 
 ### 🔥 Recommended Commands
 
@@ -322,6 +347,10 @@ python3 scripts/run_integration_tests.py --verbose --fail-fast
 
 # For CI/comprehensive testing
 python3 scripts/run_integration_tests.py --report=integration-results.md
+
+# For log management
+python3 scripts/run_integration_tests.py --clean-logs  # Clean up old logs
+python3 scripts/run_integration_tests.py --structured-logs --filter="failing-test"  # Organized debugging
 ```
 
 ## Best Practices

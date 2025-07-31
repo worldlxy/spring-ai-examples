@@ -59,6 +59,26 @@ public class RunKotlinFunctionCallback {
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
             
+            // Show actual captured output for manual verification
+            out.println("📋 Captured Application Output:");
+            out.println("---");
+            String[] lines = output.split("\n");
+            
+            for (int i = 0; i < lines.length; i++) {
+                String trimmed = lines[i].trim();
+                
+                // Show relevant output lines for Kotlin function callback
+                if (trimmed.contains("Function call") || 
+                    trimmed.contains("Weather") || 
+                    trimmed.contains("Assistant:") ||
+                    trimmed.contains("User:") ||
+                    trimmed.contains("completed") ||
+                    trimmed.contains("demo")) {
+                    out.println("  " + trimmed);
+                }
+            }
+            out.println("---");
+            
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
                 if (output.matches("(?s).*" + pattern + ".*")) {

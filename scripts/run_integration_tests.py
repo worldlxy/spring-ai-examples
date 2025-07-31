@@ -17,6 +17,7 @@ import tempfile
 import concurrent.futures
 import time
 import argparse
+import glob
 from typing import List, Tuple, Dict, Optional
 
 # Configuration
@@ -78,7 +79,8 @@ def validate_environment() -> bool:
     log("Environment validation passed", "SUCCESS")
     return True
 
-def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: bool = False) -> Tuple[pathlib.Path, bool, str, float]:
+def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: bool = False, 
+                        structured_logs: bool = False, run_log_dir: Optional[pathlib.Path] = None) -> Tuple[pathlib.Path, bool, str, float]:
     """
     Run a single integration test
     Returns: (launcher_path, success, error_message, execution_time)
@@ -106,11 +108,16 @@ def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: 
         launcher_absolute = launcher.resolve()
         launcher_relative = launcher_absolute.relative_to(module_dir)
         
-        # Create logs directory and log file for this test
-        logs_dir = pathlib.Path("logs")
-        logs_dir.mkdir(exist_ok=True)
-        timestamp = time.strftime("%Y%m%d_%H%M%S")
-        log_file = logs_dir / f"{module_name.replace('/', '_')}_{timestamp}.log"
+        # Create log file in appropriate directory
+        if run_log_dir:
+            # Use provided run directory (structured logs)
+            log_file = run_log_dir / f"{module_name.replace('/', '_')}.log"
+        else:
+            # Use flat log directory with timestamp
+            logs_dir = pathlib.Path("logs")
+            logs_dir.mkdir(exist_ok=True)
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            log_file = logs_dir / f"{module_name.replace('/', '_')}_{timestamp}.log"
         
         timeout = config.get("timeoutSec", 300)
         
@@ -188,7 +195,55 @@ def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: 
         with open(log_file, 'r') as logf:
             output = logf.read()
             
-        if verbose and not stream:
+        # For streaming mode, show the actual captured content for verification
+        if stream:
+            print("\n📋 Raw Test Output (Spring Boot Application):")
+            print("=" * 60)
+            
+            # Parse the log to extract the actual Spring Boot output from JBang's captured output section
+            lines = output.split('\n')
+            app_output_lines = []
+            in_captured_output = False
+            
+            for line in lines:
+                stripped = line.strip()
+                
+                # Look for the JBang captured output section
+                if stripped == "📋 Captured Application Output:":
+                    in_captured_output = True
+                    continue
+                elif stripped == "---" and in_captured_output:
+                    if app_output_lines:  # End of captured output section
+                        break
+                    else:  # Start of captured output content
+                        continue
+                
+                # Capture lines from JBang's output section
+                if in_captured_output and stripped:
+                    # Remove the leading "  " that JBang adds
+                    if stripped.startswith("  "):
+                        app_output_lines.append(stripped[2:])
+                    else:
+                        app_output_lines.append(stripped)
+            
+            if app_output_lines:
+                for line in app_output_lines:
+                    print(f"  {line}")
+            else:
+                print("  (No application output found - check log file for details)")
+            print("=" * 60)
+            
+            # Show pattern verification details
+            success_patterns = config.get("successRegex", [])
+            if success_patterns:
+                print("\n🔍 Pattern Verification:")
+                for i, pattern in enumerate(success_patterns, 1):
+                    if re.search(pattern, output, re.DOTALL):
+                        print(f"  ✅ Pattern {i}: '{pattern}' → FOUND")
+                    else:
+                        print(f"  ❌ Pattern {i}: '{pattern}' → MISSING")
+            
+        elif verbose and not stream:
             log(f"Output from {launcher.name}:\n{output}", "DEBUG", verbose)
         
         # Check exit code and trust JBang's pattern verification
@@ -208,6 +263,57 @@ def run_integration_test(launcher: pathlib.Path, verbose: bool = False, stream: 
                 
     except Exception as e:
         return launcher, False, f"Execution error: {e}", time.time() - start_time
+
+def clean_logs():
+    """Clean up old log files and directories"""
+    logs_dir = pathlib.Path("logs")
+    if not logs_dir.exists():
+        log("No logs directory found to clean", "INFO")
+        return
+    
+    # Count files before cleanup
+    log_files = list(logs_dir.rglob("*.log"))
+    log_dirs = [d for d in logs_dir.iterdir() if d.is_dir() and d.name.startswith("run-")]
+    
+    total_files = len(log_files)
+    total_dirs = len(log_dirs)
+    
+    if total_files == 0 and total_dirs == 0:
+        log("No log files or directories to clean", "INFO")
+        return
+    
+    log(f"Cleaning up {total_files} log files and {total_dirs} run directories...", "INFO")
+    
+    # Remove all log files
+    for log_file in log_files:
+        try:
+            log_file.unlink()
+        except Exception as e:
+            log(f"Failed to remove {log_file}: {e}", "WARN")
+    
+    # Remove run directories
+    for run_dir in log_dirs:
+        try:
+            shutil.rmtree(run_dir)
+        except Exception as e:
+            log(f"Failed to remove {run_dir}: {e}", "WARN")
+    
+    log(f"Cleanup completed: removed {total_files} files and {total_dirs} directories", "SUCCESS")
+
+def get_log_directory(structured_logs: bool = False) -> pathlib.Path:
+    """Get the appropriate log directory based on configuration"""
+    if structured_logs:
+        # Create run-specific directory: logs/run-20250731_180245/
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        log_dir = pathlib.Path("logs") / f"run-{timestamp}"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        log(f"Using structured log directory: {log_dir}", "INFO")
+        return log_dir
+    else:
+        # Use flat log directory: logs/
+        log_dir = pathlib.Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        return log_dir
 
 def generate_report(results: List[Tuple], total_time: float, output_file: Optional[str] = None):
     """Generate detailed test report"""
@@ -272,12 +378,26 @@ def main():
                        help="Stop on first failure")
     parser.add_argument("--stream", "-s", action="store_true",
                        help="Stream live output from tests (shows progress in real-time)")
+    parser.add_argument("--clean-logs", action="store_true",
+                       help="Clean up old log files and directories")
+    parser.add_argument("--structured-logs", action="store_true",
+                       help="Use structured log directories (logs/run-<timestamp>/) for iteration debugging")
     
     args = parser.parse_args()
+    
+    # Handle cleanup request
+    if args.clean_logs:
+        clean_logs()
+        return
     
     start_time = time.time()
     
     log("🚀 Starting Spring AI Examples Integration Tests", "INFO")
+    
+    # Set up log directory
+    run_log_dir = None
+    if args.structured_logs:
+        run_log_dir = get_log_directory(structured_logs=True)
     
     # Validate environment
     if not validate_environment():
@@ -300,7 +420,7 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
         # Submit all tests
         future_to_launcher = {
-            executor.submit(run_integration_test, launcher, args.verbose, args.stream): launcher 
+            executor.submit(run_integration_test, launcher, args.verbose, args.stream, args.structured_logs, run_log_dir): launcher 
             for launcher in launchers
         }
         

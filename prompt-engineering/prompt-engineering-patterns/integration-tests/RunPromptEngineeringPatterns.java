@@ -59,6 +59,26 @@ public class RunPromptEngineeringPatterns {
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
             
+            // Show actual captured output for manual verification
+            out.println("📋 Captured Application Output:");
+            out.println("---");
+            String[] lines = output.split("\n");
+            
+            for (int i = 0; i < lines.length; i++) {
+                String trimmed = lines[i].trim();
+                
+                // Show relevant output lines for prompt engineering
+                if (trimmed.contains("Pattern:") || 
+                    trimmed.contains("Example:") || 
+                    trimmed.contains("Assistant:") ||
+                    trimmed.contains("User:") ||
+                    trimmed.contains("completed") ||
+                    trimmed.contains("demo")) {
+                    out.println("  " + trimmed);
+                }
+            }
+            out.println("---");
+            
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
                 if (output.matches("(?s).*" + pattern + ".*")) {

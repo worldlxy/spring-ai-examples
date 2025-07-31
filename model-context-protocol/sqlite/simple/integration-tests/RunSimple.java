@@ -67,6 +67,26 @@ public class RunSimple {
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
             
+            // Show actual captured output for manual verification
+            out.println("📋 Captured Application Output:");
+            out.println("---");
+            String[] lines = output.split("\n");
+            
+            for (int i = 0; i < lines.length; i++) {
+                String trimmed = lines[i].trim();
+                
+                // Show relevant output lines for MCP SQLite
+                if (trimmed.contains("products available") || 
+                    trimmed.contains("Connected to database") || 
+                    trimmed.contains("Query results") ||
+                    trimmed.contains("MCP") ||
+                    trimmed.contains("SQLite") ||
+                    trimmed.contains("demo completed")) {
+                    out.println("  " + trimmed);
+                }
+            }
+            out.println("---");
+            
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
                 if (output.matches("(?s).*" + pattern + ".*")) {

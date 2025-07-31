@@ -29,6 +29,28 @@ Phase 3 revealed critical architectural challenges with parallel execution in Sp
 - **Evidence**: `--stream` flag shows real-time progress with percentage indicators and captures full output to `logs/` directory
 - **Impact**: Long-running tests now provide immediate feedback, and persistent logs enable debugging
 
+### Enhanced Test Output Visibility
+- **Finding**: Showing actual AI responses alongside pattern verification dramatically improves manual verification capability
+- **Evidence**: Stream mode now displays captured Spring Boot output (e.g., actual joke content) plus regex pattern matching results
+- **Impact**: Developers can "eyeball" test results for correctness while also seeing technical pattern verification - provides both human and automated validation
+
+### Multi-line AI Response Capture Success
+- **Finding**: ✅ **COMPLETED** - Multi-line AI responses are now fully captured and displayed in streaming output
+- **Evidence**: Test now correctly shows complete joke responses spanning multiple lines:
+  ```
+  ASSISTANT: Why did the scarecrow win an award?
+  Because he was outstanding in his field!
+  ```
+- **Implementation**: Enhanced both JBang script (state-tracking for multi-line ASSISTANT responses) and Python parser (complete captured output section extraction)
+- **Impact**: Manual verification now shows complete AI responses, not just first line - critical for content validation
+
+### Critical JBang Output Capture Gap Discovery
+- **Finding**: ✅ **COMPLETED** - 10 out of 12 JBang scripts were missing the "📋 Captured Application Output" display section
+- **Evidence**: Only helloworld and evaluator-optimizer had proper output display; all others showed "No application output found - check log file for details"
+- **Root Cause**: JBang scripts captured output to temporary files but didn't display the captured content for debugging
+- **Solution Applied**: Systematically added output display sections to all JBang scripts with module-specific content filters
+- **Impact**: Developers can now see actual application output when tests fail, dramatically improving debugging capability
+
 ## Challenges & Issues ❌
 
 ### Parallel Execution Port Conflicts
@@ -72,12 +94,15 @@ Phase 3 revealed critical architectural challenges with parallel execution in Sp
 2. **Immediate Issue Resolution**: Fix problems as soon as they're discovered rather than batching
 3. **Real-world Testing**: Full integration runs surface issues that unit tests miss
 4. **Framework Responsiveness**: Architecture that allows quick fixes to discovered problems
+5. **Dual Verification Display**: Show both raw application output and pattern matching results for human + automated validation
+6. **File-based Logging**: Persistent logs in timestamped files enable effective debugging
 
 ### Anti-Patterns to Avoid ⚠️
 1. **Unconstrained Parallel Execution**: Spring Boot apps on same port will always conflict
-2. **Silent Long-running Tests**: No progress indication leads to poor developer experience
+2. **Silent Long-running Tests**: No progress indication leads to poor developer experience (✅ FIXED)
 3. **One-size-fits-all Testing**: Web apps and CLI apps need different testing approaches
 4. **Ignoring Edge Cases**: Real deployment scenarios often reveal framework limitations
+5. **Hidden Test Content**: Pattern verification without showing actual output prevents manual validation (✅ FIXED)
 
 ## Technical Insights 🔧
 
