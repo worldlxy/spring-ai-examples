@@ -22,8 +22,36 @@ python3 scripts/run_integration_tests.py --verbose
 # Run tests for specific modules
 python3 scripts/run_integration_tests.py --filter="kotlin"
 
+# 🚀 NEW: Run with live progress indication (recommended for long tests)
+python3 scripts/run_integration_tests.py --stream --filter="prompt-engineering"
+
 # Generate test report
 python3 scripts/run_integration_tests.py --report=test-report.md
+```
+
+### 🔥 Live Progress Features
+
+For tests that take more than 30 seconds, use the `--stream` flag to see real-time progress:
+
+```bash
+# Stream live output with progress indicators
+python3 scripts/run_integration_tests.py --stream --filter="helloworld"
+```
+
+**Live progress shows:**
+- 🔄 **Real-time output** from test execution
+- 📊 **Progress percentage** with timeout countdown  
+- 📝 **Persistent logs** saved to `logs/` directory
+- ⏱️ **Execution timing** with clear success/failure indicators
+
+**Example output:**
+```
+🚀 Streaming helloworld/integration-tests (timeout: 120s) → logs/helloworld_integration-tests_20250731_174535.log
+🔄 [ 12.6%] Spring AI Hello World!
+🔄 [ 12.6%] USER: Tell me a joke
+🔄 [ 12.6%] ASSISTANT: Why did the scarecrow win an award?
+🔄 [ 12.6%] Because he was outstanding in his field!
+✅ helloworld/integration-tests completed in 15.1s
 ```
 
 ## Test Architecture
@@ -187,6 +215,41 @@ Required secrets in GitHub repository:
 - Failed test logs are preserved for debugging
 - Cross-platform compatibility is tested on Ubuntu, Windows, macOS
 
+## Debugging with Log Files
+
+### 📁 Persistent Logs
+
+All integration tests automatically save their output to timestamped log files in the `logs/` directory:
+
+```bash
+logs/
+├── helloworld_integration-tests_20250731_174535.log
+├── chain-workflow_integration-tests_20250731_180245.log
+└── sqlite-simple_integration-tests_20250731_181030.log
+```
+
+### 🔍 Log File Contents
+
+Each log file contains the complete output from the Spring Boot application:
+
+```bash
+# View the latest test output
+ls -t logs/ | head -1 | xargs -I {} cat "logs/{}"
+
+# Search for specific patterns in logs
+grep -r "ASSISTANT:" logs/
+
+# Debug failed patterns
+grep -r "Missing:" logs/
+```
+
+### 💡 Debugging Tips
+
+1. **For failed tests**: Check the log file mentioned in the error message
+2. **For pattern issues**: Compare expected vs actual output in log files  
+3. **For timeouts**: Look for where execution stopped in the log
+4. **For streaming tests**: Log files show the complete captured output, not just the streamed portions
+
 ## Troubleshooting
 
 ### Common Issues
@@ -228,12 +291,46 @@ export BRAVE_API_KEY="your-brave-key"  # if using Brave examples
 - Add retry logic for network-dependent operations
 - Use more specific success patterns
 
+## Command Reference
+
+### Integration Test Runner Options
+
+```bash
+python3 scripts/run_integration_tests.py [OPTIONS]
+```
+
+| Flag | Short | Description | Example |
+|------|-------|-------------|---------|
+| `--verbose` | `-v` | Enable verbose output | `--verbose` |
+| `--filter` | `-f` | Filter tests by module name | `--filter="kotlin"` |
+| `--workers` | `-w` | Number of parallel workers (default: 1) | `--workers 2` |
+| `--stream` | `-s` | **🆕** Stream live output with progress | `--stream` |
+| `--report` | `-r` | Generate test report file | `--report=results.md` |
+| `--fail-fast` | | Stop on first failure | `--fail-fast` |
+
+### 🔥 Recommended Commands
+
+```bash
+# For development (fast feedback)
+python3 scripts/run_integration_tests.py --stream --filter="helloworld"
+
+# For long-running tests (see progress)  
+python3 scripts/run_integration_tests.py --stream --filter="prompt-engineering"
+
+# For debugging failures
+python3 scripts/run_integration_tests.py --verbose --fail-fast
+
+# For CI/comprehensive testing
+python3 scripts/run_integration_tests.py --report=integration-results.md
+```
+
 ## Best Practices
 
 ### Configuration
 - **Start simple**: Use basic patterns, increase complexity as needed
-- **Be specific**: Prefer specific success patterns over generic ones
+- **Be specific**: Prefer specific success patterns over generic ones  
 - **Test locally**: Always verify integration tests work locally before CI
+- **Use streaming**: For tests >30s, always use `--stream` for better UX
 - **Document patterns**: Add comments explaining complex regex patterns
 
 ### Maintenance
