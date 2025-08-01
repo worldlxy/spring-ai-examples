@@ -627,6 +627,49 @@ This ensures that recent discoveries, architectural changes, and proven patterns
 
 **⚠️ CRITICAL PHASE**: This phase addresses fundamental UX and validation issues discovered during initial Phase 3 testing that prevent effective framework usage.
 
+### Phase 3a.1: Critical Test Failure Resolution (Immediate Priority) 🚨
+**Status**: 🚨 **CRITICAL** - Must be completed before any other Phase 3 work  
+**Current State**: `rit-direct.sh` shows 5/12 tests failing (58% pass rate)  
+**Target**: Achieve >90% pass rate (≥11/12 tests passing)  
+**Test Method**: Use `rit-direct.sh` for reliable test execution
+
+#### Failed Tests Identified:
+1. `agentic-patterns/parallelization-workflow` - FAILED (exit code: 1)
+2. `kotlin/kotlin-hello-world` - FAILED (exit code: 1) 
+3. `misc/spring-ai-java-function-callback` - FAILED (exit code: 1)
+4. `chat/helloworld` - FAILED (exit code: 1)
+5. `prompt-engineering/prompt-engineering-patterns` - FAILED (exit code: 1)
+
+#### Tasks:
+- [ ] **Systematic Failure Analysis**
+  - [ ] Run each failed test individually with `cd <module> && jbang integration-tests/Run*.java`
+  - [ ] Capture and analyze actual vs. expected output patterns for each failure
+  - [ ] Document root cause for each test failure (pattern mismatch, missing output capture, environment issues, application errors)
+  - [ ] Categorize failures by type to identify common patterns
+
+- [ ] **Fix Priority Order** (easiest to hardest):
+  1. [ ] **kotlin/kotlin-hello-world** - Simple example, should be straightforward to fix
+  2. [ ] **chat/helloworld** - Core functionality test, high importance
+  3. [ ] **prompt-engineering/prompt-engineering-patterns** - Already has output capture fixes
+  4. [ ] **misc/spring-ai-java-function-callback** - Function callback pattern validation  
+  5. [ ] **agentic-patterns/parallelization-workflow** - Complex workflow, may need specialized patterns
+
+- [ ] **Pattern Repair Process** (for each failing test):
+  - [ ] Run test individually to capture detailed output
+  - [ ] Identify actual application output vs. expected success patterns
+  - [ ] Update `ExampleInfo.json` success patterns to match real output
+  - [ ] Apply missing JBang output capture fixes if needed (4 scripts still need fixes)
+  - [ ] Verify fix works with individual test execution
+  - [ ] Confirm fix with `rit-direct.sh` showing the test now passes
+
+- [ ] **Validation Milestone**
+  - [ ] Achieve >90% pass rate (≥11/12 tests passing) 
+  - [ ] Run `rit-direct.sh` 3 consecutive times to ensure consistency
+  - [ ] Document successful patterns and troubleshooting methodology for future use
+
+### Phase 3a.2: Complete Remaining Infrastructure Fixes
+**Prerequisites**: Phase 3a.1 must be completed first (>90% test pass rate achieved)
+
 #### Tasks:
 - [x] **Update Integration Testing Plan** ✅ **COMPLETED**
   - [x] Split Phase 3 into sub-phases to address critical streaming UX issue 
