@@ -23,6 +23,17 @@ echo "==============================================="
 echo "🧹 Cleaning up old logs..." | tee -a "${LOG_FILE}"
 find logs/ -name "*.log" -not -name "$(basename "${LOG_FILE}")" -delete 2>/dev/null || true
 
+# Port cleanup - kill any processes using port 8080 to prevent conflicts
+echo "🔧 Cleaning up port 8080..." | tee -a "${LOG_FILE}"
+if lsof -ti:8080 >/dev/null 2>&1; then
+    echo "  Found processes using port 8080, terminating..." | tee -a "${LOG_FILE}"
+    lsof -ti:8080 | xargs kill -9 2>/dev/null || true
+    sleep 2  # Give processes time to cleanup
+    echo "  Port 8080 cleanup completed" | tee -a "${LOG_FILE}"
+else
+    echo "  Port 8080 is free" | tee -a "${LOG_FILE}"
+fi
+
 # Find all JBang integration test scripts
 jbang_scripts=($(find . -name "Run*.java" -path "*/integration-tests/*" | sort))
 
@@ -56,6 +67,13 @@ for script in "${jbang_scripts[@]}"; do
         fi
         ((failed++))
         failed_tests+=("${full_name}")
+    fi
+    
+    # Clean up any hanging processes on port 8080 after each test
+    if lsof -ti:8080 >/dev/null 2>&1; then
+        echo "🧹 Cleaning up hanging processes on port 8080..." | tee -a "${LOG_FILE}"
+        lsof -ti:8080 | xargs kill -9 2>/dev/null || true
+        sleep 1
     fi
     
     echo "" | tee -a "${LOG_FILE}"
