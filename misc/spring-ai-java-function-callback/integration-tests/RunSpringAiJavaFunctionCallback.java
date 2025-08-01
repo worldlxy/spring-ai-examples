@@ -61,27 +61,12 @@ public class RunSpringAiJavaFunctionCallback {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
             
-            // Show actual captured output for manual verification
-            out.println("📋 Captured Application Output:");
+            // Show full raw output
+            out.println("📋 Full Application Output:");
             out.println("---");
-            String[] lines = output.split("\n");
-            
-            for (int i = 0; i < lines.length; i++) {
-                String trimmed = lines[i].trim();
-                
-                // Show key lines for spring-ai-java-function-callback
-                if (trimmed.contains("Response:") || 
-                    trimmed.contains("weather") || 
-                    trimmed.contains("San Francisco") ||
-                    trimmed.contains("Tokyo") ||
-                    trimmed.contains("Paris") ||
-                    trimmed.contains("Exiting successfully") ||
-                    (!trimmed.startsWith("2025-") && !trimmed.startsWith("[INFO]") && !trimmed.isEmpty() && trimmed.length() < 200)) {
-                    out.println("  " + trimmed);
-                }
-            }
+            out.println(output);
             out.println("---");
             
             int failedPatterns = 0;
@@ -95,7 +80,7 @@ public class RunSpringAiJavaFunctionCallback {
             }
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

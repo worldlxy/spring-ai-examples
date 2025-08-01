@@ -61,26 +61,12 @@ public class RunChainWorkflow {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
             
-            // Show actual captured output for manual verification
-            out.println("📋 Captured Application Output:");
+            // Show full raw output
+            out.println("📋 Full Application Output:");
             out.println("---");
-            String[] lines = output.split("\n");
-            
-            for (int i = 0; i < lines.length; i++) {
-                String trimmed = lines[i].trim();
-                
-                // Show relevant output lines for chain workflow
-                if (trimmed.contains("EVALUATION:") || 
-                    trimmed.contains("PASS") || 
-                    trimmed.contains("FINAL") ||
-                    trimmed.contains("Chain") ||
-                    trimmed.contains("workflow") ||
-                    trimmed.contains("completed")) {
-                    out.println("  " + trimmed);
-                }
-            }
+            out.println(output);
             out.println("---");
             
             int failedPatterns = 0;
@@ -94,7 +80,7 @@ public class RunChainWorkflow {
             }
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

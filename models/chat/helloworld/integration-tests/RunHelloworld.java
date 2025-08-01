@@ -61,53 +61,8 @@ public class RunHelloworld {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
             
-            // Show actual captured output for manual verification
-            out.println("📋 Captured Application Output:");
-            out.println("---");
-            // Show key lines that contain the patterns we're looking for, plus context
-            String[] lines = output.split("\n");
-            boolean inAssistantResponse = false;
-            
-            for (int i = 0; i < lines.length; i++) {
-                String trimmed = lines[i].trim();
-                
-                // Always show these key lines
-                if (trimmed.contains("Spring AI") || trimmed.contains("USER:") || 
-                    trimmed.contains("Hello World") || trimmed.contains("demo completed")) {
-                    out.println("  " + trimmed);
-                    inAssistantResponse = false;
-                }
-                // Handle ASSISTANT responses (which may be multi-line)
-                else if (trimmed.contains("ASSISTANT:")) {
-                    out.println("  " + trimmed);
-                    inAssistantResponse = true;
-                }
-                // Show lines following ASSISTANT: that contain content
-                else if (inAssistantResponse && !trimmed.isEmpty() && 
-                         !trimmed.startsWith("2025-") && // Skip log timestamps
-                         !trimmed.startsWith("[INFO]")) { // Skip Maven messages
-                    out.println("  " + trimmed);
-                    // Stop after we hit another section or empty content area
-                    if (i + 1 < lines.length && lines[i + 1].trim().isEmpty()) {
-                        // Check if next non-empty line is still part of response
-                        boolean foundNextSection = false;
-                        for (int j = i + 1; j < lines.length && !foundNextSection; j++) {
-                            String nextLine = lines[j].trim();
-                            if (!nextLine.isEmpty()) {
-                                if (nextLine.contains("Hello World") || nextLine.contains("demo completed") ||
-                                    nextLine.startsWith("2025-")) {
-                                    inAssistantResponse = false;
-                                    foundNextSection = true;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            out.println("---");
             
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
@@ -121,7 +76,7 @@ public class RunHelloworld {
             
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

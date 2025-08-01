@@ -61,29 +61,12 @@ public class RunPromptEngineeringPatterns {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
             
-            // Show actual captured output for manual verification
-            out.println("📋 Captured Application Output:");
+            // Show full raw output
+            out.println("📋 Full Application Output:");
             out.println("---");
-            String[] lines = output.split("\n");
-            
-            for (int i = 0; i < lines.length; i++) {
-                String trimmed = lines[i].trim();
-                
-                // Show key lines for prompt engineering patterns
-                if (trimmed.contains("=== Running") || 
-                    trimmed.contains("Output:") || 
-                    trimmed.contains("completed") ||
-                    trimmed.contains("pizza") ||
-                    trimmed.contains("JSON") ||
-                    trimmed.contains("POSITIVE") ||
-                    trimmed.contains("NEGATIVE") ||
-                    trimmed.contains("NEUTRAL") ||
-                    (!trimmed.startsWith("2025-") && !trimmed.startsWith("[INFO]") && !trimmed.isEmpty())) {
-                    out.println("  " + trimmed);
-                }
-            }
+            out.println(output);
             out.println("---");
             
             int failedPatterns = 0;
@@ -97,7 +80,7 @@ public class RunPromptEngineeringPatterns {
             }
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

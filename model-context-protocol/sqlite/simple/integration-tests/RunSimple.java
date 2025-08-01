@@ -69,26 +69,12 @@ public class RunSimple {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
             
-            // Show actual captured output for manual verification
-            out.println("📋 Captured Application Output:");
+            // Show full raw output
+            out.println("📋 Full Application Output:");
             out.println("---");
-            String[] lines = output.split("\n");
-            
-            for (int i = 0; i < lines.length; i++) {
-                String trimmed = lines[i].trim();
-                
-                // Show relevant output lines for MCP SQLite
-                if (trimmed.contains("products available") || 
-                    trimmed.contains("Connected to database") || 
-                    trimmed.contains("Query results") ||
-                    trimmed.contains("MCP") ||
-                    trimmed.contains("SQLite") ||
-                    trimmed.contains("demo completed")) {
-                    out.println("  " + trimmed);
-                }
-            }
+            out.println(output);
             out.println("---");
             
             int failedPatterns = 0;
@@ -102,7 +88,7 @@ public class RunSimple {
             }
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

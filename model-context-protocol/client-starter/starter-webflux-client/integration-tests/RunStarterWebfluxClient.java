@@ -74,29 +74,12 @@ public class RunStarterWebfluxClient {
                 }
             }
 
-            // Display captured output for debugging
-            out.println("\n📋 Captured Application Output:");
-            out.println("━".repeat(80));
-            
-            // Show MCP tool discovery response
-            String[] lines = output.split("\n");
-            boolean captureOutput = false;
-            int outputLines = 0;
-            for (String line : lines) {
-                if (line.contains(">>> QUESTION:")) {
-                    captureOutput = true;
-                }
-                if (captureOutput) {
-                    out.println(line);
-                    outputLines++;
-                    if (outputLines > 50) {
-                        out.println("... (truncated, see full log)");
-                        break;
-                    }
-                }
-            }
-            out.println("━".repeat(80));
-            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
+            // Show full raw output
+            out.println("📋 Full Application Output:");
+            out.println("---");
+            out.println(output);
+            out.println("---");
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

@@ -80,23 +80,14 @@ public class RunStarterDefaultClient {
                 }
             }
 
-            // Display captured application output for debugging
-            out.println("\n📋 Captured Application Output:");
-            out.println("=== MCP CLIENT OUTPUT ===");
-            
-            // Extract and display key sections
-            String[] lines = output.split("\n");
-            
-            for (String line : lines) {
-                if (line.contains(">>> QUESTION:") || line.contains(">>> ASSISTANT:") || 
-                    line.contains("MCP Initialized") || line.contains("tools available") ||
-                    line.contains("brave_search") || line.contains("search")) {
-                    out.println(line);
-                }
-            }
+            // Show full raw output
+            out.println("📋 Full Application Output:");
+            out.println("---");
+            out.println(output);
+            out.println("---");
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

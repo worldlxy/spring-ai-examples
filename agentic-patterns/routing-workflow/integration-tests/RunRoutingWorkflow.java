@@ -80,35 +80,14 @@ public class RunRoutingWorkflow {
                 }
             }
 
-            // Display captured application output for debugging
-            out.println("\n📋 Captured Application Output:");
-            out.println("=== ROUTING WORKFLOW OUTPUT ===");
-            
-            // Extract and display ticket processing sections
-            String[] lines = output.split("\n");
-            boolean inTicketSection = false;
-            
-            for (String line : lines) {
-                if (line.startsWith("Ticket ")) {
-                    inTicketSection = true;
-                    out.println("\n" + line);
-                } else if (line.contains("Available routes:")) {
-                    out.println(line);
-                } else if (line.contains("Routing Analysis:")) {
-                    out.println(line);
-                } else if (line.contains("Selected route:")) {
-                    out.println(line);
-                } else if (line.contains("Support Response:")) {
-                    out.println(line);
-                } else if (inTicketSection && line.trim().isEmpty()) {
-                    inTicketSection = false;
-                } else if (inTicketSection || line.contains("Subject:") || line.contains("Message:")) {
-                    out.println(line);
-                }
-            }
+            // Show full raw output
+            out.println("📋 Full Application Output:");
+            out.println("---");
+            out.println(output);
+            out.println("---");
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

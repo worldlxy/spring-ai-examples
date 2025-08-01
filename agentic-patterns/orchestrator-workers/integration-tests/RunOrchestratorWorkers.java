@@ -80,34 +80,14 @@ public class RunOrchestratorWorkers {
                 }
             }
 
-            // Display captured application output for debugging
-            out.println("\n📋 Captured Application Output:");
-            out.println("=== ORCHESTRATOR OUTPUT ===");
-            
-            // Extract orchestrator analysis section
-            String[] lines = output.split("\n");
-            boolean inOrchestratorOutput = false;
-            boolean inWorkerOutput = false;
-            
-            for (String line : lines) {
-                if (line.contains("=== ORCHESTRATOR OUTPUT ===")) {
-                    inOrchestratorOutput = true;
-                    inWorkerOutput = false;
-                    continue;
-                } else if (line.contains("=== WORKER OUTPUT ===")) {
-                    inOrchestratorOutput = false;
-                    inWorkerOutput = true;
-                    out.println("\n=== WORKER OUTPUT ===");
-                    continue;
-                }
-                
-                if (inOrchestratorOutput || inWorkerOutput) {
-                    out.println(line);
-                }
-            }
+            // Show full raw output
+            out.println("📋 Full Application Output:");
+            out.println("---");
+            out.println(output);
+            out.println("---");
 
             // Keep log file for debugging - DO NOT DELETE
-            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
+            out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

@@ -2,26 +2,67 @@
 
 # Direct RIT - Run Integration Tests directly via JBang
 # Complete bypass of Python script to avoid hanging issues
+#
+# Usage:
+#   ./rit-direct.sh                  # Run all tests
+#   ./rit-direct.sh --clean-logs     # Clean all logs and run all tests
+#   ./rit-direct.sh helloworld       # Run only tests matching "helloworld"
+#   ./rit-direct.sh --clean-logs helloworld  # Clean logs and run specific test
 
 # Don't exit on command failure (let tests fail individually)
 set -uo pipefail
 
-LOGS_DIR="integration-testing/logs/background-runs"
+# Find script directory and project root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+# Change to project root to ensure consistent behavior
+cd "${PROJECT_ROOT}"
+
+# Parse arguments
+CLEAN_LOGS=false
+TEST_FILTER=""
+
+for arg in "$@"; do
+    case $arg in
+        --clean-logs)
+            CLEAN_LOGS=true
+            shift
+            ;;
+        *)
+            TEST_FILTER="$arg"
+            ;;
+    esac
+done
+
+LOGS_BASE_DIR="integration-testing/logs"
+LOGS_DIR="${LOGS_BASE_DIR}/background-runs"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-LOG_FILE="$(pwd)/${LOGS_DIR}/rit-direct_${TIMESTAMP}.log"
+LOG_FILE="${PROJECT_ROOT}/${LOGS_DIR}/rit-direct_${TIMESTAMP}.log"
 
 mkdir -p "${LOGS_DIR}"
+
+# Clean all logs if requested
+if [ "$CLEAN_LOGS" = true ]; then
+    echo "🧹 Cleaning all logs..."
+    rm -rf "${LOGS_BASE_DIR}"/*
+    mkdir -p "${LOGS_DIR}"
+    mkdir -p "${LOGS_BASE_DIR}/integration-tests"
+fi
 
 # Create the log file first
 touch "${LOG_FILE}"
 
 echo "🚀 Starting Spring AI Examples Integration Tests (Direct Mode)"
+if [ -n "$TEST_FILTER" ]; then
+    echo "🔍 Filter: $TEST_FILTER"
+fi
 echo "📝 Log file: ${LOG_FILE}"
 echo "==============================================="
 
-# Clean up old logs (but not the current log file)
-echo "🧹 Cleaning up old logs..." | tee -a "${LOG_FILE}"
-find logs/ -name "*.log" -not -name "$(basename "${LOG_FILE}")" -delete 2>/dev/null || true
+# Clean up old logs from previous runs (but not the current log file)
+echo "🧹 Cleaning up old run logs..." | tee -a "${LOG_FILE}"
+find "${LOGS_DIR}" -name "*.log" -not -name "$(basename "${LOG_FILE}")" -delete 2>/dev/null || true
 
 # Port cleanup - kill any processes using port 8080 to prevent conflicts
 echo "🔧 Cleaning up port 8080..." | tee -a "${LOG_FILE}"
@@ -35,7 +76,13 @@ else
 fi
 
 # Find all JBang integration test scripts
-jbang_scripts=($(find . -name "Run*.java" -path "*/integration-tests/*" | sort))
+if [ -n "$TEST_FILTER" ]; then
+    # Filter scripts by the provided pattern
+    jbang_scripts=($(find . -name "Run*.java" -path "*/integration-tests/*" | grep -i "$TEST_FILTER" | sort))
+else
+    # Find all scripts
+    jbang_scripts=($(find . -name "Run*.java" -path "*/integration-tests/*" | sort))
+fi
 
 echo "Found ${#jbang_scripts[@]} JBang integration test scripts" | tee -a "${LOG_FILE}"
 echo "" | tee -a "${LOG_FILE}"
