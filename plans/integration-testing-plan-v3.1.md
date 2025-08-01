@@ -622,11 +622,18 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Document dependency management best practices
   - [x] Recommendations for batch conversion approach
 
-### Phase 3: Batch Conversion & Scale Testing (Weeks 3-4)
+### Phase 3a: Critical UX & Test Validation (Week 3 - Immediate Priority) 🚨
 **Before Starting**: Review ALL learnings documents (`learnings/phase-1-insights.md`, `learnings/phase-2-insights.md`, and any existing `learnings/phase-3-insights.md`) for tool improvements, proven patterns, and recent discoveries.
 
+**⚠️ CRITICAL PHASE**: This phase addresses fundamental UX and validation issues discovered during initial Phase 3 testing that prevent effective framework usage.
+
 #### Tasks:
-- [x] **Simple Examples Batch Conversion** (Week 3)
+- [x] **Update Integration Testing Plan** ✅ **COMPLETED**
+  - [x] Split Phase 3 into sub-phases to address critical streaming UX issue 
+  - [x] Restructure plan to prioritize systematic test validation
+  - [x] Document the need for real-time Spring Boot output visibility
+
+- [x] **Simple Examples Batch Conversion** ✅ **COMPLETED**
   - [x] Apply learnings from Phase 2 to remaining simple examples
   - [x] Use proven templates and patterns from `learnings/phase-2-insights.md`
   - [x] Convert: `models/chat/helloworld`, `misc/openai-streaming-response`, `misc/spring-ai-java-function-callback`
@@ -634,17 +641,11 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Track conversion time and success rate
 
 - [x] **Live Progress Indication Implementation** (Priority: Critical UX Issue) ✅ **COMPLETED**
-  - [x] Add `--stream` or `--live` flag to show real-time test output
-  - [x] Implement live log tailing (`tail -f` style) for active tests
-  - [x] Add progress indicators (dots, spinners, or progress bars) during test execution
+  - [x] Add `--stream` flag to show real-time test output
+  - [x] Implement file-based logging with timestamped logs in `logs/` directory
+  - [x] Add progress indicators and structured output display during test execution
   - [x] Show timeout countdown for long-running tests
   - [x] Test with long-running examples like prompt-engineering-patterns
-
-- [ ] **MCP Examples Conversion** (Week 3-4)
-  - [ ] Apply complex example patterns to all MCP modules
-  - [ ] Handle varied dependency requirements (databases, external APIs)
-  - [ ] Create reusable configuration templates for MCP patterns
-  - [ ] Document resource contention issues, timing conflicts (Note: parallel testing disabled due to port conflicts)
 
 - [x] **Enhanced Log Management & Developer Experience** ✅ **COMPLETED**
   - [x] Add Python cache and log files to .gitignore (completed)
@@ -652,6 +653,45 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Add `--clean-logs` command to Python test runner for log cleanup
   - [x] Add test report management guidance (test reports added to .gitignore as they are generated artifacts)
   - [x] Create log directory structure for debugging multiple test iterations
+
+- [x] **Critical JBang Output Capture Fix** ✅ **COMPLETED**
+  - [x] Discovered and fixed critical bug: 10 out of 12 JBang scripts missing "📋 Captured Application Output" display sections
+  - [x] Fixed 8/12 scripts (helloworld, kotlin-hello-world, chain-workflow, sqlite/simple, prompt-engineering-patterns, kotlin-function-callback, filesystem, evaluator-optimizer)
+  - [x] Enhanced output capture with multi-line AI response handling
+  - [x] Added module-specific content filters for better debugging visibility
+
+- [ ] **Complete Remaining JBang Output Fixes** (Critical for debugging)
+  - [ ] Fix remaining 4 scripts: brave, openai-streaming-response, spring-ai-java-function-callback, parallelization-workflow
+  - [ ] Apply same output display pattern used in working scripts
+  - [ ] Test each fix individually to ensure proper output capture
+
+- [ ] **Real-time Spring Boot Output Streaming** (Critical UX Issue)
+  - [ ] **Problem**: Current `--stream` only shows JBang overhead, not actual Spring Boot application output
+  - [ ] **Solution**: Implement Python log tailing while JBang runs for real-time Spring Boot visibility
+  - [ ] Replace current dual output strategy with simpler log tailing approach
+  - [ ] Test with long-running examples to ensure developers can see live Spring Boot execution
+
+- [ ] **Systematic Test Validation & Pattern Repair**
+  - [ ] Run all 12 existing integration tests individually to identify failing patterns
+  - [ ] Fix incorrect success patterns in ExampleInfo.json files (e.g., prompt-engineering-patterns patterns)
+  - [ ] Validate that each test passes individually before proceeding with batch conversions
+  - [ ] Document pattern validation methodology for future tests
+
+- [ ] **Phase 3a Learning Capture**
+  - [ ] Update `learnings/phase-3-insights.md` with critical UX and validation discoveries
+  - [ ] Document streaming architecture issues and solutions
+  - [ ] Note systematic testing approach for pattern validation
+  - [ ] Record JBang output capture bug patterns to prevent regression
+
+### Phase 3b: Continue Batch Conversion (Week 3-4)
+**Prerequisites**: Phase 3a must be completed first - all existing tests must pass and real-time output streaming must work.
+
+#### Tasks:
+- [ ] **MCP Examples Conversion** (Week 3-4)
+  - [ ] Apply complex example patterns to all MCP modules
+  - [ ] Handle varied dependency requirements (databases, external APIs)
+  - [ ] Create reusable configuration templates for MCP patterns
+  - [ ] Document resource contention issues, timing conflicts (Note: parallel testing disabled due to port conflicts)
 
 - [ ] **Agentic Pattern Examples** (Week 4)
   - [ ] Convert remaining agentic pattern examples
@@ -664,14 +704,18 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [ ] Convert `agents/reflection` (complex AI interactions)
   - [ ] Handle any edge cases discovered during batch conversion
 
+### Phase 3c: Scale Testing & Optimization (Week 4)
+**Prerequisites**: Phase 3a and 3b must be completed - all integration tests must exist and pass individually.
+
+#### Tasks:
 - [ ] **Scale Testing & Optimization**
   - [ ] Run full test suite multiple times to identify patterns
-  - [ ] Test parallel execution limits and resource usage
+  - [ ] Test parallel execution limits and resource usage (after implementing dynamic port assignment)
   - [ ] Optimize CI pipeline performance
   - [ ] Identify and fix flaky test patterns
 
 - [ ] **Phase 3 Learning Capture**
-  - [ ] Create `learnings/phase-3-insights.md` with batch conversion insights
+  - [ ] Update `learnings/phase-3-insights.md` with complete batch conversion insights
   - [ ] Include: efficiency patterns, resource usage insights, flakiness patterns
   - [ ] Note: successful template variations, problematic configurations
   - [ ] Document scaling challenges and solutions
@@ -796,8 +840,8 @@ export BRAVE_API_KEY="your-brave-key"  # if using Brave examples
 ## 12. Future Enhancements
 
 ### Short-term (Next 6 months)
-- [ ] **Real-time Test Output Window**: Stream live test output for long-running tests with progress indicators
-- [ ] **Parallel Execution with Port Management**: Dynamic port assignment or test categorization to enable safe parallel execution
+- [x] **Real-time Test Output Window**: Stream live test output for long-running tests with progress indicators ✅ **PARTIALLY COMPLETED** - `--stream` flag implemented, but needs real-time Spring Boot output streaming via log tailing
+- [ ] **Parallel Execution with Port Management**: Dynamic port assignment or test categorization to enable safe parallel execution (CRITICAL: currently disabled due to port conflicts)
 - [ ] **Intelligent Test Selection**: Run only tests affected by code changes
 - [ ] **Performance Benchmarking**: Track execution time trends
 - [ ] **Test Result Caching**: Skip unchanged tests when possible
