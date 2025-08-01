@@ -44,7 +44,10 @@ public class RunHelloworld {
             runCommand(new String[]{"./mvnw", "clean", "package", "-q", "-DskipTests"}, 300);
 
             out.println("🚀 Running helloworld...");
-            Path logFile = Files.createTempFile("integration-test", ".log");
+            // Create persistent log file for debugging
+            Path logDir = Paths.get("../../../integration-testing/logs/integration-tests");
+            Files.createDirectories(logDir);
+            Path logFile = logDir.resolve("helloworld-spring-boot-" + System.currentTimeMillis() + ".log");
             
             ProcessResult result = new ProcessExecutor()
                 .command("./mvnw", "spring-boot:run", "-q")
@@ -58,6 +61,7 @@ public class RunHelloworld {
             // Verify output patterns
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
+            out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());
             
             // Show actual captured output for manual verification
             out.println("📋 Captured Application Output:");
@@ -116,7 +120,8 @@ public class RunHelloworld {
             }
             
 
-            Files.deleteIfExists(logFile);
+            // Keep log file for debugging - DO NOT DELETE
+            out.println("📁 Spring Boot log preserved: " + logFile.toAbsolutePath());
 
             if (exitCode != 0) {
                 err.println("❌ Application exited with code: " + exitCode);

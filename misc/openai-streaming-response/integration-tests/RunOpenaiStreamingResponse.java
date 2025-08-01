@@ -52,7 +52,10 @@ public class RunOpenaiStreamingResponse {
 
             // Start the server in background
             out.println("🚀 Starting web server...");
-            Path logFile = Files.createTempFile("server", ".log");
+            // Create persistent log file for debugging
+            Path logDir = Paths.get("../../integration-testing/logs/integration-tests");
+            Files.createDirectories(logDir);
+            Path logFile = logDir.resolve("openai-streaming-response-server-" + System.currentTimeMillis() + ".log");
             
             ProcessBuilder pb = new ProcessBuilder("./mvnw", "spring-boot:run", "-q");
             pb.redirectOutput(logFile.toFile());
@@ -86,6 +89,8 @@ public class RunOpenaiStreamingResponse {
                 exit(1);
             }
 
+            // Keep log file for debugging - DO NOT DELETE
+            out.println("📁 Server log preserved: " + logFile.toAbsolutePath());
             out.println("🎉 Web application integration test completed successfully!");
 
         } finally {

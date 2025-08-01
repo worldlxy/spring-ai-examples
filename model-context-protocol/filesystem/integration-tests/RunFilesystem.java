@@ -38,18 +38,18 @@ public class RunFilesystem {
         }
 
         try {
-        // Run setup commands if specified
+            
+            // Build and run the main application
+            out.println("🏗️  Building filesystem...");
+            runCommand(new String[]{"./mvnw", "clean", "package", "-q", "-DskipTests"}, 300);
+
+        // Run setup commands AFTER build to avoid clean removing test files
         if (cfg.setupCommands() != null) {
             for (String setupCmd : cfg.setupCommands()) {
                 out.println("🔧 Running setup: " + setupCmd);
                 runCommand(setupCmd.split("\\s+"), 60); // 1 minute timeout for setup
             }
         }
-        
-            
-            // Build and run the main application
-            out.println("🏗️  Building filesystem...");
-            runCommand(new String[]{"./mvnw", "clean", "package", "-q", "-DskipTests"}, 300);
 
             out.println("🚀 Running filesystem...");
             // Create persistent log file for debugging
