@@ -107,10 +107,17 @@ Complex examples include an optional `integration-tests/` directory:
 module/
 ├── integration-tests/
 │   ├── ExampleInfo.json      # Test configuration (timeout, success patterns, env vars)
-│   └── RunModule.java        # JBang launcher script
+│   └── RunModule.java        # JBang launcher (uses centralized utilities)
 ```
 
-See `docs/INTEGRATION_TESTING.md` for complete testing guide.
+### JBang Script Pattern (IMPORTANT)
+
+All JBang integration test scripts use centralized utilities to eliminate code duplication:
+- Each script is only ~18 lines (down from ~110-130 lines)
+- All test logic lives in `integration-testing/jbang-lib/IntegrationTestUtils.java`
+- See `integration-testing/docs/JBANG_PATTERN.md` for the required pattern
+
+See `integration-testing/docs/README.md` for complete testing guide.
 
 ## Development Notes
 

@@ -639,10 +639,17 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Document dependency management best practices
   - [x] Recommendations for batch conversion approach
 
-### Phase 3a: Critical UX & Test Validation (Week 3 - Immediate Priority) 🚨
-**Before Starting**: Review ALL learnings documents (`learnings/phase-1-insights.md`, `learnings/phase-2-insights.md`, and any existing `learnings/phase-3-insights.md`) for tool improvements, proven patterns, and recent discoveries.
+### Phase 3a: Critical UX & Test Validation ✅ **COMPLETED**
+**Status**: All 6 sub-phases completed successfully - 100% test pass rate achieved with centralized architecture
+**Duration**: Week 3 (all sub-phases completed)
 
-**⚠️ CRITICAL PHASE**: This phase addresses fundamental UX and validation issues discovered during initial Phase 3 testing that prevent effective framework usage.
+**Summary**: Successfully addressed all critical infrastructure issues:
+- ✅ Phase 3a.1: Achieved 100% test pass rate through systematic port cleanup
+- ✅ Phase 3a.2: Implemented comprehensive logging infrastructure
+- ✅ Phase 3a.3: Reorganized to centralized directory structure
+- ✅ Phase 3a.4: Fixed all logging issues and eliminated false positives
+- ✅ Phase 3a.5: Enhanced all scripts with full output display
+- ✅ Phase 3a.6: Centralized all JBang utilities (84% code reduction)
 
 ### Phase 3a.1: Critical Test Failure Resolution (Immediate Priority) 🚨
 **Status**: ✅ **COMPLETED** - 12/12 tests passing (100% pass rate) 🎯✅  
@@ -882,6 +889,65 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Created `fix-jbang-duplicates.sh` to fix AWK processing errors
   - [x] Documented script usage patterns for future maintenance
 
+### Phase 3a.6: JBang Utility Centralization ✅ **COMPLETED**
+**Priority**: High - Eliminate code duplication and improve maintainability
+**Prerequisites**: Phase 3a.5 must be completed first ✅ **ACHIEVED**
+**Status**: ✅ **COMPLETED** - All 18 JBang scripts now use centralized utilities 🎯
+
+#### Motivation:
+- All 18 JBang scripts contain ~130 lines of duplicated code
+- Making changes requires updating all scripts individually (error-prone)
+- Future enhancements (like streaming logs) would require 18 separate updates
+- Current duplication makes maintenance difficult and increases risk of inconsistencies
+
+#### Tasks:
+- [x] **Create Centralized Utility Infrastructure** ✅ **COMPLETED**
+  - [x] Create `integration-testing/jbang-lib/` directory for shared JBang utilities
+  - [x] Implement `IntegrationTestUtils.java` with all common functionality:
+    - [x] ExampleInfo record definition and JSON parsing
+    - [x] Environment variable verification logic
+    - [x] Command execution with timeout handling
+    - [x] Standardized log file creation and path management (dynamic depth detection)
+    - [x] Spring Boot build and run orchestration
+    - [x] Output pattern verification with consistent reporting
+    - [x] Setup/cleanup command execution
+    - [x] Error handling and exit code management
+
+- [x] **Proof of Concept with Helloworld** ✅ **COMPLETED**
+  - [x] Update `models/chat/helloworld/integration-tests/RunHelloworld.java` to use centralized utilities
+  - [x] Add `//SOURCES ../../../../integration-testing/jbang-lib/IntegrationTestUtils.java` directive
+  - [x] Reduce script from ~110 lines to ~18 lines (84% reduction)
+  - [x] Test with direct JBang execution: `jbang integration-tests/RunHelloworld.java`
+  - [x] Verify with rit-direct.sh: `./integration-testing/scripts/rit-direct.sh helloworld`
+  - [x] Confirm output format remains identical to current implementation
+  - [x] Measure execution time to ensure no performance regression
+
+- [x] **Batch Update Remaining Scripts** ✅ **COMPLETED**
+  - [x] Create automation script `refactor-jbang-scripts.sh` to update all 17 remaining JBang scripts
+  - [x] Apply the same refactoring pattern validated with helloworld
+  - [x] Ensure proper relative paths for //SOURCES directive based on module depth
+  - [x] Fix path issues with `fix-jbang-paths.sh` script
+
+- [x] **Validation & Testing** ✅ **COMPLETED**
+  - [x] Test multiple scripts individually (chain-workflow, filesystem, kotlin-hello-world)
+  - [x] Verify all 18 tests still pass with identical output
+  - [x] Check that log files are created in correct locations
+  - [x] Confirm no regression in execution time or reliability
+
+- [x] **Documentation Updates** ✅ **COMPLETED**
+  - [x] Update `integration-testing/README.md` with new architecture
+  - [x] Document the centralized utility approach and benefits
+  - [x] Add section on JBang centralized architecture
+  - [x] Update phase completion status
+
+#### Achieved Outcomes: ✅
+- **Code Reduction**: Each JBang script reduced from ~110-130 lines to ~18 lines (84% reduction)
+- **Single Source of Truth**: All common logic in `IntegrationTestUtils.java` 
+- **Easier Enhancements**: Future features (like streaming logs) can be added in one place
+- **Consistent Behavior**: Guaranteed uniform execution across all 18 tests
+- **Simplified Maintenance**: Bug fixes and improvements applied universally
+- **Dynamic Path Resolution**: Handles modules at different directory depths automatically
+
 ### Phase 3b: Continue Batch Conversion (Week 3-4) 🚀 **IN PROGRESS**
 **Prerequisites**: Phase 3a must be completed first - all existing tests must pass and real-time output streaming must work. ✅ **ACHIEVED**
 
@@ -920,15 +986,18 @@ This ensures that recent discoveries, architectural changes, and proven patterns
 - **Success Rate**: 100% (all 5 tests working locally)
 - **Time per Example**: ~10-15 minutes (with validated patterns)
 - **Pattern Quality**: All tests show full raw application output for complete visibility
-- **Logging Quality**: All 18 integration tests now have:
+- **Infrastructure Quality**: All 18 existing integration tests now have:
+  - Centralized utilities reducing code by 84% (from ~110-130 to ~18 lines)
   - Full raw output display (no filtering)
   - Persistent log files in `integration-testing/logs/integration-tests/`
-  - Normalized log paths without `../../../` components
+  - Normalized log paths with dynamic depth detection
   - Complete debugging visibility for troubleshooting
+  - Single source of truth for all test logic
 
 ### Phase 3c: AI-Assisted Validation for Non-Deterministic Tests (Week 3-4) 🆕
-**Prerequisites**: Phase 3a must be completed - infrastructure and logging must be working correctly.
+**Prerequisites**: Phase 3a must be completed - infrastructure and logging must be working correctly. ✅
 **Motivation**: Interactive chatbots and other non-deterministic examples produce variable outputs that make regex pattern matching brittle and unreliable.
+**Note**: With Phase 3a.6 centralization complete, AI validation can be added to `IntegrationTestUtils.java` once, benefiting all tests.
 
 #### 🎯 **Key Innovation: AI-Powered Log Analysis**
 Instead of rigid regex patterns, leverage Claude Code CLI to intelligently analyze test logs and determine if the application is functioning correctly.
@@ -1044,6 +1113,8 @@ Instead of rigid regex patterns, leverage Claude Code CLI to intelligently analy
 | Test flakiness rate | < 2% | 0% | Failed runs / total runs (100% pass rate) |
 | Log visibility | 100% | 100% | All tests save full raw logs |
 | False positive rate | 0% | 0% | All tests validate actual functionality |
+| JBang code duplication | 0% | 0% | All 18 scripts use centralized utilities |
+| Lines per JBang script | ~20 lines | ~18 lines | 84% reduction from original ~110-130 lines |
 
 ### Qualitative Metrics
 - **Developer Experience**: Time from "clone repo" to "run tests locally"
