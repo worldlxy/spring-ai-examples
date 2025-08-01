@@ -715,11 +715,6 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [ ] Apply same output display pattern used in working scripts
   - [ ] Test each fix individually to ensure proper output capture
 
-- [ ] **Real-time Spring Boot Output Streaming** (Critical UX Issue)
-  - [ ] **Problem**: Current `--stream` only shows JBang overhead, not actual Spring Boot application output
-  - [ ] **Solution**: Implement Python log tailing while JBang runs for real-time Spring Boot visibility
-  - [ ] Replace current dual output strategy with simpler log tailing approach
-  - [ ] Test with long-running examples to ensure developers can see live Spring Boot execution
 
 - [ ] **Systematic Test Validation & Pattern Repair**
   - [ ] Run all 12 existing integration tests individually to identify failing patterns
