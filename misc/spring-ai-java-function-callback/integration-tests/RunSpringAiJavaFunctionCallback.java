@@ -59,6 +59,27 @@ public class RunSpringAiJavaFunctionCallback {
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
             
+            // Show actual captured output for manual verification
+            out.println("📋 Captured Application Output:");
+            out.println("---");
+            String[] lines = output.split("\n");
+            
+            for (int i = 0; i < lines.length; i++) {
+                String trimmed = lines[i].trim();
+                
+                // Show key lines for spring-ai-java-function-callback
+                if (trimmed.contains("Response:") || 
+                    trimmed.contains("weather") || 
+                    trimmed.contains("San Francisco") ||
+                    trimmed.contains("Tokyo") ||
+                    trimmed.contains("Paris") ||
+                    trimmed.contains("Exiting successfully") ||
+                    (!trimmed.startsWith("2025-") && !trimmed.startsWith("[INFO]") && !trimmed.isEmpty() && trimmed.length() < 200)) {
+                    out.println("  " + trimmed);
+                }
+            }
+            out.println("---");
+            
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
                 if (output.matches("(?s).*" + pattern + ".*")) {

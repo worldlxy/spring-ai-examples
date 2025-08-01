@@ -6,7 +6,7 @@
 # Don't exit on command failure (let tests fail individually)
 set -uo pipefail
 
-LOGS_DIR="logs/background-runs"
+LOGS_DIR="integration-testing/logs/background-runs"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="$(pwd)/${LOGS_DIR}/rit-direct_${TIMESTAMP}.log"
 
@@ -51,12 +51,17 @@ for script in "${jbang_scripts[@]}"; do
     parent_name=$(basename $(dirname "${module_dir}"))
     full_name="${parent_name}/${module_name}"
     
+    # Create individual test log file
+    individual_log="${LOGS_DIR}/test_${parent_name}_${module_name}_${TIMESTAMP}.log"
+    
     echo "🔄 Testing ${full_name}..." | tee -a "${LOG_FILE}"
     echo "   Script: ${script}" | tee -a "${LOG_FILE}"
+    echo "   Individual log: ${individual_log}" | tee -a "${LOG_FILE}"
     
-    # Run JBang script with full path (avoid cd issues)
-    if (cd "${module_dir}" && timeout 300s jbang "integration-tests/$(basename "${script}")") >> "${LOG_FILE}" 2>&1; then
+    # Run JBang script with both main log and individual log
+    if (cd "${module_dir}" && timeout 300s jbang "integration-tests/$(basename "${script}")") 2>&1 | tee "${individual_log}" >> "${LOG_FILE}"; then
         echo "✅ ${full_name} - PASSED" | tee -a "${LOG_FILE}"
+        echo "   ✅ Individual log: ${individual_log}" | tee -a "${LOG_FILE}"
         ((passed++))
     else
         exit_code=$?
@@ -65,6 +70,7 @@ for script in "${jbang_scripts[@]}"; do
         else
             echo "❌ ${full_name} - FAILED (exit code: ${exit_code})" | tee -a "${LOG_FILE}"
         fi
+        echo "   ❌ Individual log: ${individual_log}" | tee -a "${LOG_FILE}"
         ((failed++))
         failed_tests+=("${full_name}")
     fi

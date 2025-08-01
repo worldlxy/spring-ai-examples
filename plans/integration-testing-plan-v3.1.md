@@ -722,11 +722,113 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Validated that all tests pass consistently with rit-direct.sh execution
   - [x] Documented port cleanup methodology as root cause solution for all test failures
 
-- [ ] **Phase 3a Learning Capture**
-  - [ ] Update `learnings/phase-3-insights.md` with critical UX and validation discoveries
-  - [ ] Document streaming architecture issues and solutions
-  - [ ] Note systematic testing approach for pattern validation
-  - [ ] Record JBang output capture bug patterns to prevent regression
+- [x] **Phase 3a Learning Capture** ✅ **COMPLETED**
+  - [x] Update `learnings/phase-3-insights.md` with critical UX and validation discoveries
+  - [x] Document false positive test validation issues and comprehensive logging gaps
+  - [x] Note systematic port cleanup solution and root cause analysis methodology
+  - [x] Record JBang output capture bug patterns and persistent logging template
+
+### Phase 3a.3: Integration Testing Infrastructure Reorganization ✅ **COMPLETED**
+**Priority**: High - Improve developer experience and maintainability
+**Prerequisites**: Phase 3a.2 must be completed first ✅ **ACHIEVED**
+**Status**: ✅ **COMPLETED** - Centralized directory structure implemented successfully 🎯
+
+#### Tasks:
+- [x] **Review All Learning Documents for Implementation Context** ✅ **COMPLETED**
+  - [x] Read `learnings/phase-1-insights.md` for infrastructure setup patterns and proven approaches
+  - [x] Read `learnings/phase-2-insights.md` for pilot conversion patterns and template effectiveness
+  - [x] Read `learnings/phase-3-insights.md` for critical discoveries, port cleanup, logging patterns, and anti-patterns
+  - [x] Review current directory structure and file locations to understand reorganization scope
+  - [x] Identify all files that need to be moved and references that need updating
+
+- [x] **Create Top-Level Integration Testing Directory Structure** ✅ **COMPLETED**
+  - [x] Create `integration-testing/` directory at project root
+  - [x] Move integration testing shell scripts from root to `integration-testing/scripts/`
+    - [x] Move `rit-direct.sh` → `integration-testing/scripts/rit-direct.sh`
+    - [x] Move `scripts/run_integration_tests.py` → `integration-testing/scripts/run_integration_tests.py`
+    - [x] Move `scripts/scaffold_integration_test.py` → `integration-testing/scripts/scaffold_integration_test.py`
+  - [x] Move integration testing documentation to `integration-testing/docs/`
+    - [x] Move `README_INTEGRATION_TESTING.md` → `integration-testing/docs/README.md`
+    - [x] Create `integration-testing/README.md` with comprehensive framework overview
+  - [x] Centralize integration testing logs under `integration-testing/logs/`
+    - [x] Update filesystem JBang script to use `../../integration-testing/logs/` (template for others)
+    - [x] Update `rit-direct.sh` to use `integration-testing/logs/` directory
+    - [x] Create `.gitignore` entries for `integration-testing/logs/` directory
+
+- [x] **Update All References and Scripts** ✅ **COMPLETED**
+  - [x] Update CLAUDE.md to reference new script locations
+  - [x] Update shell script path references to new locations
+  - [x] Test all integration testing functionality after reorganization (verified rit-direct.sh works)
+  - [x] Clean up old empty directories (scripts/, logs/)
+
+- [x] **Documentation Updates** ✅ **COMPLETED**
+  - [x] Update developer workflow documentation with new directory structure
+  - [x] Create `integration-testing/README.md` with comprehensive overview of the testing framework
+  - [x] Document the centralized logging approach and log file locations
+
+### Phase 3a.4: Comprehensive Logging Fix & Validation for All Integration Tests
+**Priority**: Critical - Fix logging issues discovered during Phase 3a investigation
+**Prerequisites**: Phase 3a.3 must be completed first (directory reorganization)
+
+#### Tasks:
+- [ ] **Systematic JBang Logging Fix** (Apply comprehensive logging to all 12 existing tests)
+  - [ ] **Agentic Pattern Tests** (3 tests):
+    - [ ] `agentic-patterns/chain-workflow` - Fix persistent logging (replace temp file deletion)
+    - [ ] `agentic-patterns/evaluator-optimizer` - Fix persistent logging (replace temp file deletion)  
+    - [ ] `agentic-patterns/parallelization-workflow` - Fix persistent logging (replace temp file deletion)
+  - [ ] **MCP Tests** (4 tests):
+    - [ ] `model-context-protocol/filesystem` - Already fixed ✅ (template for others)
+    - [ ] `model-context-protocol/sqlite/simple` - Fix persistent logging (replace temp file deletion)
+    - [ ] `model-context-protocol/brave` - Fix persistent logging (replace temp file deletion)
+    - [ ] Update any other MCP integration tests discovered
+  - [ ] **Basic Examples** (5 tests):
+    - [ ] `models/chat/helloworld` - Fix persistent logging (replace temp file deletion)
+    - [ ] `misc/openai-streaming-response` - Verify web server logging approach (different architecture)
+    - [ ] `misc/spring-ai-java-function-callback` - Fix persistent logging (replace temp file deletion)
+    - [ ] `kotlin/kotlin-hello-world` - Fix persistent logging (replace temp file deletion)
+    - [ ] `kotlin/kotlin-function-callback` - Fix persistent logging (replace temp file deletion)
+    - [ ] `prompt-engineering/prompt-engineering-patterns` - Fix persistent logging (replace temp file deletion)
+
+- [ ] **Standardize Logging Implementation Pattern**
+  - [ ] Create standard logging template based on fixed filesystem example:
+    ```java
+    // Create persistent log file for debugging
+    Path logDir = Paths.get("../../integration-testing/logs/integration-tests");
+    Files.createDirectories(logDir);
+    Path logFile = logDir.resolve("MODULE-spring-boot-" + System.currentTimeMillis() + ".log");
+    ```
+  - [ ] Apply consistent log file naming: `{module-name}-spring-boot-{timestamp}.log`
+  - [ ] Ensure all scripts preserve log files (remove `Files.deleteIfExists(logFile)` calls)
+  - [ ] Add log file path display: `out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath());`
+
+- [ ] **Test Logging Validation & Error Investigation**
+  - [ ] Run each updated integration test individually to verify logging works
+  - [ ] Investigate and document actual errors found in logs (like MCP file not found issues)
+  - [ ] Create troubleshooting entries for common log patterns and errors
+  - [ ] Validate that comprehensive logs provide sufficient debugging information
+
+- [ ] **Claude-Assisted Log Analysis & Test Validation** (Critical Quality Assurance)
+  - [ ] **Manual Log Review for Each Test**: Have Claude analyze the full Spring Boot logs to determine if tests truly passed
+  - [ ] **False Positive Detection**: Identify tests that pass regex patterns but have underlying functional failures
+    - [ ] Look for ERROR logs, exceptions, and failure messages in comprehensive logs
+    - [ ] Identify cases where applications start but core functionality fails (like MCP file operations)
+    - [ ] Document discrepancies between regex pattern success and actual application behavior
+  - [ ] **Regex Pattern Validation & Improvement**:
+    - [ ] Review existing `successRegex` patterns in `ExampleInfo.json` files for brittleness
+    - [ ] Propose more robust success patterns that capture actual functionality, not just startup messages
+    - [ ] Add negative pattern detection (should NOT contain ERROR, FAILED, Exception patterns)
+    - [ ] Create comprehensive success criteria that validate end-to-end functionality
+  - [ ] **Test Quality Assessment**:
+    - [ ] For each of the 12 tests, provide a quality score: TRULY_PASSING / FALSE_POSITIVE / FAILING
+    - [ ] Document specific functional issues discovered through log analysis
+    - [ ] Prioritize fixing tests with false positives or underlying functional problems
+    - [ ] Create improved test validation methodology based on comprehensive log analysis
+
+- [ ] **Integration with Centralized Logging Structure**
+  - [ ] Verify all JBang scripts write to `integration-testing/logs/integration-tests/`
+  - [ ] Update `rit-direct.sh` to reference new log locations
+  - [ ] Create log cleanup utilities for managing accumulated log files
+  - [ ] Add comprehensive logging documentation to troubleshooting guide
 
 ### Phase 3b: Continue Batch Conversion (Week 3-4)
 **Prerequisites**: Phase 3a must be completed first - all existing tests must pass and real-time output streaming must work.

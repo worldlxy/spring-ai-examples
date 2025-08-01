@@ -85,12 +85,12 @@ This repository uses a lightweight integration testing framework for ensuring al
 
 **Run all integration tests:**
 ```bash
-python3 scripts/run_integration_tests.py
+python3 integration-testing/scripts/run_integration_tests.py
 ```
 
 **Create integration test for new example:**
 ```bash
-python3 scripts/scaffold_integration_test.py <module-path> [--complexity simple|complex|mcp]
+python3 integration-testing/scripts/scaffold_integration_test.py <module-path> [--complexity simple|complex|mcp]
 ```
 
 **Test specific example:**
