@@ -771,6 +771,12 @@ This ensures that recent discoveries, architectural changes, and proven patterns
 **Prerequisites**: Phase 3a.3 must be completed first (directory reorganization)
 
 #### Tasks:
+- [ ] **Review All Learning Documents for Implementation Context** (Critical for efficient implementation)
+  - [ ] Read `learnings/phase-1-insights.md` for proven infrastructure patterns and tool effectiveness
+  - [ ] Read `learnings/phase-2-insights.md` for successful template patterns and success pattern strategies
+  - [ ] Read `learnings/phase-3-insights.md` for critical discoveries about false positives, port cleanup, and persistent logging
+  - [ ] Review filesystem JBang script as working template for persistent logging implementation
+  - [ ] Identify specific patterns and anti-patterns to apply during systematic logging fixes
 - [ ] **Systematic JBang Logging Fix** (Apply comprehensive logging to all 12 existing tests)
   - [ ] **Agentic Pattern Tests** (3 tests):
     - [ ] `agentic-patterns/chain-workflow` - Fix persistent logging (replace temp file deletion)
