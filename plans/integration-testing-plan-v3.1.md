@@ -63,7 +63,7 @@ module/
 ```jsonc
 {
   "timeoutSec": 300,                    // Maximum execution time
-  "successRegex": [                     // Patterns that must appear in output
+  "successRegex": [                     // Patterns that must appear in output (regex mode)
     "EVALUATION:\\\\s+PASS",
     "FINAL OUTPUT:",
     "BUILD SUCCESS"
@@ -73,7 +73,11 @@ module/
   "setupCommands": [                    // Optional: pre-execution setup
     "./create-database.sh"
   ],
-  "cleanupCommands": []                 // Optional: post-execution cleanup
+  "cleanupCommands": [],                // Optional: post-execution cleanup
+  
+  // AI Validation Mode (Phase 3c addition)
+  "validationMode": "regex",            // Optional: "regex" (default) or "ai"
+  "aiValidationPrompt": "..."           // Required when validationMode is "ai"
 }
 ```
 
@@ -104,6 +108,16 @@ module/
   "timeoutSec": 600,
   "successRegex": ["EVALUATION:\\\\s+PASS", "Chain completed", "Final metrics"],
   "requiredEnv": ["OPENAI_API_KEY"]
+}
+```
+
+#### Interactive Chatbot Example (AI Validation)
+```json
+{
+  "timeoutSec": 300,
+  "validationMode": "ai",
+  "aiValidationPrompt": "This is a Spring AI chatbot using MCP Brave Search. The log should show: 1) Application startup, 2) User prompt received, 3) AI response generated using Brave Search if needed, 4) Clean shutdown. Please analyze if the chatbot functioned correctly.",
+  "requiredEnv": ["ANTHROPIC_API_KEY", "BRAVE_API_KEY"]
 }
 ```
 
@@ -837,29 +851,92 @@ This ensures that recent discoveries, architectural changes, and proven patterns
   - [x] Implemented persistent logging across all 12 JBang scripts ✅
   - [x] Added comprehensive logging documentation in `integration-testing/README.md` ✅
 
-### Phase 3b: Continue Batch Conversion (Week 3-4)
-**Prerequisites**: Phase 3a must be completed first - all existing tests must pass and real-time output streaming must work.
+### Phase 3b: Continue Batch Conversion (Week 3-4) 🚀 **IN PROGRESS**
+**Prerequisites**: Phase 3a must be completed first - all existing tests must pass and real-time output streaming must work. ✅ **ACHIEVED**
+
+**Status**: ✅ **STARTED** - 5/21 remaining examples converted (24% complete)  
+**Framework Total**: 17/33 examples with integration tests (52% complete)  
+**Method**: Using validated framework with comprehensive logging and false positive elimination
+
+#### ✅ **Completed Examples** (5/21):
+1. **agentic-patterns/orchestrator-workers** ✅ - Complex task breakdown with JSON-structured orchestrator analysis and worker responses
+2. **agentic-patterns/routing-workflow** ✅ - Support ticket routing with analysis for 3 different ticket types (account, billing, product)
+3. **model-context-protocol/client-starter/starter-default-client** ✅ - MCP client that queries available tools via Brave Search integration
+4. **model-context-protocol/client-starter/starter-webflux-client** ✅ - WebFlux-based MCP client using Anthropic model with Brave Search tools
+5. **model-context-protocol/web-search/brave-starter** ✅ - MCP Brave Search integration demonstrating Spring AI MCP support queries
 
 #### Tasks:
-- [ ] **MCP Examples Conversion** (Week 3-4)
-  - [ ] Apply complex example patterns to all MCP modules
-  - [ ] Handle varied dependency requirements (databases, external APIs)
-  - [ ] Create reusable configuration templates for MCP patterns
-  - [ ] Document resource contention issues, timing conflicts (Note: parallel testing disabled due to port conflicts)
+- [x] **Start Agentic Pattern Examples** ✅ **COMPLETED**
+  - [x] Convert `agentic-patterns/orchestrator-workers` - Working (task breakdown pattern)
+  - [x] Convert `agentic-patterns/routing-workflow` - Working (support routing pattern)
+  - [x] Handle long-running workflow validation with appropriate timeout configurations
+  - [x] Create specialized success patterns for multi-step AI processes
 
-- [ ] **Agentic Pattern Examples** (Week 4)
-  - [ ] Convert remaining agentic pattern examples
-  - [ ] Handle long-running workflow validation
-  - [ ] Create specialized success patterns for multi-step processes
-  - [ ] Test timeout configurations for complex workflows
+- [ ] **MCP Examples Conversion** (Week 3-4) 🚀 **IN PROGRESS**
+  - [x] **Started**: `model-context-protocol/client-starter/starter-default-client` - Working (MCP tools query)
+  - [ ] **Continue**: Apply complex example patterns to remaining 17 MCP modules
+  - [ ] Handle varied dependency requirements (databases, external APIs, Docker setups)
+  - [ ] Create reusable configuration templates for MCP patterns (client vs server patterns)
+  - [ ] Document resource contention issues, timing conflicts (Note: sequential execution due to port conflicts)
 
 - [ ] **Special Cases** (Week 4)
   - [ ] Convert `kotlin/rag-with-kotlin` (database setup complexity)
   - [ ] Convert `agents/reflection` (complex AI interactions)
   - [ ] Handle any edge cases discovered during batch conversion
 
-### Phase 3c: Scale Testing & Optimization (Week 4)
-**Prerequisites**: Phase 3a and 3b must be completed - all integration tests must exist and pass individually.
+#### 🎯 **Phase 3b Progress Metrics**:
+- **Completed**: 3/21 remaining examples (14%)
+- **Success Rate**: 100% (all 3 tests working locally)
+- **Time per Example**: ~10-15 minutes (with validated patterns)
+- **Pattern Quality**: All tests show actual application output for validation
+
+### Phase 3c: AI-Assisted Validation for Non-Deterministic Tests (Week 3-4) 🆕
+**Prerequisites**: Phase 3a must be completed - infrastructure and logging must be working correctly.
+**Motivation**: Interactive chatbots and other non-deterministic examples produce variable outputs that make regex pattern matching brittle and unreliable.
+
+#### 🎯 **Key Innovation: AI-Powered Log Analysis**
+Instead of rigid regex patterns, leverage Claude Code CLI to intelligently analyze test logs and determine if the application is functioning correctly.
+
+#### Tasks:
+- [ ] **AI Validation Infrastructure Development**
+  - [ ] Extend `ExampleInfo.json` schema to support validation modes:
+    ```json
+    {
+      "validationMode": "regex" | "ai",     // Default: "regex" for backward compatibility
+      "aiValidationPrompt": "string",        // Custom prompt for AI validation
+      "successRegex": [...]                  // Still used for regex mode
+    }
+    ```
+  - [ ] Create JBang template that supports both validation modes
+  - [ ] Implement Claude CLI integration using `-p` flag for headless validation
+  - [ ] Design structured prompts for consistent AI validation results
+
+- [ ] **Prototype Implementation & Testing**
+  - [ ] Test AI validation on `models/chat/helloworld` as proof of concept
+  - [ ] Compare AI validation results with existing regex validation
+  - [ ] Measure validation reliability and response time
+  - [ ] Document optimal prompt patterns for different test types
+
+- [ ] **Convert Non-Deterministic Examples**
+  - [ ] `model-context-protocol/web-search/brave-chatbot` - Interactive chatbot with variable responses
+  - [ ] `model-context-protocol/sqlite/chatbot` - Database-backed conversational interface
+  - [ ] Other interactive examples that produce unpredictable output
+  - [ ] Create validation prompt templates for common patterns (chatbots, workflows, etc.)
+
+- [ ] **Tooling Updates**
+  - [ ] Update `scaffold_integration_test.py` to support AI validation mode
+  - [ ] Add `--validation-mode` flag with intelligent defaults based on example type
+  - [ ] Create validation prompt library for common test scenarios
+  - [ ] Update documentation with AI validation best practices
+
+- [ ] **Phase 3c Learning Capture**
+  - [ ] Document AI validation effectiveness vs regex patterns
+  - [ ] Note: optimal prompt structures, reliability metrics, performance impact
+  - [ ] Create guidelines for choosing validation modes
+  - [ ] Document edge cases and limitations of AI validation
+
+### Phase 3d: Scale Testing & Optimization (Week 4)
+**Prerequisites**: Phase 3a, 3b, and 3c must be completed - all integration tests must exist and pass individually.
 
 #### Tasks:
 - [ ] **Scale Testing & Optimization**
