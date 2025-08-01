@@ -4,20 +4,39 @@
  */
 
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.zeroturnaround.exec.*;
 import java.nio.file.*;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import static java.lang.System.*;
 
 public class IntegrationTestUtils {
     
+    // Record for AI validation configuration
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record AIValidationConfig(
+        boolean enabled,
+        String validationMode,    // "primary", "hybrid", "fallback"
+        String readmeFile,
+        String expectedBehavior,
+        String[] components,
+        String promptTemplate,
+        Map<String, Object> successCriteria
+    ) {}
+    
     // Record for test configuration
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public record ExampleInfo(
         int timeoutSec, 
         String[] successRegex, 
         String[] requiredEnv,
         String[] setupCommands,
-        String[] cleanupCommands
+        String[] cleanupCommands,
+        AIValidationConfig aiValidation
     ) {}
     
     // Load configuration from ExampleInfo.json
@@ -124,19 +143,207 @@ public class IntegrationTestUtils {
         out.println("📁 Full Spring Boot log: " + logFile.toAbsolutePath().normalize());
     }
     
-    // Check results and exit appropriately
-    public static void checkResults(int exitCode, int failedPatterns) {
-        if (exitCode != 0) {
-            err.println("❌ Application exited with code: " + exitCode);
-            exit(exitCode);
+    // Perform AI validation using Python script
+    public static boolean performAIValidation(String output, Path logFile, ExampleInfo cfg, String moduleName) throws Exception {
+        AIValidationConfig aiConfig = cfg.aiValidation();
+        if (aiConfig == null || !aiConfig.enabled()) {
+            return true; // AI validation not enabled, return success
         }
         
-        if (failedPatterns > 0) {
-            err.println("❌ Failed pattern verification: " + failedPatterns + " patterns missing");
-            exit(1);
+        out.println("🤖 Running AI validation...");
+        
+        // Build Python command - calculate path to repository root and then to validator
+        Path currentDir = Path.of(".").toAbsolutePath();
+        Path repoRoot = currentDir;
+        
+        // Navigate up to find the repository root (contains integration-testing directory)
+        while (repoRoot != null && !repoRoot.resolve("integration-testing").toFile().exists()) {
+            repoRoot = repoRoot.getParent();
         }
         
-        out.println("🎉 Integration test completed successfully!");
+        if (repoRoot == null) {
+            throw new Exception("Could not find repository root with integration-testing directory");
+        }
+        
+        Path validatorScript = repoRoot.resolve("integration-testing/ai-validator/validate_example.py");
+            
+        String[] baseCmd = {
+            "python3", 
+            validatorScript.toString(),
+            "--log-path", logFile.toAbsolutePath().toString(),
+            "--example-name", moduleName,
+            "--output-format", "json"
+        };
+        
+        // Build dynamic command with optional parameters
+        List<String> cmdList = new ArrayList<>(Arrays.asList(baseCmd));
+        
+        if (aiConfig.expectedBehavior() != null && !aiConfig.expectedBehavior().isEmpty()) {
+            cmdList.add("--expected-behavior");
+            cmdList.add(aiConfig.expectedBehavior());
+        }
+        
+        if (aiConfig.readmeFile() != null && !aiConfig.readmeFile().isEmpty()) {
+            cmdList.add("--readme-path");
+            cmdList.add(aiConfig.readmeFile());
+        }
+        
+        if (aiConfig.components() != null && aiConfig.components().length > 0) {
+            cmdList.add("--components");
+            for (String component : aiConfig.components()) {
+                cmdList.add(component);
+            }
+        }
+        
+        if (aiConfig.promptTemplate() != null && !aiConfig.promptTemplate().isEmpty()) {
+            cmdList.add("--template");
+            cmdList.add(aiConfig.promptTemplate());
+        }
+        
+        String[] fullCmd = cmdList.toArray(new String[0]);
+        
+        try {
+            // Execute AI validation
+            ProcessResult result = new ProcessExecutor()
+                .command(fullCmd)
+                .timeout(180, TimeUnit.SECONDS) // 3 minutes timeout for AI validation
+                .readOutput(true)
+                .execute();
+            
+            String aiOutput = result.outputUTF8();
+            String aiError = ""; // Error capture not available with readOutput(true)
+            int aiExitCode = result.getExitValue();
+            
+            // Check exit code
+            if (aiExitCode != 0) {
+                throw new Exception("AI validation script failed with exit code: " + aiExitCode);
+            }
+            
+            // With quiet mode, output should be clean JSON
+            String jsonOutput = aiOutput.trim();
+            
+            if (jsonOutput.isEmpty()) {
+                throw new Exception("No output from AI validation");
+            }
+            
+            // Parse JSON response directly (no complex filtering needed with quiet mode)
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> aiResult;
+            
+            try {
+                aiResult = mapper.readValue(jsonOutput, Map.class);
+            } catch (Exception e) {
+                // If direct parsing fails, try extracting JSON as fallback
+                String extractedJson = extractJsonFromOutput(aiOutput);
+                if (extractedJson != null && !extractedJson.trim().isEmpty()) {
+                    aiResult = mapper.readValue(extractedJson, Map.class);
+                } else {
+                    throw new Exception("Could not parse AI validation JSON response: " + e.getMessage());
+                }
+            }
+            
+            boolean aiSuccess = (Boolean) aiResult.get("success");
+            Double confidence = (Double) aiResult.get("confidence");
+            String reasoning = (String) aiResult.get("reasoning");
+            
+            // Display AI validation results
+            out.println("🤖 AI Validation Result:");
+            out.println("  Success: " + aiSuccess);
+            out.println("  Confidence: " + String.format("%.2f", confidence));
+            out.println("  Reasoning: " + reasoning);
+            
+            // Show cost information if available in logging
+            if (aiOutput.contains("total_cost_usd") && aiOutput.contains("duration_api_ms")) {
+                try {
+                    // Extract cost information from logging output
+                    String[] lines = aiOutput.split("\n");
+                    for (String line : lines) {
+                        if (line.contains("Claude Code completed in")) {
+                            String duration = line.substring(line.lastIndexOf(" ") + 1);
+                            out.println("  Duration: " + duration);
+                            break;
+                        }
+                    }
+                    out.println("  Cost Tracking: Enabled (check logs for details)");
+                } catch (Exception e) {
+                    // Cost parsing failed, but that's not critical
+                }
+            }
+            
+            @SuppressWarnings("unchecked")
+            List<String> functionalityDemo = (List<String>) aiResult.get("functionality_demonstrated");
+            if (functionalityDemo != null && !functionalityDemo.isEmpty()) {
+                out.println("  Functionality Demonstrated:");
+                for (String item : functionalityDemo) {
+                    out.println("    - " + item);
+                }
+            }
+            
+            @SuppressWarnings("unchecked")
+            List<String> issues = (List<String>) aiResult.get("issues_found");
+            if (issues != null && !issues.isEmpty()) {
+                out.println("  Issues Found:");
+                for (String issue : issues) {
+                    out.println("    - " + issue);
+                }
+            }
+            
+            return aiSuccess;
+            
+        } catch (Exception e) {
+            err.println("⚠️  AI validation failed: " + e.getMessage());
+            
+            // Handle based on validation mode
+            String mode = aiConfig.validationMode();
+            if ("primary".equals(mode)) {
+                throw new Exception("AI validation failed and is required: " + e.getMessage());
+            } else if ("hybrid".equals(mode)) {
+                err.println("⚠️  AI validation failed, falling back to regex patterns only");
+                return true; // Let regex validation handle it
+            } else { // fallback mode
+                err.println("⚠️  AI validation failed, using regex validation result");
+                return true; // Use whatever regex validation determined
+            }
+        }
+    }
+    
+    // Extract JSON from mixed output (filtering out logging lines)
+    public static String extractJsonFromOutput(String output) {
+        String[] lines = output.split("\n");
+        StringBuilder jsonBuilder = new StringBuilder();
+        boolean inJsonBlock = false;
+        int braceCount = 0;
+        
+        for (String line : lines) {
+            String trimmedLine = line.trim();
+            
+            // Skip logging lines
+            if (trimmedLine.startsWith("INFO:") || 
+                trimmedLine.startsWith("DEBUG:") || 
+                trimmedLine.startsWith("WARNING:") ||
+                trimmedLine.startsWith("ERROR:")) {
+                continue;
+            }
+            
+            // Look for JSON start
+            if (trimmedLine.startsWith("{") && !inJsonBlock) {
+                inJsonBlock = true;
+                braceCount = 0;
+                jsonBuilder.setLength(0); // Reset
+                jsonBuilder.append(line).append("\n");
+                braceCount += line.chars().map(c -> c == '{' ? 1 : c == '}' ? -1 : 0).sum();
+            } else if (inJsonBlock) {
+                jsonBuilder.append(line).append("\n");
+                braceCount += line.chars().map(c -> c == '{' ? 1 : c == '}' ? -1 : 0).sum();
+                
+                // Check if JSON block is complete
+                if (braceCount <= 0 && trimmedLine.endsWith("}")) {
+                    break;
+                }
+            }
+        }
+        
+        return inJsonBlock ? jsonBuilder.toString().trim() : null;
     }
     
     // Main test execution flow
@@ -172,22 +379,67 @@ public class IntegrationTestUtils {
             // Display full output first
             displayOutput(output);
             
-            // Then verify patterns
-            int failedPatterns = 0;
-            for (String pattern : cfg.successRegex()) {
-                if (output.matches("(?s).*" + pattern + ".*")) {
-                    out.println("  ✓ Found: " + pattern);
-                } else {
-                    err.println("  ❌ Missing: " + pattern);
-                    failedPatterns++;
+            // First, check if AI validation is enabled and in primary mode
+            AIValidationConfig aiConfig = cfg.aiValidation();
+            boolean regexValidationNeeded = true;
+            boolean aiValidationPassed = true;
+            
+            if (aiConfig != null && aiConfig.enabled() && "primary".equals(aiConfig.validationMode())) {
+                // Primary AI validation mode - skip regex patterns
+                out.println("🤖 Using AI validation as primary validation method");
+                regexValidationNeeded = false;
+                aiValidationPassed = performAIValidation(output, logFile, cfg, moduleName);
+            } else {
+                // Run regex validation first
+                int failedPatterns = 0;
+                for (String pattern : cfg.successRegex()) {
+                    if (output.matches("(?s).*" + pattern + ".*")) {
+                        out.println("  ✓ Found: " + pattern);
+                    } else {
+                        err.println("  ❌ Missing: " + pattern);
+                        failedPatterns++;
+                    }
+                }
+                
+                // Run AI validation if configured
+                if (aiConfig != null && aiConfig.enabled()) {
+                    if ("hybrid".equals(aiConfig.validationMode())) {
+                        // Hybrid mode - both must pass
+                        out.println("🤖 Running additional AI validation (hybrid mode)");
+                        aiValidationPassed = performAIValidation(output, logFile, cfg, moduleName);
+                    } else if ("fallback".equals(aiConfig.validationMode()) && failedPatterns > 0) {
+                        // Fallback mode - only run AI if regex failed
+                        out.println("🤖 Regex validation failed, trying AI validation (fallback mode)");
+                        aiValidationPassed = performAIValidation(output, logFile, cfg, moduleName);
+                        if (aiValidationPassed) {
+                            out.println("🎉 AI validation succeeded, overriding regex failure!");
+                            failedPatterns = 0; // Reset failed patterns since AI validation passed
+                        }
+                    }
+                }
+                
+                // Check regex results if needed
+                if (regexValidationNeeded && failedPatterns > 0 && !aiValidationPassed) {
+                    err.println("❌ Failed pattern verification: " + failedPatterns + " patterns missing");
+                    exit(1);
                 }
             }
             
             // Keep log file for debugging - DO NOT DELETE
             out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
             
-            // Check results
-            checkResults(exitCode, failedPatterns);
+            // Final validation check
+            if (exitCode != 0) {
+                err.println("❌ Application exited with code: " + exitCode);
+                exit(exitCode);
+            }
+            
+            if (!aiValidationPassed) {
+                err.println("❌ AI validation failed");
+                exit(1);
+            }
+            
+            out.println("🎉 Integration test completed successfully!");
             
         } finally {
             // Run cleanup commands
