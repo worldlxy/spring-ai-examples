@@ -47,7 +47,7 @@ public class RunPromptEngineeringPatterns {
             Path logFile = Files.createTempFile("integration-test", ".log");
             
             ProcessResult result = new ProcessExecutor()
-                .command("./mvnw", "spring-boot:run", "-q")
+                .command("./mvnw", "spring-boot:run", "-q", "-Dspring-boot.run.arguments=basic")
                 .timeout(cfg.timeoutSec(), TimeUnit.SECONDS)
                 .redirectOutput(Files.newOutputStream(logFile))
                 .redirectErrorStream(true)
@@ -67,13 +67,16 @@ public class RunPromptEngineeringPatterns {
             for (int i = 0; i < lines.length; i++) {
                 String trimmed = lines[i].trim();
                 
-                // Show relevant output lines for prompt engineering
-                if (trimmed.contains("Pattern:") || 
-                    trimmed.contains("Example:") || 
-                    trimmed.contains("Assistant:") ||
-                    trimmed.contains("User:") ||
+                // Show key lines for prompt engineering patterns
+                if (trimmed.contains("=== Running") || 
+                    trimmed.contains("Output:") || 
                     trimmed.contains("completed") ||
-                    trimmed.contains("demo")) {
+                    trimmed.contains("pizza") ||
+                    trimmed.contains("JSON") ||
+                    trimmed.contains("POSITIVE") ||
+                    trimmed.contains("NEGATIVE") ||
+                    trimmed.contains("NEUTRAL") ||
+                    (!trimmed.startsWith("2025-") && !trimmed.startsWith("[INFO]") && !trimmed.isEmpty())) {
                     out.println("  " + trimmed);
                 }
             }

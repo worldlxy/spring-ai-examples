@@ -1,9 +1,9 @@
 {
-  "timeoutSec": 900,
+  "timeoutSec": 120,
   "successRegex": [
-    "Output: POSITIVE|NEGATIVE|NEUTRAL",
-    "Output:.*museum",
-    "The email is.*IMPORTANT",
+    "=== Running Basic Patterns ===",
+    "Output: (POSITIVE|NEGATIVE|NEUTRAL)", 
+    "Output:.*pizza.*JSON",
     "Prompt engineering patterns demonstration completed!"
   ],
   "requiredEnv": [

@@ -59,6 +59,27 @@ public class RunParallelizationWorkflow {
             String output = Files.readString(logFile);
             out.println("✅ Verifying output patterns...");
             
+            // Show actual captured output for manual verification
+            out.println("📋 Captured Application Output:");
+            out.println("---");
+            String[] lines = output.split("\n");
+            
+            for (int i = 0; i < lines.length; i++) {
+                String trimmed = lines[i].trim();
+                
+                // Show key lines for parallelization workflow
+                if (trimmed.contains("Started") || 
+                    trimmed.contains("Impact Analysis") || 
+                    trimmed.contains("Market") ||
+                    trimmed.contains("Stakeholder") ||
+                    trimmed.contains("EVALUATION") ||
+                    trimmed.contains("Key Impacts") ||
+                    (!trimmed.startsWith("2025-") && !trimmed.startsWith("[INFO]") && !trimmed.isEmpty() && trimmed.length() < 100)) {
+                    out.println("  " + trimmed);
+                }
+            }
+            out.println("---");
+            
             int failedPatterns = 0;
             for (String pattern : cfg.successRegex()) {
                 if (output.matches("(?s).*" + pattern + ".*")) {
