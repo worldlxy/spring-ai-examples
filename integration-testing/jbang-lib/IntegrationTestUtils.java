@@ -252,22 +252,25 @@ public class IntegrationTestUtils {
             out.println("  Confidence: " + String.format("%.2f", confidence));
             out.println("  Reasoning: " + reasoning);
             
-            // Show cost information if available in logging
-            if (aiOutput.contains("total_cost_usd") && aiOutput.contains("duration_api_ms")) {
-                try {
-                    // Extract cost information from logging output
-                    String[] lines = aiOutput.split("\n");
-                    for (String line : lines) {
-                        if (line.contains("Claude Code completed in")) {
-                            String duration = line.substring(line.lastIndexOf(" ") + 1);
-                            out.println("  Duration: " + duration);
-                            break;
-                        }
-                    }
-                    out.println("  Cost Tracking: Enabled (check logs for details)");
-                } catch (Exception e) {
-                    // Cost parsing failed, but that's not critical
-                }
+            // Show cost information if available
+            @SuppressWarnings("unchecked")
+            Map<String, Object> costInfo = (Map<String, Object>) aiResult.get("cost_info");
+            if (costInfo != null) {
+                out.println("  💰 Cost Information:");
+                
+                Object inputTokens = costInfo.get("input_tokens");
+                Object outputTokens = costInfo.get("output_tokens");
+                Object totalTokens = costInfo.get("total_tokens");
+                Object cacheCreation = costInfo.get("cache_creation_input_tokens");
+                Object cacheRead = costInfo.get("cache_read_input_tokens");
+                Object duration = costInfo.get("duration_seconds");
+                
+                if (inputTokens != null) out.println("    Input Tokens: " + inputTokens);
+                if (outputTokens != null) out.println("    Output Tokens: " + outputTokens);
+                if (totalTokens != null) out.println("    Total Tokens: " + totalTokens);
+                if (cacheCreation != null) out.println("    Cache Creation Tokens: " + cacheCreation);
+                if (cacheRead != null) out.println("    Cache Read Tokens: " + cacheRead);
+                if (duration != null) out.println("    Duration: " + String.format("%.2f", (Double) duration) + " seconds");
             }
             
             @SuppressWarnings("unchecked")

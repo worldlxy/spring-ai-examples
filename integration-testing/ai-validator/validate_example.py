@@ -45,9 +45,10 @@ class ValidationResult:
     issues_found: List[str]
     recommendations: List[str]
     raw_response: str = ""
+    cost_info: Optional[Dict[str, Any]] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        result = {
             "success": self.success,
             "confidence": self.confidence,
             "reasoning": self.reasoning,
@@ -56,6 +57,12 @@ class ValidationResult:
             "issues_found": self.issues_found,
             "recommendations": self.recommendations
         }
+        
+        # Include cost information if available
+        if self.cost_info:
+            result["cost_info"] = self.cost_info
+            
+        return result
 
 class SpringAIExampleValidator:
     """AI-powered validator for Spring AI examples"""
@@ -104,7 +111,8 @@ class SpringAIExampleValidator:
                 components_validated=[],
                 functionality_demonstrated=[],
                 issues_found=[f"Validation error: {str(e)}"],
-                recommendations=["Check log file path and configuration"]
+                recommendations=["Check log file path and configuration"],
+                cost_info=None
             )
     
     def _load_log_file(self, log_path: str) -> str:
@@ -211,6 +219,7 @@ class SpringAIExampleValidator:
         
         raw_response = ai_result.get('response', '')
         json_data = ai_result.get('json_data')
+        cost_info = ai_result.get('cost_info')
         
         # If JSON extraction was successful, use it
         if json_data and isinstance(json_data, dict):
@@ -222,7 +231,8 @@ class SpringAIExampleValidator:
                 functionality_demonstrated=json_data.get('functionality_demonstrated', []),
                 issues_found=json_data.get('issues_found', []),
                 recommendations=json_data.get('recommendations', []),
-                raw_response=raw_response
+                raw_response=raw_response,
+                cost_info=cost_info
             )
         
         # Fallback: try to extract JSON manually from raw response
@@ -237,7 +247,8 @@ class SpringAIExampleValidator:
                     functionality_demonstrated=json_data.get('functionality_demonstrated', []),
                     issues_found=json_data.get('issues_found', []),
                     recommendations=json_data.get('recommendations', []),
-                    raw_response=raw_response
+                    raw_response=raw_response,
+                    cost_info=cost_info
                 )
         except Exception:
             pass
@@ -253,7 +264,8 @@ class SpringAIExampleValidator:
             functionality_demonstrated=[],
             issues_found=["Could not parse JSON response from AI"],
             recommendations=["Review AI response format"],
-            raw_response=raw_response
+            raw_response=raw_response,
+            cost_info=cost_info
         )
     
     def _analyze_raw_response_for_success(self, response: str) -> bool:
