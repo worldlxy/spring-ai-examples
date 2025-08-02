@@ -39,18 +39,47 @@ def get_config_template(complexity: str) -> Dict:
         'simple': {
             "timeoutSec": 120,
             "successRegex": ["BUILD SUCCESS", "Started.*Application"],
-            "requiredEnv": ["OPENAI_API_KEY"]
+            "requiredEnv": ["OPENAI_API_KEY"],
+            "aiValidation": {
+                "enabled": True,
+                "validationMode": "hybrid",
+                "expectedBehavior": "Spring Boot application should start successfully and demonstrate basic functionality",
+                "promptTemplate": "example_validation"
+            }
         },
         'complex': {
             "timeoutSec": 300,  
             "successRegex": ["BUILD SUCCESS", "Started.*Application", "EVALUATION:\\\\s+PASS"],
-            "requiredEnv": ["OPENAI_API_KEY"]
+            "requiredEnv": ["OPENAI_API_KEY"],
+            "aiValidation": {
+                "enabled": True,
+                "validationMode": "primary",
+                "readmeFile": "../README.md",
+                "expectedBehavior": "Complex AI workflow should execute successfully with multi-step processing and produce evaluation results",
+                "promptTemplate": "workflow_validation",
+                "successCriteria": {
+                    "expectedSteps": 3,
+                    "evaluationRequired": True
+                }
+            }
         },
         'mcp': {
             "timeoutSec": 300,
             "successRegex": ["BUILD SUCCESS", "Started.*Application", "MCP Initialized", "Connected"],
             "requiredEnv": ["OPENAI_API_KEY"],
-            "setupCommands": ["./create-database.sh"]
+            "setupCommands": ["./create-database.sh"],
+            "aiValidation": {
+                "enabled": True,
+                "validationMode": "hybrid",
+                "readmeFile": "../README.md",
+                "expectedBehavior": "MCP server/client should establish connections, register tools, and demonstrate protocol communication",
+                "promptTemplate": "client_server_validation",
+                "components": ["server", "client"],
+                "successCriteria": {
+                    "requiresUserInteraction": False,
+                    "expectedOutputTypes": ["tool_discovery", "protocol_communication"]
+                }
+            }
         }
     }
     return templates.get(complexity, templates['simple'])
@@ -89,7 +118,7 @@ public class Run{class_name} {{
     }}
 }}'''
 
-def create_integration_test(module_path: str, complexity: str = 'simple', force: bool = False):
+def create_integration_test(module_path: str, complexity: str = 'simple', force: bool = False, ai_validation: bool = True, ai_mode: str = None):
     """Create integration test files for a Spring AI example"""
     module_dir = pathlib.Path(module_path)
     if not module_dir.exists():
@@ -114,6 +143,15 @@ def create_integration_test(module_path: str, complexity: str = 'simple', force:
     module_info = get_module_info(module_path)
     config = get_config_template(complexity)
     
+    # Apply AI validation options
+    if not ai_validation:
+        # Remove AI validation section
+        config.pop('aiValidation', None)
+    elif ai_mode:
+        # Override validation mode if specified
+        if 'aiValidation' in config:
+            config['aiValidation']['validationMode'] = ai_mode
+    
     # Create ExampleInfo.json
     config_file = integration_dir / "ExampleInfo.json"
     with config_file.open("w") as f:
@@ -125,12 +163,16 @@ def create_integration_test(module_path: str, complexity: str = 'simple', force:
     with launcher_file.open("w") as f:
         f.write(launcher_content)
     
+    ai_enabled = 'aiValidation' in config
+    ai_mode = config.get('aiValidation', {}).get('validationMode', 'N/A') if ai_enabled else 'disabled'
+    
     print(f"✅ Created integration test for {module_path}")
     print(f"   📄 {config_file}")
     print(f"   ☕ {launcher_file} (using centralized utilities)")
     print(f"   🎯 Complexity: {complexity}")
     print(f"   ⏱️  Timeout: {config['timeoutSec']}s")
     print(f"   🔍 Success patterns: {len(config['successRegex'])}")
+    print(f"   🤖 AI validation: {ai_mode}")
     print(f"\n🧪 To test locally:")
     print(f"   cd {module_path}")
     print(f"   jbang integration-tests/Run{module_info['class_name']}.java")
@@ -139,6 +181,21 @@ def create_integration_test(module_path: str, complexity: str = 'simple', force:
     print(f"\n💡 Configuration suggestions:")
     print("   - The JBang script uses centralized utilities (no code duplication)")
     print("   - All configuration is done through ExampleInfo.json")
+    
+    if ai_enabled:
+        print(f"   - AI validation enabled ({ai_mode} mode) for intelligent validation")
+        print("   - Review 'expectedBehavior' in aiValidation section")
+        print("   - Choose appropriate promptTemplate (example_validation, workflow_validation, client_server_validation)")
+        if ai_mode == 'primary':
+            print("   - Primary mode: Only AI validation (good for unpredictable AI outputs)")
+        elif ai_mode == 'hybrid':
+            print("   - Hybrid mode: Both regex and AI validation must pass")
+        else:
+            print("   - Fallback mode: AI validation if regex fails")
+    else:
+        print("   - AI validation disabled - using regex patterns only")
+        print("   - Consider enabling AI validation for complex AI workflows")
+    
     if complexity == 'simple':
         print("   - Review success patterns in ExampleInfo.json")
         print("   - Adjust timeout if needed")
@@ -146,9 +203,11 @@ def create_integration_test(module_path: str, complexity: str = 'simple', force:
         print("   - Verify setupCommands match your database/service setup")
         print("   - Add cleanup commands if needed")
         print("   - Check MCP-specific environment variables")
+        print("   - AI validation excellent for MCP protocol validation")
     else:
         print("   - Fine-tune success patterns for your specific workflow")
         print("   - Consider adding setup/cleanup commands if needed")
+        print("   - AI validation ideal for complex workflows with unpredictable outputs")
 
 def main():
     """Main CLI function"""
@@ -157,14 +216,20 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Create simple integration test
+  # Create simple integration test with AI validation (default)
   python3 scripts/scaffold_integration_test.py kotlin/kotlin-hello-world
   
-  # Create complex integration test with longer timeout
-  python3 scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex
+  # Create complex integration test with primary AI validation
+  python3 scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex --ai-mode primary
   
-  # Create MCP integration test with database setup
+  # Create MCP integration test with hybrid validation
   python3 scripts/scaffold_integration_test.py model-context-protocol/sqlite/simple --complexity mcp
+  
+  # Create integration test without AI validation (regex only)
+  python3 scripts/scaffold_integration_test.py misc/simple-example --no-ai-validation
+  
+  # Override existing files with fallback AI validation
+  python3 scripts/scaffold_integration_test.py existing/module --force --ai-mode fallback
         """
     )
     
@@ -177,10 +242,17 @@ Examples:
     parser.add_argument("--force", "-f", 
                        action="store_true",
                        help="Overwrite existing integration test files")
+    parser.add_argument("--no-ai-validation", 
+                       action="store_true",
+                       help="Disable AI validation (use only regex patterns)")
+    parser.add_argument("--ai-mode", 
+                       choices=['primary', 'hybrid', 'fallback'],
+                       help="Override AI validation mode (primary=AI only, hybrid=AI+regex, fallback=regex first)")
     
     args = parser.parse_args()
     
-    create_integration_test(args.module_path, args.complexity, args.force)
+    create_integration_test(args.module_path, args.complexity, args.force, 
+                          not args.no_ai_validation, args.ai_mode)
 
 if __name__ == "__main__":
     main()

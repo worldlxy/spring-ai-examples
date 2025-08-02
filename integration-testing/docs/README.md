@@ -171,6 +171,108 @@ python3 scripts/scaffold_integration_test.py model-context-protocol/sqlite/simpl
 | Complex Workflow | 300s | Multi-step processing |
 | MCP + Database | 300-600s | External service setup |
 
+## 🤖 AI Validation (NEW)
+
+AI validation uses Claude to intelligently analyze test outputs and determine success beyond simple pattern matching. This is especially powerful for examples with unpredictable AI-generated content.
+
+### When to Use AI Validation
+
+**✅ Recommended for:**
+- **Chat examples** - Jokes, conversations, creative content
+- **Complex workflows** - Multi-step AI reasoning, agentic patterns
+- **MCP examples** - Protocol validation, tool discovery
+- **Function calling** - Verifying realistic AI tool usage
+- **Streaming responses** - Dynamic content validation
+
+**❌ Not needed for:**
+- Simple build/start verification
+- Deterministic outputs
+- Pure infrastructure tests
+
+### AI Validation Configuration
+
+Add an `aiValidation` section to your `ExampleInfo.json`:
+
+```json
+{
+  "timeoutSec": 300,
+  "successRegex": ["BUILD SUCCESS", "Started.*Application"],
+  "requiredEnv": ["OPENAI_API_KEY"],
+  "aiValidation": {
+    "enabled": true,
+    "validationMode": "hybrid",
+    "readmeFile": "../README.md",
+    "expectedBehavior": "Application should demonstrate chat functionality with coherent AI responses",
+    "promptTemplate": "chat_example_validation",
+    "components": ["client", "server"],
+    "successCriteria": {
+      "requiresUserInteraction": false,
+      "expectedOutputTypes": ["conversation", "tool_usage"]
+    }
+  }
+}
+```
+
+### Validation Modes
+
+| Mode | Behavior | Use Case |
+|------|----------|----------|
+| **primary** | AI validation only | Unpredictable AI outputs, creative content |
+| **hybrid** | Both regex AND AI must pass | Mixed deterministic + AI components |
+| **fallback** | AI validation if regex fails | Backup validation for edge cases |
+
+### Prompt Templates
+
+| Template | Purpose | Best For |
+|----------|---------|----------|
+| `example_validation` | Basic functionality validation | Simple applications |
+| `chat_example_validation` | Conversation quality assessment | Chat, jokes, creative content |
+| `workflow_validation` | Multi-step process validation | Agentic patterns, complex workflows |
+| `client_server_validation` | Distributed system validation | MCP examples, microservices |
+
+### AI Validation Output
+
+```json
+{
+  "success": true,
+  "confidence": 0.95,
+  "reasoning": "Application successfully demonstrated chat functionality with coherent responses",
+  "functionality_demonstrated": [
+    "Spring Boot started correctly",
+    "AI model generated appropriate joke response",
+    "User interaction flow worked as expected"
+  ],
+  "cost_info": {
+    "total_tokens": 420,
+    "duration_seconds": 12.5
+  }
+}
+```
+
+### Cost & Performance
+
+**Typical costs per validation:**
+- **Tokens**: 380-450 (very reasonable)
+- **Duration**: 12-15 seconds
+- **Cache efficiency**: 10-25x read ratio (cost-effective)
+- **Accuracy**: 85-100% confidence scores
+
+### Scaffolding with AI Validation
+
+```bash
+# Enable AI validation by default (hybrid mode)
+python3 scripts/scaffold_integration_test.py kotlin/kotlin-hello-world
+
+# Complex workflow with primary AI validation
+python3 scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex --ai-mode primary
+
+# MCP example with client-server validation
+python3 scripts/scaffold_integration_test.py model-context-protocol/weather/server --complexity mcp
+
+# Disable AI validation (regex only)
+python3 scripts/scaffold_integration_test.py simple-example --no-ai-validation
+```
+
 ## Local Development Workflow
 
 ### Testing a Single Example

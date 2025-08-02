@@ -93,6 +93,21 @@ python3 integration-testing/scripts/run_integration_tests.py
 python3 integration-testing/scripts/scaffold_integration_test.py <module-path> [--complexity simple|complex|mcp]
 ```
 
+**Create integration test with AI validation:**
+```bash
+# Default: hybrid AI validation enabled
+python3 integration-testing/scripts/scaffold_integration_test.py kotlin/kotlin-hello-world
+
+# Complex workflow with primary AI validation (recommended for agentic patterns)
+python3 integration-testing/scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex --ai-mode primary
+
+# MCP example with client-server validation
+python3 integration-testing/scripts/scaffold_integration_test.py model-context-protocol/weather/server --complexity mcp
+
+# Disable AI validation (regex patterns only)
+python3 integration-testing/scripts/scaffold_integration_test.py simple-example --no-ai-validation
+```
+
 **Test specific example:**
 ```bash
 cd <module-directory>
@@ -118,6 +133,46 @@ All JBang integration test scripts use centralized utilities to eliminate code d
 - See `integration-testing/docs/JBANG_PATTERN.md` for the required pattern
 
 See `integration-testing/docs/README.md` for complete testing guide.
+
+### 🤖 AI Validation (NEW)
+
+The integration testing framework now includes AI-powered validation using Claude to intelligently analyze test outputs. This goes beyond regex pattern matching to understand context, validate unpredictable AI outputs, and assess complex workflows.
+
+**Key Benefits:**
+- **Intelligent Assessment** - Understands if examples achieved their intended purpose
+- **Handles AI Outputs** - Validates jokes, conversations, creative content  
+- **Context-Aware** - Uses README documentation for validation context
+- **Multi-Component Support** - Validates distributed systems holistically
+- **Cost Efficient** - ~400 tokens per validation with high cache utilization
+
+**When AI Validation Excels:**
+- Chat examples (jokes, conversations, creative responses)
+- Agentic patterns (multi-step reasoning, workflow completion)
+- MCP examples (protocol validation, tool discovery)
+- Function calling (realistic tool usage verification)
+- Complex workflows with unpredictable outputs
+
+**Configuration Example:**
+```json
+{
+  "timeoutSec": 300,
+  "successRegex": ["BUILD SUCCESS", "Started.*Application"],
+  "requiredEnv": ["OPENAI_API_KEY"],
+  "aiValidation": {
+    "enabled": true,
+    "validationMode": "hybrid",
+    "expectedBehavior": "Application should demonstrate chat functionality with coherent AI responses",
+    "promptTemplate": "chat_example_validation"
+  }
+}
+```
+
+**Validation Modes:**
+- `primary` - AI validation only (best for unpredictable AI outputs)
+- `hybrid` - Both regex and AI must pass (recommended for most cases)  
+- `fallback` - AI validation if regex fails (gradual migration)
+
+For complete details, see `integration-testing/docs/AI_VALIDATION.md`.
 
 ## Development Notes
 
