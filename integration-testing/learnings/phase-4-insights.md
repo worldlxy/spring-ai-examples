@@ -11,7 +11,7 @@ Successfully completed Phase 4 by synthesizing all learnings, creating comprehen
 
 ### Implementation Summary Synthesis
 - **Finding**: Comprehensive synthesis document effectively captures 5-phase journey and technical innovations
-- **Evidence**: Created `learnings/implementation-summary.md` covering architecture, patterns, metrics, and future roadmap
+- **Evidence**: Created `integration-testing/learnings/implementation-summary.md` covering architecture, patterns, metrics, and future roadmap
 - **Impact**: Provides complete knowledge transfer resource for maintainers and stakeholders
 
 ### Configuration Standardization
@@ -114,8 +114,8 @@ Successfully completed Phase 4 by synthesizing all learnings, creating comprehen
 ## Phase 4 Achievements Summary
 
 ### Documentation Assets Created
-1. **`learnings/implementation-summary.md`**: Comprehensive 5-phase journey synthesis
-2. **`learnings/templates/configuration-templates.md`**: Standardized configuration patterns
+1. **`integration-testing/learnings/implementation-summary.md`**: Comprehensive 5-phase journey synthesis
+2. **`integration-testing/learnings/templates/configuration-templates.md`**: Standardized configuration patterns
 3. **`integration-testing/docs/TROUBLESHOOTING.md`**: Complete troubleshooting guide
 4. **Enhanced `CLAUDE.md`**: Updated developer workflow documentation
 

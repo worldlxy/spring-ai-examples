@@ -422,7 +422,7 @@ df -h
 ## Prevention Best Practices
 
 ### 1. Before Creating New Tests
-- Use appropriate configuration template from `learnings/templates/`
+- Use appropriate configuration template from `integration-testing/learnings/templates/`
 - Test locally before committing
 - Verify all environment variables are documented
 - Check timeout is appropriate for application complexity
@@ -446,7 +446,7 @@ df -h
 1. **Check this guide** for common issues
 2. **Review logs** in `integration-testing/logs/`
 3. **Test manually** with `./mvnw spring-boot:run`
-4. **Check configuration** against templates in `learnings/templates/`
+4. **Check configuration** against templates in `integration-testing/learnings/templates/`
 5. **Run individual test** with `jbang integration-tests/RunModule.java`
 
-For issues not covered here, check the learning documents in `learnings/` for detailed technical insights and patterns.
+For issues not covered here, check the learning documents in `integration-testing/learnings/` for detailed technical insights and patterns.

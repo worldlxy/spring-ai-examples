@@ -156,7 +156,7 @@ python3 scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --c
 ├── scripts/
 │   ├── run_integration_tests.py            # 402 lines
 │   └── scaffold_integration_test.py        # 285 lines
-├── learnings/
+├── integration-testing/learnings/
 │   ├── phase-1-insights.md                 # This file
 │   └── templates/                          # Ready for Phase 2
 └── CLAUDE.md                               # Updated with testing info

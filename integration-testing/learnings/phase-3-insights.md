@@ -273,7 +273,7 @@ After:  README_INTEGRATION_TESTING.md (root level, easily discoverable)
 
 ### Key Files Updated This Phase
 - `scripts/run_integration_tests.py`: MAX_WORKERS = 1
-- `plans/integration-testing-plan-v3.1.md`: Added real-time output and parallel execution to future enhancements
+- `integration-testing/plans/integration-testing-plan-v3.1.md`: Added real-time output and parallel execution to future enhancements
 - `TODO.txt`: Created with development priorities
 - `README_INTEGRATION_TESTING.md`: Moved to root level
 - All simple example integration-tests/ directories: Created and validated
