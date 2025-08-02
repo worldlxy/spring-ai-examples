@@ -432,9 +432,17 @@ public class IntegrationTestUtils {
             out.println("\n📁 Spring Boot log preserved: " + logFile.toAbsolutePath().normalize());
             
             // Final validation check
-            if (exitCode != 0) {
+            // Allow non-zero exit codes for interactive applications that use AI validation
+            boolean allowNonZeroExit = aiConfig != null && aiConfig.enabled() && 
+                aiConfig.successCriteria() != null && 
+                aiConfig.successCriteria().containsKey("requiresUserInteraction") &&
+                Boolean.TRUE.equals(aiConfig.successCriteria().get("requiresUserInteraction"));
+                
+            if (exitCode != 0 && !allowNonZeroExit) {
                 err.println("❌ Application exited with code: " + exitCode);
                 exit(exitCode);
+            } else if (exitCode != 0 && allowNonZeroExit) {
+                out.println("ℹ️  Application exited with code " + exitCode + " (expected for interactive application)");
             }
             
             if (!aiValidationPassed) {

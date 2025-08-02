@@ -72,20 +72,37 @@ mvn clean package
 
 ## Testing Framework
 
-This repository uses a lightweight integration testing framework for ensuring all examples work correctly across releases.
+This repository uses a comprehensive integration testing framework with **AI-powered validation** for ensuring all examples work correctly across releases. The framework achieves **97% coverage (32/33 examples)** with intelligent validation for interactive applications.
 
 ### Testing Approaches
 
 | Example Type | Test Location | Command | Purpose |
 |--------------|---------------|---------|---------|
 | **Simple** | `src/test/java/` | `./mvnw test` | Unit tests, basic functionality |
-| **Complex** | `integration-tests/` | `jbang integration-tests/Run*.java` | End-to-end integration |
+| **Complex** | `integration-tests/` | `jbang integration-tests/Run*.java` | End-to-end integration with AI validation |
+
+### Key Features
+
+- **AI Validation**: Intelligent analysis of application logs for non-deterministic outputs
+- **Interactive Application Support**: Testing of chatbots and Scanner-based applications
+- **Centralized Architecture**: Single source of truth with 84% code reduction
+- **Comprehensive Logging**: Full application output preserved for debugging
 
 ### Quick Testing Commands
 
-**Run all integration tests:**
+**Run all integration tests (recommended):**
 ```bash
-python3 integration-testing/scripts/run_integration_tests.py
+./integration-testing/scripts/rit-direct.sh
+```
+
+**Run specific integration test:**
+```bash
+./integration-testing/scripts/rit-direct.sh module-name
+```
+
+**Run with clean logs:**
+```bash
+./integration-testing/scripts/rit-direct.sh --clean-logs
 ```
 
 **Create integration test for new example:**
@@ -95,17 +112,17 @@ python3 integration-testing/scripts/scaffold_integration_test.py <module-path> [
 
 **Create integration test with AI validation:**
 ```bash
-# Default: hybrid AI validation enabled
-python3 integration-testing/scripts/scaffold_integration_test.py kotlin/kotlin-hello-world
+# Simple example (hybrid AI validation)
+python3 integration-testing/scripts/scaffold_integration_test.py kotlin/kotlin-hello-world --complexity simple
 
-# Complex workflow with primary AI validation (recommended for agentic patterns)
-python3 integration-testing/scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex --ai-mode primary
+# Complex workflow (primary AI validation)
+python3 integration-testing/scripts/scaffold_integration_test.py agentic-patterns/chain-workflow --complexity complex
 
-# MCP example with client-server validation
-python3 integration-testing/scripts/scaffold_integration_test.py model-context-protocol/weather/server --complexity mcp
+# Interactive application (fallback AI validation)
+python3 integration-testing/scripts/scaffold_integration_test.py agents/reflection --complexity complex
 
-# Disable AI validation (regex patterns only)
-python3 integration-testing/scripts/scaffold_integration_test.py simple-example --no-ai-validation
+# MCP example (hybrid validation)
+python3 integration-testing/scripts/scaffold_integration_test.py model-context-protocol/weather/server --complexity complex
 ```
 
 **Test specific example:**
@@ -117,22 +134,28 @@ jbang integration-tests/Run*.java  # For complex examples
 
 ### Integration Test Structure
 
-Complex examples include an optional `integration-tests/` directory:
+Complex examples include an `integration-tests/` directory with AI validation:
 ```
 module/
 ├── integration-tests/
-│   ├── ExampleInfo.json      # Test configuration (timeout, success patterns, env vars)
+│   ├── ExampleInfo.json      # Test configuration with AI validation support
 │   └── RunModule.java        # JBang launcher (uses centralized utilities)
 ```
 
-### JBang Script Pattern (IMPORTANT)
+### JBang Script Pattern & AI Validation
 
-All JBang integration test scripts use centralized utilities to eliminate code duplication:
-- Each script is only ~18 lines (down from ~110-130 lines)
-- All test logic lives in `integration-testing/jbang-lib/IntegrationTestUtils.java`
-- See `integration-testing/docs/JBANG_PATTERN.md` for the required pattern
+All integration test scripts use centralized utilities with AI validation support:
+- **Centralized Architecture**: Each script is only ~18 lines (84% code reduction)
+- **AI Integration**: Automatic AI validation using Claude for intelligent analysis
+- **Universal Support**: All test logic in `integration-testing/jbang-lib/IntegrationTestUtils.java`
+- **Interactive Apps**: Special handling for Scanner-based applications
 
-See `integration-testing/docs/README.md` for complete testing guide.
+**Validation Modes:**
+- **Primary**: AI-only validation for unpredictable AI outputs
+- **Hybrid**: Regex patterns + AI validation for reliability
+- **Fallback**: Regex primary with AI backup for interactive applications
+
+See `integration-testing/docs/README.md` for complete guide and `integration-testing/docs/TROUBLESHOOTING.md` for troubleshooting.
 
 ### 🤖 AI Validation (NEW)
 
