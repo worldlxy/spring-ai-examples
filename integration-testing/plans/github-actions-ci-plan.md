@@ -183,6 +183,76 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 
 ---
 
+## Phase 3a: Local Testing with Spring AI 1.0.1
+
+*Critical validation phase - ensure all integration tests work locally before CI/CD*
+
+### Phase 3a Pre-Conditions
+- [ ] Confirm version management scripts work
+- [ ] Have OPENAI_API_KEY configured locally
+- [ ] Have ANTHROPIC_API_KEY configured locally (for AI validation)
+- [ ] Claude Code CLI installed locally
+
+### Phase 3a Implementation - Version Update
+- [ ] Update all modules to Spring AI 1.0.1:
+  ```bash
+  ./scripts/update-spring-ai-version.sh 1.0.1
+  ```
+- [ ] Verify version update:
+  ```bash
+  ./scripts/check-spring-ai-version.sh
+  ```
+- [ ] Confirm all 17 pom files show version 1.0.1
+
+### Phase 3a Testing - Core Examples
+- [ ] Test models/chat/helloworld:
+  ```bash
+  ./integration-testing/scripts/run-integration-tests.sh "chat/helloworld"
+  ```
+- [ ] Test kotlin/kotlin-hello-world:
+  ```bash
+  ./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world
+  ```
+- [ ] Test misc/spring-ai-java-function-callback:
+  ```bash
+  ./integration-testing/scripts/run-integration-tests.sh spring-ai-java-function-callback
+  ```
+
+### Phase 3a Testing - All Examples
+- [ ] Run full test suite:
+  ```bash
+  ./integration-testing/scripts/run-integration-tests.sh
+  ```
+- [ ] Document which tests pass/fail
+- [ ] Identify any version-specific issues
+- [ ] Fix or disable failing tests
+- [ ] Re-run until all enabled tests pass
+
+### Phase 3a AI Validation Testing
+- [ ] Verify Claude Code CLI is available:
+  ```bash
+  claude --version
+  ```
+- [ ] Test with AI validation enabled for core examples
+- [ ] Document any AI validation issues
+- [ ] Adjust validation prompts if needed
+
+### Phase 3a Troubleshooting
+- [ ] For build failures: Check for API breaking changes in 1.0.1
+- [ ] For runtime failures: Check logs in integration-testing/logs/
+- [ ] For AI validation failures: Check Claude API access and prompts
+- [ ] Document all issues and resolutions
+
+### Phase 3a Completion & Commit Point
+- [ ] All core examples (3) pass with Spring AI 1.0.1
+- [ ] Document pass/fail status for all examples
+- [ ] Commit any fixes: `git commit -m "fix: ensure integration tests work with Spring AI 1.0.1"`
+- [ ] Create learnings document: `integration-testing/learnings/phase-3a-local-testing.md`
+- [ ] Update test configurations as needed
+- [ ] Review Phase 3b and adjust based on findings
+
+---
+
 ## Phase 3b: Workflow Optimization & AI Validation Support
 
 *Critical optimization to support AI validation and improve CI performance*

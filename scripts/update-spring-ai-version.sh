@@ -37,7 +37,13 @@ TOTAL_COUNT=0
 # Find and process all pom.xml files
 echo "Searching for pom.xml files..."
 while IFS= read -r pom_file; do
+    # Skip backup directories
+    if [[ "$pom_file" == *".version-backups"* ]]; then
+        continue
+    fi
+    
     TOTAL_COUNT=$((TOTAL_COUNT + 1))
+    updated_file=false
     
     # Check if this pom file contains spring-ai.version property
     if grep -q "<spring-ai.version>" "$pom_file"; then
@@ -47,10 +53,29 @@ while IFS= read -r pom_file; do
         mkdir -p "$(dirname "$backup_file")"
         cp "$pom_file" "$backup_file"
         
-        # Update the version
+        # Update the version property
         sed -i "s|<spring-ai.version>.*</spring-ai.version>|<spring-ai.version>${VERSION}</spring-ai.version>|g" "$pom_file"
+        updated_file=true
+    fi
+    
+    # Also check for direct spring-ai-bom version in dependencyManagement
+    if grep -q "spring-ai-bom" "$pom_file"; then
+        if ! $updated_file; then
+            # Create backup if not already done
+            relative_path="${pom_file#./}"
+            backup_file="${BACKUP_DIR}/${relative_path}"
+            mkdir -p "$(dirname "$backup_file")"
+            cp "$pom_file" "$backup_file"
+        fi
         
-        echo "  ✓ Updated: $relative_path"
+        # Update the BOM version using sed with pattern for multiline
+        sed -i '/<artifactId>spring-ai-bom<\/artifactId>/{n;s|<version>.*</version>|<version>'"${VERSION}"'</version>|}' "$pom_file"
+        
+        updated_file=true
+    fi
+    
+    if $updated_file; then
+        echo "  ✓ Updated: ${pom_file#./}"
         UPDATED_COUNT=$((UPDATED_COUNT + 1))
     fi
 done < <(find . -name "pom.xml" -type f)
