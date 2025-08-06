@@ -40,6 +40,28 @@ cd <module-directory>
 mvn clean package
 ```
 
+### Version Management
+
+**Update Spring AI version across all modules:**
+```bash
+./scripts/update-spring-ai-version.sh 1.0.1  # or 1.1.0-SNAPSHOT
+```
+
+The version management script handles two patterns:
+- **17 modules** use `<spring-ai.version>` property
+- **15 modules** use direct BOM version in dependencyManagement
+- **Total: 32 pom.xml files** updated across the repository
+
+**Check current versions:**
+```bash
+./scripts/check-spring-ai-version.sh
+```
+
+**Restore from backup:**
+```bash
+./scripts/restore-spring-ai-version.sh /path/to/backup
+```
+
 ## Architecture
 
 ### Module Structure
@@ -72,7 +94,7 @@ mvn clean package
 
 ## Testing Framework
 
-This repository uses a comprehensive integration testing framework with **AI-powered validation** for ensuring all examples work correctly across releases. The framework achieves **97% coverage (32/33 examples)** with intelligent validation for interactive applications.
+This repository uses a comprehensive integration testing framework with **AI-powered validation** for ensuring all examples work correctly across releases. The framework currently covers **24 modules with integration tests** with intelligent validation for interactive applications.
 
 ### Testing Approaches
 
@@ -83,6 +105,7 @@ This repository uses a comprehensive integration testing framework with **AI-pow
 
 ### Key Features
 
+- **24 Modules Tested**: Integration tests for all major example categories
 - **AI Validation**: Intelligent analysis of application logs for non-deterministic outputs
 - **Interactive Application Support**: Testing of chatbots and Scanner-based applications
 - **Centralized Architecture**: Single source of truth with 84% code reduction

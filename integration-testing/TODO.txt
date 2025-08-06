@@ -31,6 +31,10 @@
 - prompt-engineering-patterns takes long to run (~2+ minutes) - acceptable for complex AI workflows  
 - Real-time progress visibility still needed for long-running tests
 - Parallel execution disabled due to port conflicts (acceptable tradeoff for reliability)
+- Web applications that don't auto-terminate (e.g., misc/openai-streaming-response) timeout in tests
+  - Need new test category for REST API applications
+  - Consider adding CommandLineRunner for demo mode vs server mode
+  - Or implement client-based testing approach
 
 ## Future Enhancement Ideas
 1. **Real-time Streaming**: `--stream` flag to show live test output
