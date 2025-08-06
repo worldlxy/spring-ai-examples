@@ -21,23 +21,26 @@ Optimized GitHub Actions workflow with official actions and proper caching. Disc
 - Key based on pom.xml hash for cache invalidation
 - Should improve subsequent run performance
 
-## AI Validation Discovery
+## AI Validation Support
 
-### Key Finding
-AI validation uses the **Claude Code CLI** (`claude` command) which is:
-- A local development tool
-- Not available in GitHub Actions environment
-- Requires Claude API access via local CLI authentication
-
-### Implications
-- AI validation must remain **disabled** for GitHub Actions
-- Tests use **regex validation** in CI/CD
-- AI validation remains available for **local testing only**
+### Implementation
+AI validation uses the **Claude Code CLI** (`claude` command) which:
+- Can be installed via `curl -s https://install.anthropic.com | bash`
+- Requires ANTHROPIC_API_KEY environment variable
+- Provides intelligent validation beyond regex patterns
+- Essential for validating AI-generated responses
 
 ### Configuration
-- Keep `"enabled": false` in ExampleInfo.json files for CI
-- Consider environment-based configuration in future
-- Document this limitation clearly
+- Claude Code CLI installed in workflow
+- ANTHROPIC_API_KEY must be configured in GitHub Secrets
+- AI validation enabled in ExampleInfo.json files
+- Uses `--dangerously-skip-permissions` flag for CI environment
+
+### Benefits
+- Validates actual AI behavior, not just patterns
+- Ensures jokes are actually jokes
+- Verifies coherent AI responses
+- Catches issues regex patterns might miss
 
 ## Performance Improvements
 - JBang official action: ~5-10 seconds faster setup

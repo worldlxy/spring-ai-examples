@@ -38,6 +38,14 @@ jobs:
       with:
         python-version: '3.11'
         
+    - name: Install Claude Code CLI
+      run: |
+        echo "📦 Installing Claude Code CLI..."
+        curl -s https://install.anthropic.com | bash -s -- --yes
+        echo "$HOME/.ape/bin" >> "$GITHUB_PATH"
+        which claude || echo "❌ Claude CLI not found"
+        claude --version || echo "⚠️ Claude CLI version check failed"
+        
     - name: Cache JBang dependencies
       uses: actions/cache@v4
       with:
@@ -60,6 +68,7 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         SPRING_AI_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: |
         echo "🧪 Running integration tests with Spring AI ${{ inputs.spring_ai_version }}..."
         
@@ -100,6 +109,7 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         SPRING_AI_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       run: |
         echo "🔍 Running filtered test: ${{ inputs.test_filter }}"
         ./integration-testing/scripts/run-integration-tests.sh "${{ inputs.test_filter }}"

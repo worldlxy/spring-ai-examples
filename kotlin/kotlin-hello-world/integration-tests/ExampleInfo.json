@@ -9,7 +9,7 @@
     "OPENAI_API_KEY"
   ],
   "aiValidation": {
-    "enabled": false,
+    "enabled": true,
     "validationMode": "primary",
     "readmeFile": "../README.md",
     "expectedBehavior": "Fetch a joke from OpenAI API, parse it into structured Joke object with setup and punchline fields, and display them properly formatted",

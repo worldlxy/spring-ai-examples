@@ -194,12 +194,12 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Confirm basic workflow is functional
 
 ### Phase 3b Implementation - Setup Optimization
-- [ ] Replace manual JBang installation with official action:
+- [x] Replace manual JBang installation with official action:
   ```yaml
   - name: Set up JBang
     uses: jbangdev/setup-jbang@v0.119.0
   ```
-- [ ] Add Python setup for AI validation:
+- [x] Add Python setup for AI validation:
   ```yaml
   - name: Set up Python
     uses: actions/setup-python@v5
@@ -207,13 +207,26 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
       python-version: '3.11'
       cache: 'pip'
   ```
-- [ ] Install Python dependencies for AI validator:
+- [ ] Install Claude Code CLI for AI validation:
   ```yaml
-  - name: Install AI validator dependencies
+  - name: Install Claude Code CLI
     run: |
-      pip install -r integration-testing/ai-validator/requirements.txt
+      echo "📦 Installing Claude Code CLI..."
+      curl -s https://install.anthropic.com | bash -s -- --yes
+      echo "$HOME/.ape/bin" >> "$GITHUB_PATH"
+      which claude || echo "❌ Claude CLI not found"
+      claude --version || echo "⚠️ Claude CLI version check failed"
   ```
-- [ ] Add JBang cache to speed up subsequent runs:
+- [ ] Configure Claude API key:
+  ```yaml
+  - name: Configure Claude CLI
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    run: |
+      # Claude CLI will use ANTHROPIC_API_KEY from environment
+      echo "🔑 Claude API key configured"
+  ```
+- [x] Add JBang cache to speed up subsequent runs:
   ```yaml
   - name: Cache JBang
     uses: actions/cache@v4
@@ -227,8 +240,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ### Phase 3b Implementation - Re-enable AI Validation
 - [ ] Re-enable AI validation in `models/chat/helloworld/integration-tests/ExampleInfo.json`
 - [ ] Re-enable AI validation in `kotlin/kotlin-hello-world/integration-tests/ExampleInfo.json`
-- [ ] Test AI validation locally with Python environment
+- [ ] Configure ANTHROPIC_API_KEY in GitHub Secrets
+- [ ] Test AI validation with Claude Code CLI in workflow
 - [ ] Verify AI validation prompts are appropriate
+- [ ] Ensure Claude CLI has proper permissions
 
 ### Phase 3b Testing
 - [ ] Test workflow with optimized setup
@@ -238,10 +253,12 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Measure performance improvement from caching
 
 ### Phase 3b Troubleshooting
-- [ ] If AI validation still fails, check Python path and dependencies
+- [ ] If AI validation fails, check Claude CLI installation and PATH
+- [ ] Verify ANTHROPIC_API_KEY is properly configured in GitHub Secrets
+- [ ] Check Claude CLI permissions with --dangerously-skip-permissions flag if needed
 - [ ] If JBang action fails, check version compatibility
-- [ ] Document any API key requirements for AI validation
-- [ ] Check if AI validator needs ANTHROPIC_API_KEY or uses OPENAI_API_KEY
+- [ ] Document Claude API key requirements for AI validation
+- [ ] Test with both ANTHROPIC_API_KEY and fallback options
 
 ### Phase 3b Completion & Commit Point
 - [ ] Commit optimizations: `git commit -m "feat: optimize workflow with official actions and AI validation support"`
