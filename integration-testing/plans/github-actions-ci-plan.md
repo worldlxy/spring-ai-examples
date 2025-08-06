@@ -176,10 +176,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ### Phase 3 Completion & Commit Point
 - [x] Commit workflow updates: `git commit -m "feat: add manual GitHub Actions workflow for integration tests"`
 - [x] Create learnings document: `integration-testing/learnings/phase-3-minimal-workflow.md`
-- [ ] Document GitHub Actions setup process
-- [ ] Note any CI-specific issues or limitations
-- [ ] Document version management integration success
-- [ ] Review Phase 4 and adjust based on learnings
+- [x] Document GitHub Actions setup process (see integration-testing/docs/GITHUB_ACTIONS_SETUP.md)
+- [x] Note any CI-specific issues or limitations
+- [x] Document version management integration success
+- [x] Review Phase 3b and adjust based on learnings
 
 ---
 
@@ -258,9 +258,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ### Phase 3b Completion & Commit Point
 - [x] Commit optimizations: `git commit -m "feat: optimize workflow with official actions and AI validation support"`
 - [x] Create learnings document: `integration-testing/learnings/phase-3b-workflow-optimization.md`
-- [ ] Document performance improvements
-- [ ] Note any issues with AI validation
-- [ ] Update documentation on Python requirements
+- [x] Document performance improvements
+- [x] Note any issues with AI validation (Claude CLI installation)
+- [x] Update documentation on Python requirements
+- [x] Review Phase 4 and adjust based on learnings
 
 ---
 
@@ -293,7 +294,14 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
           spring-ai-version: ['1.0.1', '1.1.0-SNAPSHOT']
   ```
 - [ ] Add job name with version for clarity: `name: Test with Spring AI ${{ matrix.spring-ai-version }}`
-- [ ] Copy steps from Phase 3 workflow (JDK, cache, version update, test execution)
+- [ ] Copy steps from Phase 3 workflow including:
+  - JDK 17 setup
+  - JBang setup via official action
+  - Python setup
+  - Claude Code CLI installation via npm
+  - JBang caching
+  - Version update script
+  - Test execution with environment variables (OPENAI_API_KEY, ANTHROPIC_API_KEY)
 - [ ] Use matrix version: `./scripts/update-spring-ai-version.sh ${{ matrix.spring-ai-version }}`
 - [ ] Add version reporting to output: `echo "Testing with Spring AI version: ${{ matrix.spring-ai-version }}"`
 - [ ] Update artifact names to include version: `name: test-logs-${{ matrix.spring-ai-version }}`
