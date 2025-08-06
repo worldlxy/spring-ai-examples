@@ -183,6 +183,75 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 
 ---
 
+## Phase 3b: Workflow Optimization & AI Validation Support
+
+*Critical optimization to support AI validation and improve CI performance*
+
+### Phase 3b Pre-Conditions
+- [ ] Read learnings from Phase 3 (especially regarding AI validation failures)
+- [ ] Understand Python requirements for AI validation
+- [ ] Review JBang installation best practices
+- [ ] Confirm basic workflow is functional
+
+### Phase 3b Implementation - Setup Optimization
+- [ ] Replace manual JBang installation with official action:
+  ```yaml
+  - name: Set up JBang
+    uses: jbangdev/setup-jbang@v0.119.0
+  ```
+- [ ] Add Python setup for AI validation:
+  ```yaml
+  - name: Set up Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: '3.11'
+      cache: 'pip'
+  ```
+- [ ] Install Python dependencies for AI validator:
+  ```yaml
+  - name: Install AI validator dependencies
+    run: |
+      pip install -r integration-testing/ai-validator/requirements.txt
+  ```
+- [ ] Add JBang cache to speed up subsequent runs:
+  ```yaml
+  - name: Cache JBang
+    uses: actions/cache@v4
+    with:
+      path: ~/.jbang
+      key: ${{ runner.os }}-jbang-${{ hashFiles('**/pom.xml') }}
+      restore-keys: |
+        ${{ runner.os }}-jbang-
+  ```
+
+### Phase 3b Implementation - Re-enable AI Validation
+- [ ] Re-enable AI validation in `models/chat/helloworld/integration-tests/ExampleInfo.json`
+- [ ] Re-enable AI validation in `kotlin/kotlin-hello-world/integration-tests/ExampleInfo.json`
+- [ ] Test AI validation locally with Python environment
+- [ ] Verify AI validation prompts are appropriate
+
+### Phase 3b Testing
+- [ ] Test workflow with optimized setup
+- [ ] Verify JBang action works correctly
+- [ ] Confirm Python environment is properly configured
+- [ ] Test AI validation with all 3 examples
+- [ ] Measure performance improvement from caching
+
+### Phase 3b Troubleshooting
+- [ ] If AI validation still fails, check Python path and dependencies
+- [ ] If JBang action fails, check version compatibility
+- [ ] Document any API key requirements for AI validation
+- [ ] Check if AI validator needs ANTHROPIC_API_KEY or uses OPENAI_API_KEY
+
+### Phase 3b Completion & Commit Point
+- [ ] Commit optimizations: `git commit -m "feat: optimize workflow with official actions and AI validation support"`
+- [ ] Create learnings document: `integration-testing/learnings/phase-3b-workflow-optimization.md`
+- [ ] Document performance improvements
+- [ ] Note any issues with AI validation
+- [ ] Update documentation on Python requirements
+
+---
+
 ## Phase 4: Multi-Version Matrix Testing (HIGH PRIORITY)
 
 *Test the version management system with matrix execution - higher risk than full coverage*

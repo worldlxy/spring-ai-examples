@@ -30,13 +30,21 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Install JBang
-      run: |
-        echo "📦 Installing JBang..."
-        curl -Ls https://sh.jbang.dev | bash -s - app setup
-        echo "$HOME/.jbang/bin" >> $GITHUB_PATH
-        export PATH="$HOME/.jbang/bin:$PATH"
-        jbang version
+    - name: Set up JBang
+      uses: jbangdev/setup-jbang@v0.119.0
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Cache JBang dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.jbang
+        key: ${{ runner.os }}-jbang-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-jbang-
         
     - name: Update Spring AI version
       run: |
