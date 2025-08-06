@@ -148,4 +148,12 @@ fi
 
 echo "" | tee -a "${LOG_FILE}"
 echo "📝 Full log: ${LOG_FILE}"
-echo "✅ Testing completed!"
+
+# Exit with proper code
+if [ ${failed} -gt 0 ]; then
+    echo "❌ Testing completed with failures!"
+    exit 1
+else
+    echo "✅ Testing completed!"
+    exit 0
+fi
