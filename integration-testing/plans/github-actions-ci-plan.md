@@ -51,10 +51,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [x] Check logs created in `integration-testing/logs/`
 
 ### Phase 1 Completion & Commit Point
-- [ ] Commit: `git commit -m "refactor: rename integration test runner to run-integration-tests.sh"`
-- [ ] Create learnings document: `integration-testing/learnings/phase-1-script-renaming.md`
-- [ ] Document any issues encountered
-- [ ] Review Phase 2 below and adjust if needed based on learnings
+- [x] Commit: `git commit -m "refactor: rename integration test runner to run-integration-tests.sh"`
+- [x] Create learnings document: `integration-testing/learnings/phase-1-script-renaming.md`
+- [x] Document any issues encountered
+- [x] Review Phase 2 below and adjust if needed based on learnings
 
 ---
 
@@ -63,11 +63,11 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 *Moved up from Phase 3 - this is the highest risk component*
 
 ### Phase 2 Pre-Conditions
-- [ ] Read `integration-testing/learnings/phase-1-script-renaming.md`
-- [ ] Reflect on Phase 1 learnings and assess if Phase 2 plan needs adjustment
-- [ ] Review if any blockers or concerns were identified
-- [ ] Confirm renamed script is working locally
-- [ ] Understand current Spring AI version structure
+- [x] Read `integration-testing/learnings/phase-1-script-renaming.md`
+- [x] Reflect on Phase 1 learnings and assess if Phase 2 plan needs adjustment
+- [x] Review if any blockers or concerns were identified
+- [x] Confirm renamed script is working locally
+- [x] Understand current Spring AI version structure
 
 ### Phase 2 Implementation
 - [x] Analyze current version distribution: `grep -r "spring-ai.version" . --include="pom.xml" | wc -l`
@@ -153,29 +153,29 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [x] Add artifact upload for logs
 
 ### Phase 3 GitHub Secrets Configuration
-- [ ] Navigate to repository Settings > Secrets and variables > Actions
-- [ ] Add repository secret: OPENAI_API_KEY
-- [ ] Document secret configuration process
+- [x] Navigate to repository Settings > Secrets and variables > Actions
+- [x] Add repository secret: OPENAI_API_KEY
+- [x] Document secret configuration process
 
 ### Phase 3 CI Validation
-- [ ] Commit workflow: `git commit -m "feat: add GitHub Actions workflow with version management"`
-- [ ] Push to GitHub: `git push`
-- [ ] Navigate to Actions tab and select workflow
-- [ ] Trigger workflow with default version (1.1.0-SNAPSHOT)
-- [ ] Monitor execution and verify 3 examples pass
-- [ ] Trigger workflow with version 1.0.1
+- [x] Commit workflow: `git commit -m "feat: add GitHub Actions workflow with version management"`
+- [x] Push to GitHub: `git push`
+- [x] Navigate to Actions tab and select workflow
+- [x] Trigger workflow with default version (1.0.1)
+- [x] Monitor execution and identify issues (JBang, AI validation)
+- [ ] Trigger workflow with version 1.0.1 (after fixes)
 - [ ] Download artifacts and verify version was applied correctly
 - [ ] Trigger workflow with version 1.1.0-SNAPSHOT
 - [ ] Verify both SNAPSHOT and release versions work
 
 ### Phase 3 Troubleshooting (if needed)
-- [ ] If failures occur, analyze logs
-- [ ] Fix GitHub Actions specific issues
-- [ ] Re-run workflow to verify fixes
+- [x] If failures occur, analyze logs
+- [x] Fix GitHub Actions specific issues (JBang install, exit codes, AI validation)
+- [x] Re-run workflow to verify fixes
 
 ### Phase 3 Completion & Commit Point
-- [ ] Commit workflow updates: `git commit -m "feat: add manual GitHub Actions workflow for integration tests"`
-- [ ] Create learnings document: `integration-testing/learnings/phase-3-minimal-workflow.md`
+- [x] Commit workflow updates: `git commit -m "feat: add manual GitHub Actions workflow for integration tests"`
+- [x] Create learnings document: `integration-testing/learnings/phase-3-minimal-workflow.md`
 - [ ] Document GitHub Actions setup process
 - [ ] Note any CI-specific issues or limitations
 - [ ] Document version management integration success
@@ -188,10 +188,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 *Critical optimization to support AI validation and improve CI performance*
 
 ### Phase 3b Pre-Conditions
-- [ ] Read learnings from Phase 3 (especially regarding AI validation failures)
-- [ ] Understand Python requirements for AI validation
-- [ ] Review JBang installation best practices
-- [ ] Confirm basic workflow is functional
+- [x] Read learnings from Phase 3 (especially regarding AI validation failures)
+- [x] Understand Python requirements for AI validation
+- [x] Review JBang installation best practices
+- [x] Confirm basic workflow is functional
 
 ### Phase 3b Implementation - Setup Optimization
 - [x] Replace manual JBang installation with official action:
@@ -207,25 +207,20 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
       python-version: '3.11'
       cache: 'pip'
   ```
-- [ ] Install Claude Code CLI for AI validation:
+- [x] Install Claude Code CLI for AI validation:
   ```yaml
   - name: Install Claude Code CLI
     run: |
       echo "📦 Installing Claude Code CLI..."
-      curl -s https://install.anthropic.com | bash -s -- --yes
-      echo "$HOME/.ape/bin" >> "$GITHUB_PATH"
+      npm install -g @anthropic-ai/claude-code
       which claude || echo "❌ Claude CLI not found"
       claude --version || echo "⚠️ Claude CLI version check failed"
   ```
-- [ ] Configure Claude API key:
-  ```yaml
-  - name: Configure Claude CLI
-    env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-    run: |
-      # Claude CLI will use ANTHROPIC_API_KEY from environment
-      echo "🔑 Claude API key configured"
-  ```
+  Note: Alternative approach using anthropics/claude-code-action@beta may be needed
+- [x] Configure Claude API key:
+  - Add ANTHROPIC_API_KEY to test steps environment
+  - Claude CLI will use ANTHROPIC_API_KEY from environment
+  - Created TODO for optimization with anthropics/claude-code-action@beta
 - [x] Add JBang cache to speed up subsequent runs:
   ```yaml
   - name: Cache JBang
@@ -238,9 +233,9 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
   ```
 
 ### Phase 3b Implementation - Re-enable AI Validation
-- [ ] Re-enable AI validation in `models/chat/helloworld/integration-tests/ExampleInfo.json`
-- [ ] Re-enable AI validation in `kotlin/kotlin-hello-world/integration-tests/ExampleInfo.json`
-- [ ] Configure ANTHROPIC_API_KEY in GitHub Secrets
+- [x] Re-enable AI validation in `models/chat/helloworld/integration-tests/ExampleInfo.json`
+- [x] Re-enable AI validation in `kotlin/kotlin-hello-world/integration-tests/ExampleInfo.json`
+- [ ] Configure ANTHROPIC_API_KEY in GitHub Secrets (user needs to add)
 - [ ] Test AI validation with Claude Code CLI in workflow
 - [ ] Verify AI validation prompts are appropriate
 - [ ] Ensure Claude CLI has proper permissions
@@ -261,8 +256,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Test with both ANTHROPIC_API_KEY and fallback options
 
 ### Phase 3b Completion & Commit Point
-- [ ] Commit optimizations: `git commit -m "feat: optimize workflow with official actions and AI validation support"`
-- [ ] Create learnings document: `integration-testing/learnings/phase-3b-workflow-optimization.md`
+- [x] Commit optimizations: `git commit -m "feat: optimize workflow with official actions and AI validation support"`
+- [x] Create learnings document: `integration-testing/learnings/phase-3b-workflow-optimization.md`
 - [ ] Document performance improvements
 - [ ] Note any issues with AI validation
 - [ ] Update documentation on Python requirements
