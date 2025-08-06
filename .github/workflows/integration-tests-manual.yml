@@ -1,0 +1,109 @@
+name: Integration Tests (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      spring_ai_version:
+        description: 'Spring AI Version (e.g., 1.0.1 or 1.1.0-SNAPSHOT)'
+        required: false
+        default: '1.0.1'
+        type: string
+      test_filter:
+        description: 'Test filter (optional, e.g., kotlin-hello-world)'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Update Spring AI version
+      run: |
+        echo "📦 Updating Spring AI version to: ${{ inputs.spring_ai_version }}"
+        ./scripts/update-spring-ai-version.sh "${{ inputs.spring_ai_version }}"
+        
+    - name: Verify version update
+      run: |
+        echo "🔍 Verifying Spring AI version update..."
+        ./scripts/check-spring-ai-version.sh
+        
+    - name: Run integration tests for 3 examples
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        SPRING_AI_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        echo "🧪 Running integration tests with Spring AI ${{ inputs.spring_ai_version }}..."
+        
+        # Test 1: Simple Hello World
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Test 1/3: models/chat/helloworld"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        ./integration-testing/scripts/run-integration-tests.sh "chat/helloworld"
+        
+        # Test 2: Kotlin Hello World
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Test 2/3: kotlin/kotlin-hello-world"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        ./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world
+        
+        # Test 3: Function Callback
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Test 3/3: misc/spring-ai-java-function-callback"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        ./integration-testing/scripts/run-integration-tests.sh spring-ai-java-function-callback
+        
+        echo ""
+        echo "✅ All 3 examples tested successfully with Spring AI ${{ inputs.spring_ai_version }}"
+        
+    - name: Run specific test (if filter provided)
+      if: inputs.test_filter != ''
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        SPRING_AI_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        echo "🔍 Running filtered test: ${{ inputs.test_filter }}"
+        ./integration-testing/scripts/run-integration-tests.sh "${{ inputs.test_filter }}"
+        
+    - name: Upload test logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-logs-${{ inputs.spring_ai_version }}-${{ github.run_number }}
+        path: |
+          integration-testing/logs/background-runs/*.log
+          integration-testing/logs/integration-tests/*.log
+        retention-days: 7
+        
+    - name: Summary
+      if: always()
+      run: |
+        echo "## 📊 Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Spring AI Version**: ${{ inputs.spring_ai_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Test Filter**: ${{ inputs.test_filter || 'None (ran 3 examples)' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Examples Tested" >> $GITHUB_STEP_SUMMARY
+        echo "1. models/chat/helloworld" >> $GITHUB_STEP_SUMMARY
+        echo "2. kotlin/kotlin-hello-world" >> $GITHUB_STEP_SUMMARY
+        echo "3. misc/spring-ai-java-function-callback" >> $GITHUB_STEP_SUMMARY
+        if [ "${{ inputs.test_filter }}" != "" ]; then
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Additional filtered test**: ${{ inputs.test_filter }}" >> $GITHUB_STEP_SUMMARY
+        fi
