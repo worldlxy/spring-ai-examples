@@ -7,7 +7,7 @@ This directory contains the comprehensive integration testing framework for Spri
 ```
 integration-testing/
 ├── scripts/                    # Integration testing scripts (2 active tools)
-│   ├── rit-direct.sh          # ⭐ PRIMARY: Direct test runner (recommended)
+│   ├── run-integration-tests.sh  # ⭐ PRIMARY: Direct test runner (recommended)
 │   └── scaffold_integration_test.py  # ⭐ PRIMARY: Creates integration tests for new examples
 ├── jbang-lib/                 # Centralized JBang utilities
 │   └── IntegrationTestUtils.java  # Common testing functionality
@@ -23,9 +23,9 @@ integration-testing/
 ### Run All Integration Tests
 ```bash
 # Recommended: Direct execution with reliable port cleanup
-./integration-testing/scripts/rit-direct.sh
+./integration-testing/scripts/run-integration-tests.sh
 
-# Alternative: Use the legacy Python orchestrator (may have hanging issues - use rit-direct.sh instead)
+# Alternative: Use the legacy Python orchestrator (may have hanging issues - use run-integration-tests.sh instead)
 # python3 integration-testing/scripts/run_integration_tests.py  # REMOVED - obsolete
 ```
 
@@ -137,7 +137,7 @@ All 18 JBang integration test scripts now use a centralized utility class:
 ```
 logs/
 ├── background-runs/           # Main test execution logs
-│   └── rit-direct_YYYYMMDD_HHMMSS.log
+│   └── run-integration-tests_YYYYMMDD_HHMMSS.log
 └── integration-tests/         # Individual Spring Boot application logs
     └── MODULE-spring-boot-TIMESTAMP.log
 ```

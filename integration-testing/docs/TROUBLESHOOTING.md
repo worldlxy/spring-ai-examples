@@ -29,15 +29,15 @@ Previous Spring Boot processes didn't terminate cleanly
 # Quick fix - kill processes on port 8080
 lsof -ti:8080 | xargs -r kill
 
-# Comprehensive cleanup (used in rit-direct.sh)
-./integration-testing/scripts/rit-direct.sh --clean-logs
+# Comprehensive cleanup (used in run-integration-tests.sh)
+./integration-testing/scripts/run-integration-tests.sh --clean-logs
 
 # Check what's using the port
 lsof -i :8080
 ```
 
 #### Prevention
-- Use `rit-direct.sh` which includes automatic port cleanup
+- Use `run-integration-tests.sh` which includes automatic port cleanup
 - Allow processes to shut down gracefully between tests
 - Consider dynamic port assignment for parallel testing
 

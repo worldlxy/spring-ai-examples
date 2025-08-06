@@ -35,22 +35,22 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Verify `rit-direct.sh` exists and functions
 
 ### Phase 1 Implementation
-- [ ] Check current file exists: `integration-testing/scripts/rit-direct.sh`
-- [ ] Execute rename: `mv integration-testing/scripts/rit-direct.sh integration-testing/scripts/run-integration-tests.sh`
-- [ ] Update references in `CLAUDE.md`
-- [ ] Update references in `integration-testing/README.md`
-- [ ] Update references in `integration-testing/TODO.txt`
-- [ ] Search for other references: `grep -r "rit-direct.sh" . --exclude-dir=.git`
-- [ ] Update any additional references found
+- [x] Check current file exists: `integration-testing/scripts/rit-direct.sh`
+- [x] Execute rename: `mv integration-testing/scripts/rit-direct.sh integration-testing/scripts/run-integration-tests.sh`
+- [x] Update references in `CLAUDE.md`
+- [x] Update references in `integration-testing/README.md`
+- [x] Update references in `integration-testing/TODO.txt` (no references found)
+- [x] Search for other references: `grep -r "rit-direct.sh" . --exclude-dir=.git`
+- [x] Update any additional references found
 
 ### Phase 1 Validation
-- [ ] Test locally: `./integration-testing/scripts/run-integration-tests.sh helloworld`
-- [ ] Verify exit code is 0
-- [ ] Test locally: `./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world`
-- [ ] Verify exit code is 0
-- [ ] Check logs created in `integration-testing/logs/`
+- [x] Test locally: `./integration-testing/scripts/run-integration-tests.sh helloworld`
+- [x] Verify exit code is 0
+- [x] Test locally: `./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world`
+- [x] Verify exit code is 0
+- [x] Check logs created in `integration-testing/logs/`
 
-### Phase 1 Completion
+### Phase 1 Completion & Commit Point
 - [ ] Commit: `git commit -m "refactor: rename integration test runner to run-integration-tests.sh"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-1-script-renaming.md`
 - [ ] Document any issues encountered
@@ -99,7 +99,7 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Document any version-specific issues
 - [ ] Create compatibility matrix for tested versions
 
-### Phase 2 Completion
+### Phase 2 Completion & Commit Point
 - [ ] Commit version management system: `git commit -m "feat: add Spring AI version management system"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-2-version-management.md`
 - [ ] Document version compatibility findings
@@ -170,7 +170,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Fix GitHub Actions specific issues
 - [ ] Re-run workflow to verify fixes
 
-### Phase 3 Completion
+### Phase 3 Completion & Commit Point
+- [ ] Commit workflow updates: `git commit -m "feat: add manual GitHub Actions workflow for integration tests"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-3-minimal-workflow.md`
 - [ ] Document GitHub Actions setup process
 - [ ] Note any CI-specific issues or limitations
@@ -228,7 +229,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Fix issues or mark as version-incompatible
 - [ ] Re-run matrix to verify fixes
 
-### Phase 4 Completion
+### Phase 4 Completion & Commit Point
+- [ ] Commit matrix testing: `git commit -m "feat: add multi-version matrix testing workflow"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-4-matrix-testing.md`
 - [ ] Create version compatibility matrix
 - [ ] Document parallel execution insights
@@ -287,7 +289,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Verify workflow does NOT trigger
 - [ ] Close PR after verification
 
-### Phase 5 Completion
+### Phase 5 Completion & Commit Point
+- [ ] Commit trigger configuration: `git commit -m "feat: add automated triggers with path filtering"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-5-automated-triggers.md`
 - [ ] Document trigger behavior
 - [ ] Note any edge cases
@@ -339,7 +342,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
   - [ ] Caching optimizations
 - [ ] Document optimization decisions
 
-### Phase 6 Completion
+### Phase 6 Completion & Commit Point
+- [ ] Final commit: `git commit -m "feat: complete full integration test coverage (32 examples)"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-6-full-coverage.md`
 - [ ] Document final metrics (pass rate, execution time)
 - [ ] List any persistently failing tests
@@ -384,7 +388,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Document version-specific failures
 - [ ] Create compatibility matrix
 
-### Phase 7 Completion
+### Phase 7 Completion & Commit Point
+- [ ] Commit multi-version testing: `git commit -m "feat: add multi-version testing matrix for all examples"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-7-multi-version.md`
 - [ ] Create version compatibility matrix document
 - [ ] Document version-specific issues
@@ -432,7 +437,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Configure to run against multiple versions
 - [ ] Set up failure notifications
 
-### Phase 8 Completion
+### Phase 8 Completion & Commit Point
+- [ ] Commit enhancements: `git commit -m "feat: add CI enhancements (JSON output, annotations, caching)"`
 - [ ] Create learnings document: `integration-testing/learnings/phase-8-enhancements.md`
 - [ ] Document feature effectiveness
 - [ ] Note performance improvements
@@ -465,7 +471,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 - [ ] Verify scheduled run (if implemented)
 - [ ] Test all documented procedures
 
-### Phase 9 Completion
+### Phase 9 Completion & Commit Point
+- [ ] Final documentation commit: `git commit -m "docs: complete GitHub Actions CI/CD documentation"`
 - [ ] Create final summary: `integration-testing/learnings/github-actions-implementation-summary.md`
 - [ ] Archive this plan with completion dates
 - [ ] Document future enhancement opportunities

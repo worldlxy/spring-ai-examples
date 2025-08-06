@@ -94,17 +94,17 @@ The framework provides **two essential tools** for integration testing:
 
 **1. ⭐ Run all integration tests (primary test runner):**
 ```bash
-./integration-testing/scripts/rit-direct.sh
+./integration-testing/scripts/run-integration-tests.sh
 ```
 
 **Run specific integration test:**
 ```bash
-./integration-testing/scripts/rit-direct.sh module-name
+./integration-testing/scripts/run-integration-tests.sh module-name
 ```
 
 **Run with clean logs:**
 ```bash
-./integration-testing/scripts/rit-direct.sh --clean-logs
+./integration-testing/scripts/run-integration-tests.sh --clean-logs
 ```
 
 **2. ⭐ Create integration tests for new examples (scaffolding tool):**

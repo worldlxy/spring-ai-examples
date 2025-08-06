@@ -4,10 +4,10 @@
 # Complete bypass of Python script to avoid hanging issues
 #
 # Usage:
-#   ./rit-direct.sh                  # Run all tests
-#   ./rit-direct.sh --clean-logs     # Clean all logs and run all tests
-#   ./rit-direct.sh helloworld       # Run only tests matching "helloworld"
-#   ./rit-direct.sh --clean-logs helloworld  # Clean logs and run specific test
+#   ./run-integration-tests.sh                  # Run all tests
+#   ./run-integration-tests.sh --clean-logs     # Clean all logs and run all tests
+#   ./run-integration-tests.sh helloworld       # Run only tests matching "helloworld"
+#   ./run-integration-tests.sh --clean-logs helloworld  # Clean logs and run specific test
 
 # Don't exit on command failure (let tests fail individually)
 set -uo pipefail
@@ -38,7 +38,7 @@ done
 LOGS_BASE_DIR="integration-testing/logs"
 LOGS_DIR="${LOGS_BASE_DIR}/background-runs"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-LOG_FILE="${PROJECT_ROOT}/${LOGS_DIR}/rit-direct_${TIMESTAMP}.log"
+LOG_FILE="${PROJECT_ROOT}/${LOGS_DIR}/run-integration-tests_${TIMESTAMP}.log"
 
 mkdir -p "${LOGS_DIR}"
 
