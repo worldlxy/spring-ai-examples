@@ -64,47 +64,49 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 
 ### Phase 2 Pre-Conditions
 - [ ] Read `integration-testing/learnings/phase-1-script-renaming.md`
+- [ ] Reflect on Phase 1 learnings and assess if Phase 2 plan needs adjustment
+- [ ] Review if any blockers or concerns were identified
 - [ ] Confirm renamed script is working locally
 - [ ] Understand current Spring AI version structure
 
 ### Phase 2 Implementation
-- [ ] Analyze current version distribution: `grep -r "spring-ai.version" . --include="pom.xml" | wc -l`
-- [ ] Document which modules use version property vs. which don't
-- [ ] Create script: `scripts/update-spring-ai-version.sh`
-- [ ] Add shebang and parameter handling:
+- [x] Analyze current version distribution: `grep -r "spring-ai.version" . --include="pom.xml" | wc -l`
+- [x] Document which modules use version property vs. which don't (17 use property, 17 don't)
+- [x] Create script: `scripts/update-spring-ai-version.sh`
+- [x] Add shebang and parameter handling:
   ```bash
   #!/bin/bash
   VERSION="${1:-1.1.0-SNAPSHOT}"
   echo "Updating Spring AI version to: $VERSION"
   ```
-- [ ] Add find command to locate all pom.xml files
-- [ ] Add sed command to update `<spring-ai.version>` property
-- [ ] Add backup functionality before modifications
-- [ ] Add validation for version format (handle both release and SNAPSHOT)
-- [ ] Add restore capability from backups
-- [ ] Make script executable: `chmod +x scripts/update-spring-ai-version.sh`
+- [x] Add find command to locate all pom.xml files
+- [x] Add sed command to update `<spring-ai.version>` property
+- [x] Add backup functionality before modifications
+- [x] Add validation for version format (handle both release and SNAPSHOT)
+- [x] Add restore capability from backups (separate script)
+- [x] Make script executable: `chmod +x scripts/*.sh`
 
 ### Phase 2 Local Testing
-- [ ] Test with release version: `./scripts/update-spring-ai-version.sh 1.0.1`
-- [ ] Verify: `grep "spring-ai.version" misc/openai-streaming-response/pom.xml`
-- [ ] Test with SNAPSHOT: `./scripts/update-spring-ai-version.sh 1.1.0-SNAPSHOT`
-- [ ] Verify SNAPSHOT format preserved
-- [ ] Test restore functionality
-- [ ] Verify original versions restored
-- [ ] Run integration test to ensure changed version works: `./integration-testing/scripts/run-integration-tests.sh helloworld`
+- [x] Test with release version: `./scripts/update-spring-ai-version.sh 1.0.1`
+- [x] Verify: `grep "spring-ai.version" misc/openai-streaming-response/pom.xml`
+- [x] Test with SNAPSHOT: `./scripts/update-spring-ai-version.sh 1.1.0-SNAPSHOT`
+- [x] Verify SNAPSHOT format preserved
+- [x] Test restore functionality
+- [x] Verify original versions restored
+- [x] Run integration test to ensure changed version works: `./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world`
 
 ### Phase 2 Version Compatibility Testing
-- [ ] Test examples with 1.0.1: `./integration-testing/scripts/run-integration-tests.sh helloworld`
-- [ ] Test examples with 1.1.0-SNAPSHOT: `./integration-testing/scripts/run-integration-tests.sh helloworld`
-- [ ] Document any version-specific issues
-- [ ] Create compatibility matrix for tested versions
+- [x] Test examples with 1.0.1: `./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world`
+- [x] Test examples with 1.1.0-SNAPSHOT: `./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world`
+- [x] Document any version-specific issues (none found)
+- [x] Create compatibility matrix for tested versions
 
 ### Phase 2 Completion & Commit Point
+- [x] Create learnings document: `integration-testing/learnings/phase-2-version-management.md`
+- [x] Document version compatibility findings
+- [x] Note any version-specific behavior or limitations (none found)
+- [x] List tested version combinations
 - [ ] Commit version management system: `git commit -m "feat: add Spring AI version management system"`
-- [ ] Create learnings document: `integration-testing/learnings/phase-2-version-management.md`
-- [ ] Document version compatibility findings
-- [ ] Note any version-specific behavior or limitations
-- [ ] List tested version combinations
 - [ ] Review Phase 3 and adjust based on learnings
 
 ---
@@ -114,8 +116,9 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 *Basic workflow to validate version management works in CI*
 
 ### Phase 3 Pre-Conditions
-- [ ] Read `integration-testing/learnings/phase-1-script-renaming.md`
-- [ ] Read `integration-testing/learnings/phase-2-version-management.md`
+- [ ] Read ALL previous learnings documents (phases 1-2)
+- [ ] Reflect on learnings and assess if Phase 3 plan needs significant adjustment
+- [ ] Identify any blockers or technical debt from previous phases
 - [ ] Confirm version management script works locally
 - [ ] Ensure GitHub repository write access
 - [ ] Have OPENAI_API_KEY available for secrets
@@ -185,7 +188,9 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 *Test the version management system with matrix execution - higher risk than full coverage*
 
 ### Phase 4 Pre-Conditions
-- [ ] Read all previous learnings documents (phases 1-3)
+- [ ] Read ALL previous learnings documents (phases 1-3)
+- [ ] Reflect on cumulative learnings and assess if Phase 4 plan needs significant adjustment
+- [ ] Review execution times and resource usage from Phase 3
 - [ ] Confirm single-version workflow passes 3 examples reliably
 - [ ] Understand GitHub Actions matrix strategies
 
@@ -242,8 +247,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ## Phase 5: Automated Triggers & Path Filtering
 
 ### Phase 5 Pre-Conditions
-- [ ] Read all previous learnings documents (phases 1-4)
-- [ ] Confirm 8 examples run reliably
+- [ ] Read ALL previous learnings documents (phases 1-4)
+- [ ] Reflect on learnings and assess if Phase 5 plan needs significant adjustment
+- [ ] Review any version-specific issues discovered in Phase 4
+- [ ] Confirm matrix testing runs reliably
 - [ ] Understand GitHub Actions trigger types
 - [ ] Plan path filtering strategy
 
@@ -302,8 +309,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ## Phase 6: Full Coverage Rollout (32 Examples)
 
 ### Phase 6 Pre-Conditions
-- [ ] Read all previous learnings documents (phases 1-5)
-- [ ] Review total execution time for 8 examples
+- [ ] Read ALL previous learnings documents (phases 1-5)
+- [ ] Reflect on cumulative learnings and assess if Phase 6 plan needs significant adjustment
+- [ ] Review any performance bottlenecks identified in previous phases
+- [ ] Review total execution time for examples tested so far
 - [ ] Calculate estimated time for 32 examples
 - [ ] Ensure sufficient GitHub Actions minutes available
 
@@ -355,7 +364,9 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ## Phase 7: Multi-Version Testing Matrix
 
 ### Phase 7 Pre-Conditions
-- [ ] Read all previous learnings documents (phases 1-6)
+- [ ] Read ALL previous learnings documents (phases 1-6)
+- [ ] Reflect on learnings and assess if Phase 7 plan needs significant adjustment
+- [ ] Review performance metrics from Phase 6 full coverage
 - [ ] Confirm full suite runs successfully
 - [ ] Define target Spring AI versions to test
 - [ ] Understand GitHub Actions matrix strategies
@@ -401,8 +412,10 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 ## Phase 8: Enhanced CI Features
 
 ### Phase 8 Pre-Conditions
-- [ ] Read all previous learnings documents (phases 1-7)
-- [ ] Prioritize enhancement features
+- [ ] Read ALL previous learnings documents (phases 1-7)
+- [ ] Reflect on learnings and assess if Phase 8 plan needs significant adjustment
+- [ ] Review resource usage and cost implications from Phase 7
+- [ ] Prioritize enhancement features based on actual needs discovered
 - [ ] Confirm core functionality is stable
 - [ ] Review GitHub Actions advanced features
 
@@ -451,6 +464,8 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
 
 ### Phase 9 Pre-Conditions
 - [ ] Read ALL learnings documents (phases 1-8)
+- [ ] Reflect on entire journey and identify key success factors
+- [ ] Document any technical debt or future improvements needed
 - [ ] Compile list of key insights
 - [ ] Review original goals vs. achievements
 - [ ] Gather all configuration examples
