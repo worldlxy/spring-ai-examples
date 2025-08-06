@@ -6,13 +6,9 @@ This directory contains the comprehensive integration testing framework for Spri
 
 ```
 integration-testing/
-├── scripts/                    # All integration testing scripts
-│   ├── rit-direct.sh          # Direct test runner (recommended)
-│   ├── rit.sh                 # Alternative test runner
-│   ├── run_integration_tests.py  # Python test orchestrator  
-│   ├── scaffold_integration_test.py  # Test scaffolding tool
-│   ├── refactor-jbang-scripts.sh  # JBang script refactoring tool
-│   └── fix-jbang-paths.sh     # Path correction utility
+├── scripts/                    # Integration testing scripts (2 active tools)
+│   ├── rit-direct.sh          # ⭐ PRIMARY: Direct test runner (recommended)
+│   └── scaffold_integration_test.py  # ⭐ PRIMARY: Creates integration tests for new examples
 ├── jbang-lib/                 # Centralized JBang utilities
 │   └── IntegrationTestUtils.java  # Common testing functionality
 ├── docs/                      # Integration testing documentation
@@ -29,13 +25,20 @@ integration-testing/
 # Recommended: Direct execution with reliable port cleanup
 ./integration-testing/scripts/rit-direct.sh
 
-# Alternative: Python orchestrator (may have hanging issues)
-python3 integration-testing/scripts/run_integration_tests.py
+# Alternative: Use the legacy Python orchestrator (may have hanging issues - use rit-direct.sh instead)
+# python3 integration-testing/scripts/run_integration_tests.py  # REMOVED - obsolete
 ```
 
 ### Create New Integration Test
+**⭐ Essential tool for extending the framework to new examples**
 ```bash
+# Creates both ExampleInfo.json and Run*.java files with proper templates
 python3 integration-testing/scripts/scaffold_integration_test.py <module-path> [--complexity simple|complex|mcp]
+
+# Examples:
+python3 integration-testing/scripts/scaffold_integration_test.py kotlin/kotlin-hello-world --complexity simple
+python3 integration-testing/scripts/scaffold_integration_test.py agentic-patterns/new-workflow --complexity complex
+python3 integration-testing/scripts/scaffold_integration_test.py model-context-protocol/new-server --complexity mcp
 ```
 
 ### Test Individual Example

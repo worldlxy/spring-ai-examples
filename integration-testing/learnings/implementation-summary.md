@@ -242,3 +242,51 @@ The Spring AI integration testing implementation represents a successful evoluti
 The key innovation—AI validation for non-deterministic applications—opens new possibilities for testing complex AI systems while maintaining cost efficiency and reliability. The centralized architecture ensures maintainability and rapid feature deployment across all tests.
 
 While minor issues remain (Docker Compose configuration, specific application requirements), the core framework is production-ready and provides exceptional value for comprehensive Spring AI testing.
+
+## Critical Framework Learnings
+
+### Development Strategy Insights
+- **Pattern Testing Strategy**: Expect 2-3 iterations to get success patterns right for each new example type
+- **Phased Validation Approach**: Scale testing reveals real constraints - infrastructure → samples → batch conversion works
+- **Port Conflict Management**: Critical for any future parallel execution work - systematic port 8080 cleanup prevents cascading failures
+
+### Performance & Cost Baselines
+- **Execution Time Expectations**: 30s (simple), 2-3min (complex), 5min+ (very complex) - essential for timeout configuration
+- **AI Validation Cost**: ~$0.002 per validation (~400 tokens), ~$6/month for 100 daily runs - extremely cost-effective
+- **Success Rate**: ~92% reliability with known issues documented
+
+### AI Validation Configuration Patterns
+**Interactive Applications (Scanner-based):**
+```json
+{
+  "validationMode": "fallback",
+  "expectedBehavior": "Application should start successfully and display interactive prompt",
+  "successCriteria": {
+    "requiresUserInteraction": true,
+    "expectedComponents": ["spring_boot_startup", "interactive_prompt"]
+  }
+}
+```
+
+**Client-Server Applications:**
+```json
+{
+  "validationMode": "hybrid", 
+  "expectedBehavior": "Both client and server components should start and interact successfully",
+  "successCriteria": {
+    "expectedComponents": ["server_startup", "client_connection", "successful_interaction"]
+  }
+}
+```
+
+### Special Case Knowledge
+- **Database Examples** (kotlin/rag-with-kotlin): Require database setup complexity and extended timeouts
+- **Interactive AI Examples** (agents/reflection): Complex AI interaction patterns need specialized validation
+- **MCP Examples**: Longer execution times due to external service dependencies, document resource requirements
+- **Agentic Patterns**: Extended timeouts needed, complex workflow validation techniques required
+
+### Technical Solutions Library
+- **ProcessExecutor API**: Specific fixes documented for Maven integration and application lifecycle management
+- **Output Capture**: JBang output display fixes critical for debugging - affects 8/12 scripts initially
+- **Interactive App Testing**: Scanner-based applications fail with NoSuchElementException - solved with timeout and AI validation approach
+- **Framework Architecture**: Python orchestration + JBang execution provides excellent cross-platform compatibility

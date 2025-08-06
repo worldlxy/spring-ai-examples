@@ -88,9 +88,11 @@ This repository uses a comprehensive integration testing framework with **AI-pow
 - **Centralized Architecture**: Single source of truth with 84% code reduction
 - **Comprehensive Logging**: Full application output preserved for debugging
 
-### Quick Testing Commands
+### Primary Integration Testing Tools
 
-**Run all integration tests (recommended):**
+The framework provides **two essential tools** for integration testing:
+
+**1. ⭐ Run all integration tests (primary test runner):**
 ```bash
 ./integration-testing/scripts/rit-direct.sh
 ```
@@ -105,8 +107,9 @@ This repository uses a comprehensive integration testing framework with **AI-pow
 ./integration-testing/scripts/rit-direct.sh --clean-logs
 ```
 
-**Create integration test for new example:**
+**2. ⭐ Create integration tests for new examples (scaffolding tool):**
 ```bash
+# Essential for extending the framework - creates ExampleInfo.json + Run*.java files
 python3 integration-testing/scripts/scaffold_integration_test.py <module-path> [--complexity simple|complex|mcp]
 ```
 
@@ -199,8 +202,63 @@ For complete details, see `integration-testing/docs/AI_VALIDATION.md`.
 
 ## Development Notes
 
-- Use the provided `run-example.sh` script for quick testing of individual examples
+- Use the integration testing framework for comprehensive example testing and validation
 - Each module has its own Maven wrapper for isolated builds
 - Examples demonstrate both OpenAI and other AI model integrations
 - MCP examples often include database setup scripts (e.g., `create-database.sh`)
 - Complex examples should include integration tests for CI/CD validation
+
+## Commit Message Guidelines
+
+**IMPORTANT**: When committing code to this repository, commit messages should appear to be authored by humans:
+
+- ❌ **DO NOT include**: Robot emoji (🤖), "Generated with Claude Code", "Co-Authored-By: Claude", or any AI attribution
+- ✅ **DO use**: Professional commit messages following established conventions
+
+### The Seven Rules of a Great Git Commit Message
+
+Based on [Chris Beams' classic guide](https://cbea.ms/git-commit/), follow these rules:
+
+1. **Separate subject from body with a blank line**
+2. **Limit the subject line to 50 characters**
+3. **Capitalize the subject line**
+4. **Do not end the subject line with a period**
+5. **Use the imperative mood in the subject line** ("Add feature" not "Added feature")
+6. **Wrap the body at 72 characters**
+7. **Use the body to explain what and why vs. how**
+
+### Modern Conventions (Recommended)
+
+Combine the classic rules with conventional commit format:
+
+- `feat(scope): add new feature` - new functionality
+- `fix(scope): resolve issue description` - bug fixes  
+- `docs(scope): update documentation` - documentation changes
+- `refactor(scope): restructure without changing behavior` - code refactoring
+- `test(scope): add or update tests` - test changes
+- `chore(scope): maintenance tasks` - build, dependencies, etc.
+
+### Examples
+
+**Good:**
+```
+feat(mcp): add weather server with OAuth2 support
+
+Implements OAuth2 authentication for weather data access.
+Resolves rate limiting issues and improves security.
+```
+
+**Good (simple):**
+```
+fix: resolve port conflicts in integration tests
+```
+
+**Bad:**
+```
+🤖 Generated with Claude Code: Fixed some stuff
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+### Writing Tip
+Your commit message should complete: "If applied, this commit will _[subject line]_"

@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### Claude Code CLI ###
+.claude/
+
 ### Python ###
 __pycache__/
 *.py[cod]
