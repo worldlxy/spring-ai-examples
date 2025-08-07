@@ -30,8 +30,19 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Set up JBang
-      uses: jbangdev/setup-jbang@v0.119.0
+    - name: Install JBang (manual fallback)
+      run: |
+        echo "📦 Installing JBang manually via curl..."
+        curl -Ls https://sh.jbang.dev | bash -s - app setup
+        
+        # Add JBang to PATH for following steps
+        echo "$HOME/.jbang/bin" >> "$GITHUB_PATH"
+        
+        # Verify installation
+        echo "🔍 Verifying JBang installation..."
+        export PATH="$HOME/.jbang/bin:$PATH"
+        which jbang || echo "❌ JBang not found in PATH"
+        jbang version || echo "❌ JBang version check failed"
       
     - name: Set up Python
       uses: actions/setup-python@v5
