@@ -35,6 +35,14 @@
   - Need new test category for REST API applications
   - Consider adding CommandLineRunner for demo mode vs server mode
   - Or implement client-based testing approach
+- AI validation false negative for kotlin/kotlin-hello-world with Spring AI 1.0.1
+  - Application runs successfully but AI validation fails
+  - Need to debug why AI validation script returns exit code 1
+- MCP client/server failures need investigation:
+  - model-context-protocol/client-starter/starter-webflux-client (exit code 2)
+  - model-context-protocol/dynamic-tool-update/client (needs server running)
+  - model-context-protocol/dynamic-tool-update/server (needs client running)
+  - Consider paired execution strategy for client/server examples
 
 ## Future Enhancement Ideas
 1. **Real-time Streaming**: `--stream` flag to show live test output

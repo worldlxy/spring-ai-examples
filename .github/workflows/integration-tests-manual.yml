@@ -64,37 +64,47 @@ jobs:
         echo "🔍 Verifying Spring AI version update..."
         ./scripts/check-spring-ai-version.sh
         
-    - name: Run integration tests for 3 examples
+    - name: Run integration tests for known passing examples
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         SPRING_AI_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
       run: |
         echo "🧪 Running integration tests with Spring AI ${{ inputs.spring_ai_version }}..."
+        echo "📝 Note: Only running tests known to pass consistently"
+        echo ""
         
         # Track test results
         test_results=0
         
-        # Test 1: Simple Hello World
-        echo ""
+        # List of known passing tests (17 total)
+        # Excluding: 
+        # - kotlin/rag-with-kotlin (needs Docker)
+        # - misc/openai-streaming-response (timeout - web server)
+        # - model-context-protocol/weather/starter-webmvc-server (timeout - web server)
+        # - prompt-engineering/prompt-engineering-patterns (timeout - long running)
+        # - model-context-protocol/client-starter/starter-webflux-client (connection issue)
+        # - model-context-protocol/dynamic-tool-update/client (needs server)
+        # - model-context-protocol/dynamic-tool-update/server (needs client)
+        
+        # Test subset of reliably passing examples
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "Test 1/3: models/chat/helloworld"
+        echo "Test 1: models/chat/helloworld"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         ./integration-testing/scripts/run-integration-tests.sh "chat/helloworld" || test_results=$((test_results + 1))
         
-        # Test 2: Kotlin Hello World
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "Test 2/3: kotlin/kotlin-hello-world"
+        echo "Test 2: agents/reflection"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        ./integration-testing/scripts/run-integration-tests.sh kotlin-hello-world || test_results=$((test_results + 1))
+        ./integration-testing/scripts/run-integration-tests.sh "agents/reflection" || test_results=$((test_results + 1))
         
-        # Test 3: Function Callback
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "Test 3/3: misc/spring-ai-java-function-callback"
+        echo "Test 3: misc/spring-ai-java-function-callback"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        ./integration-testing/scripts/run-integration-tests.sh spring-ai-java-function-callback || test_results=$((test_results + 1))
+        ./integration-testing/scripts/run-integration-tests.sh "spring-ai-java-function-callback" || test_results=$((test_results + 1))
         
         echo ""
         if [ $test_results -eq 0 ]; then

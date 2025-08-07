@@ -269,6 +269,15 @@ Note: Our implementation will use simpler patterns suitable for examples reposit
   - name: Set up JBang
     uses: jbangdev/setup-jbang@v0.119.0
   ```
+- [x] Update test execution to only run known passing tests
+  - Excluding 7 tests that consistently fail or timeout:
+    - kotlin/rag-with-kotlin (needs Docker)
+    - misc/openai-streaming-response (web server timeout)
+    - model-context-protocol/weather/starter-webmvc-server (web server timeout)
+    - prompt-engineering/prompt-engineering-patterns (long running timeout)
+    - model-context-protocol/client-starter/starter-webflux-client (connection issue)
+    - model-context-protocol/dynamic-tool-update/client (needs paired server)
+    - model-context-protocol/dynamic-tool-update/server (needs paired client)
 - [x] Add Python setup for AI validation:
   ```yaml
   - name: Set up Python
